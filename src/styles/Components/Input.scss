@@ -1,0 +1,42 @@
+@import "../mixins.scss";
+
+.input {
+  @include input-container();
+
+  &--sm {
+    width: 100px;
+  }
+
+  &--md {
+    width: 150px;
+  }
+
+  &--lg {
+    width: 200px;
+  }
+
+  &--xlg {
+    width: 250px;
+  }
+
+  &--xlg2 {
+    width: 300px;
+  }
+
+  &--xlg3 {
+    width: 350px;
+  }
+
+  &__input {
+    @include input-base();
+    height: 38px;
+  }
+
+  &__label {
+    @include input-label();
+  }
+
+  &__error-message {
+    @include input-error();
+  }
+}

@@ -1,0 +1,106 @@
+@import "./colors.scss";
+
+.flex {
+  display: flex;
+
+  &--align-center {
+    @extend .flex;
+    align-items: center;
+
+    &--justify-center {
+      @extend .flex--align-center;
+      justify-content: center;
+    }
+
+    &--justify-space-between {
+      @extend .flex--align-center;
+      justify-content: space-between;
+    }
+
+    &--justify-flex-start {
+      @extend .flex--align-center;
+      justify-content: flex-start;
+    }
+
+    &--justify-space-around {
+      @extend .flex--align-center;
+      justify-content: space-around;
+    }
+
+    &--justify-flex-end {
+      @extend .flex--align-center;
+      justify-content: flex-end;
+    }
+  }
+
+  &--justify-flex-start {
+    @extend .flex;
+    justify-content: flex-start;
+  }
+
+  &--justify-center {
+    @extend .flex;
+    justify-content: center;
+  }
+
+  &--justify-space-between {
+    @extend .flex;
+    justify-content: space-between;
+  }
+
+  &--column {
+    @extend .flex;
+    flex-direction: column;
+
+    &--align-center {
+      @extend .flex--column;
+      align-items: center;
+
+      &--justify-flex-start {
+        @extend .flex--column--align-center;
+        justify-content: flex-start;
+      }
+
+      &--justify-flex-end {
+        @extend .flex--column--align-center;
+        justify-content: flex-end;
+      }
+
+      &--justify-center {
+        @extend .flex--column--align-center;
+        justify-content: center;
+      }
+
+      &--justify-space-around {
+        @extend .flex--column--align-center;
+        justify-content: space-around;
+      }
+    }
+
+    &--align-flex-start {
+      @extend .flex--column;
+      align-items: flex-start;
+
+      &--justify-flex-start {
+        @extend .flex--column--align-flex-start;
+        justify-content: flex-start;
+      }
+    }
+
+    &--justify-flex-start {
+      @extend .flex--column;
+      justify-content: flex-start;
+    }
+
+    &--justify-flex-end {
+      @extend .flex--column;
+      justify-content: flex-end;
+    }
+
+    &--justify-space-between {
+      @extend .flex--column;
+      justify-content: space-between;
+    }
+  }
+}
+

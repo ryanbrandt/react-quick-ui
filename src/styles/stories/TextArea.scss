@@ -1,0 +1,24 @@
+@import "../colors.scss";
+@import "../common.scss";
+@import "../mixins.scss";
+
+.textArea {
+  @include input-container();
+
+  &__content {
+    &__input {
+      @include input-base();
+      padding-top: 5px;
+      width: 360px;
+      height: 235px;
+    }
+
+    &__error {
+      @include input-error();
+    }
+
+    &__label {
+      @include input-label();
+    }
+  }
+}

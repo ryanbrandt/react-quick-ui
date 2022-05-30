@@ -1,0 +1,73 @@
+@mixin add-font-face($family, $style, $weight, $path) {
+    font-family: $family;
+    font-style: $style;
+    font-weight: $weight;
+    src: url("../assets/fonts/#{$path}.woff2") format("woff2"), url("../assets/fonts/#{$path}.woff") format("woff");
+}
+
+$work-sans-family: "Work Sans";
+$work-sans-dir: "worksans";
+
+@font-face {
+    @include add-font-face($work-sans-family, normal, normal, "#{$work-sans-dir}/work-sans-v16-latin-regular");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, italic, normal, "#{$work-sans-dir}/work-sans-v16-latin-italic");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, normal, 200, "#{$work-sans-dir}/work-sans-v16-latin-200");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, normal, 300, "#{$work-sans-dir}/work-sans-v16-latin-300");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, normal, 500, "#{$work-sans-dir}/work-sans-v16-latin-500");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, normal, 600, "#{$work-sans-dir}/work-sans-v16-latin-600");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, normal, 700, "#{$work-sans-dir}/work-sans-v16-latin-700");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, normal, 800, "#{$work-sans-dir}/work-sans-v16-latin-800");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, normal, 900, "#{$work-sans-dir}/work-sans-v16-latin-900");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, italic, 200, "#{$work-sans-dir}/work-sans-v16-latin-200italic");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, italic, 300, "#{$work-sans-dir}/work-sans-v16-latin-300italic");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, italic, 500, "#{$work-sans-dir}/work-sans-v16-latin-500italic");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, italic, 600, "#{$work-sans-dir}/work-sans-v16-latin-600italic");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, italic, 700, "#{$work-sans-dir}/work-sans-v16-latin-700italic");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, italic, 800, "#{$work-sans-dir}/work-sans-v16-latin-800italic");
+}
+
+@font-face {
+    @include add-font-face($work-sans-family, italic, 200, "#{$work-sans-dir}/work-sans-v16-latin-900italic");
+}

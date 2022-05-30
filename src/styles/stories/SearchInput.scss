@@ -1,0 +1,22 @@
+@import "../colors.scss";
+@import "../common.scss";
+
+$placeholder-left-padding: 5px;
+
+.search-input {
+  @extend .flex--align-center;
+
+  &__content {
+    &__icon {
+      @extend .flex--align-center;
+      position: absolute;
+      padding-left: 7.5px;
+    }
+  }
+
+  .input__input {
+      padding-left: calc(30px + $placeholder-left-padding);
+      color: $primary-blue;
+  }
+  
+}

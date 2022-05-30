@@ -1,0 +1,92 @@
+@import "../colors.scss";
+@import "../common.scss";
+@import "../mixins.scss";
+
+$button-hover-transition: 0.25s;
+$button-border-sizing: 2px;
+
+@mixin button-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+@mixin button-variant-filled-with-hover($primaryColor, $secondaryColor) {
+    background-color: $primaryColor;
+    color: $secondaryColor;
+    border: $primaryColor $button-border-sizing;
+    fill: $secondaryColor;
+    transition: $button-hover-transition ease-out;
+    filter: brightness(95%);
+
+    &:hover {
+        filter: brightness(115%);
+        transition: $button-hover-transition ease-in;
+    }
+
+    &:disabled {
+        @include button-disabled();
+    }
+}
+
+@mixin button-size($fontSize, $width, $height) {
+    font-size: $fontSize;
+    width: $width;
+    height: $height;
+
+    svg {
+        width: $fontSize;
+        height: $fontSize;
+    }
+}
+
+.button {
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &--xlg {
+        @include button-size(16px, 230px, 50px);
+    }
+
+    &--lg {
+        @include button-size(14px, 180px, 40px);
+    }
+
+    &--md {
+        @include button-size(12px, 130px, 30px);
+    }
+
+    &--sm {
+        @include button-size(11px, 80px, 20px);
+    }
+
+    &--primary {
+        @include button-variant-filled-with-hover($primary-blue, $white);
+    }
+
+    &--success {
+        @include button-variant-filled-with-hover($green, $white);
+    }
+
+    &--danger {
+        @include button-variant-filled-with-hover($red, $white);
+    }
+
+    &--neutral {
+        @include button-variant-filled-with-hover($dark-gray, $white);
+    }
+
+    &__content {
+        @extend .flex--align-center--justify-center;
+
+        &__icon {
+            @extend .flex--justify-flex-start;
+            margin: 0.5em;
+        }
+
+        &__text {
+            @include text-overflow-elipsis();
+            flex: 1;
+        }
+    }
+}

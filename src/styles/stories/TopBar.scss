@@ -1,0 +1,15 @@
+@import "../colors.scss";
+@import "../common.scss";
+
+.topbar {
+    @extend .flex;
+    background-color: $white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    height: 76px;
+
+    &--sticky {
+        position: sticky;
+        top: 0;
+    }
+}
