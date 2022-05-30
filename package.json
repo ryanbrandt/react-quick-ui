@@ -4,6 +4,7 @@
   "private": true,
   "author": "Ryan Brandt",
   "description": "React component/hooks library",
+  "repository": "https://github.com/ryanbrandt/react-quick-ui",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "typings": "dist/@types/index",

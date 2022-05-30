@@ -1,6 +1,6 @@
 # react-quick-ui
 
-A React component and hooks library for rapid UI development
+A React component + hooks for quick UIs
 
 ## Usage
 
