@@ -3,60 +3,64 @@
 @import "../mixins.scss";
 
 @mixin badge-size($fontSize, $width, $height) {
-    font-size: $fontSize;
-    width: $width;
-    height: $height;
+  font-size: $fontSize;
+  width: $width;
+  height: $height;
 }
 
 @mixin badge-variant($primaryColor, $secondaryColor) {
-    background-color: $primaryColor;
-    color: $secondaryColor;
-    border: $primaryColor 2px;
+  background-color: $primaryColor;
+  color: $secondaryColor;
+  border: $primaryColor 2px;
 }
 
 .badge {
-    @extend .flex--align-center--justify-center;
-    font-weight: 500;
-    border-radius: 8px;
+  @extend .flex--align-center--justify-center;
+  font-weight: 500;
+  border-radius: 8px;
 
-    &--xlg {
-        @include badge-size(14px, 170px, 35px);
-    }
+  &--xlg {
+    @include badge-size(14px, 170px, 35px);
+  }
 
-    &--lg {
-        @include badge-size(12px, 140px, 30px);
-    }
+  &--lg {
+    @include badge-size(12px, 140px, 30px);
+  }
 
-    &--md {
-        @include badge-size(10px, 110px, 25px);
-    }
+  &--md {
+    @include badge-size(10px, 110px, 25px);
+  }
 
-    &--sm {
-        @include badge-size(8px, 80px, 20px);
-    }
+  &--sm {
+    @include badge-size(8px, 80px, 20px);
+  }
 
-    &--primary {
-        @include badge-variant($primary-blue, $white);
-    }
+  &--fit-content {
+    @include badge-size(10px, fit-content, fit-content);
+  }
 
-    &--success {
-        @include badge-variant($green, $white);
-    }
+  &--primary {
+    @include badge-variant($primary-blue, $white);
+  }
 
-    &--danger {
-        @include badge-variant($red, $white);
-    }
+  &--success {
+    @include badge-variant($green, $white);
+  }
 
-    &--neutral {
-        @include badge-variant($dark-gray, $white);
-    }
+  &--danger {
+    @include badge-variant($red, $white);
+  }
 
-    &--warning {
-        @include badge-variant($yellow, $white);
-    }
+  &--neutral {
+    @include badge-variant($dark-gray, $white);
+  }
 
-    &__text {
-        @include text-overflow-elipsis();
-        padding: 1em;
-    }
+  &--warning {
+    @include badge-variant($yellow, $white);
+  }
+
+  &__text {
+    @include text-overflow-elipsis();
+    padding: 1em;
+  }
 }

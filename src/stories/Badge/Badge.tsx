@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 
 type BadgeVariant = "primary" | "warning" | "danger" | "success" | "neutral";
-type BadgeSize = "sm" | "md" | "lg" | "xlg";
+type BadgeSize = "sm" | "md" | "lg" | "xlg" | "fit-content";
 
 interface Props {
   /**

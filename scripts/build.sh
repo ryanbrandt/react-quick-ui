@@ -39,7 +39,7 @@ function main() {
 
     printf "\nCopying assets...\n"
 
-    mkdir -p dist/assets/ && cp -r src/assets/fonts/ dist/assets/
+    mkdir -p dist/assets/ && cp -r src/assets/fonts/ dist/assets/fonts/
 
     if [ $? -ne 0 ]; then
         build_failure "Failed copying assets"
