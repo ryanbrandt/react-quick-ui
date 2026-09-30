@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import type { FunctionComponent } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import SpinnerLoader from "@stories/SpinnerLoader/SpinnerLoader";

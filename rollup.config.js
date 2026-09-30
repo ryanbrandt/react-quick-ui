@@ -3,9 +3,17 @@ import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
-import ttypescript from "ttypescript";
+import transformPaths from "typescript-transform-paths";
 
 const packageFile = require("./package.json");
+
+// Bridge until Q3: rewrite the tsconfig path aliases (@stories/*, ...) to
+// relative paths in the emitted JS and .d.ts files. This replaces ttypescript,
+// which does not run on TypeScript >= 5.
+const pathTransformer = (options) => ({
+  type: "program",
+  factory: (program) => transformPaths(program, options),
+});
 
 export default {
   input: "src/index.ts",
@@ -27,7 +35,10 @@ export default {
     commonjs(),
     typescript({
       tsconfig: "./tsconfig.build.json",
-      typescript: ttypescript,
+      transformers: {
+        before: [pathTransformer()],
+        afterDeclarations: [pathTransformer({ afterDeclarations: true })],
+      },
     }),
     terser(),
   ],

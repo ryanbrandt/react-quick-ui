@@ -2,6 +2,13 @@ module.exports = {
   roots: ["<rootDir>"],
   testEnvironment: "jsdom",
   preset: "ts-jest",
+  globals: {
+    "ts-jest": {
+      // ts-jest 27 emits CommonJS, which verbatimModuleSyntax rejects (TS1295).
+      // Revisit in Q4 (Jest 30 / ts-jest 29).
+      tsconfig: { verbatimModuleSyntax: false },
+    },
+  },
   transform: {
     "^.+\\.tsx?$": "ts-jest",
   },

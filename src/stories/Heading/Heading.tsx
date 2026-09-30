@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import type { FunctionComponent } from "react";
 
 declare type HeadingVariant = "h1" | "h2" | "h3";
 

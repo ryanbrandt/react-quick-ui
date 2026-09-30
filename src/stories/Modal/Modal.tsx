@@ -1,8 +1,8 @@
-import { FunctionComponent, PropsWithChildren } from "react";
+import type { FunctionComponent, PropsWithChildren } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
-import Heading, { HeadingProps } from "@stories/Heading/Heading";
+import Heading, { type HeadingProps } from "@stories/Heading/Heading";
 
 interface BaseProps {
   /**
