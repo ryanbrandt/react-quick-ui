@@ -8,15 +8,12 @@ interface IConditionalClassName {
  * @param classNames The classnames to conditionally append to the string
  * @see IConditionalClassName
  *
- * @returns A classnames string containing all of the classnames with satisfied conditions
+ * @returns A space-separated string of the non-empty classnames whose conditions are truthy
  */
 const createCompositeClassName = (classNames: IConditionalClassName): string =>
-  Object.keys(classNames).reduce((classNamesString, className) => {
-    if (classNames[className]) {
-      return `${classNamesString} ${className}`;
-    }
-
-    return classNamesString;
-  });
+  Object.entries(classNames)
+    .filter(([className, condition]) => condition && className !== "")
+    .map(([className]) => className)
+    .join(" ");
 
 export default createCompositeClassName;
