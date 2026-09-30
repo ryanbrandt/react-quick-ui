@@ -1,59 +1,52 @@
 version: 2.1
 
-jobs:
-  lint:
+executors:
+  node:
     docker:
-      - image: node:16.11.1
+      - image: cimg/node:24.21
         environment:
           TERM: xterm
           TZ: "America/New_York"
 
-    working_directory: ~/repo
-
+commands:
+  install:
+    description: Check out the repo and install dependencies from the lockfile
     steps:
       - checkout
-
       - restore_cache:
           keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - v2-deps-{{ .Branch }}-
-            - v2-deps-
-
+            - v3-yarn-{{ checksum "yarn.lock" }}
+            - v3-yarn-
       - run: yarn install --immutable
+      - save_cache:
+          key: v3-yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.yarn/berry/cache
 
+jobs:
+  lint:
+    executor: node
+    steps:
+      - install
       - run:
           name: Run Linter
           command: yarn lint
 
-      - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/repo/node_modules
-            - ~/.yarn
-
   unit_test:
-    docker:
-      - image: node:16.11.1
-        environment:
-          TERM: xterm
-          TZ: "America/New_York"
-
-    working_directory: ~/repo
-
+    executor: node
     steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - v2-deps-{{ .Branch }}-
-            - v2-deps-
-
-      - run: yarn install --immutable
-
+      - install
       - run:
           name: Unit Test
           command: yarn test:coverage --runInBand
+
+  build:
+    executor: node
+    steps:
+      - install
+      - run:
+          name: Build
+          command: yarn build
 
 workflows:
   build:
@@ -62,5 +55,9 @@ workflows:
           name: Lint
       - unit_test:
           name: Unit Tests
+          requires:
+            - Lint
+      - build:
+          name: Build
           requires:
             - Lint
