@@ -14,6 +14,9 @@ const usePrevious = <T>(value: T): T | undefined => {
     ref.current = value;
   }, [value]);
 
+  // Reading a ref during render breaks React Compiler memoization. Keeping the
+  // current behaviour until Q7 (React 19) revisits this hook.
+  // eslint-disable-next-line react-hooks/refs
   return ref.current;
 };
 

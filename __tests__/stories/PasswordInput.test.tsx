@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
 import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
@@ -45,7 +44,7 @@ describe("PasswordInput", () => {
     mockBaseInput.assertOnScreen();
     mockBaseInput.assertCalledWith({
       value: MOCK_VALUE,
-      onChange: expect.any(Function),
+      onChange: expect.any(Function) as (value: string) => void,
       inputType: MOCK_DEFAULT_INPUT_TYPE,
       size: MOCK_SIZE,
       label: MOCK_LABEL,

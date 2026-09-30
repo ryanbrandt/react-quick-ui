@@ -1,6 +1,9 @@
 import type { FunctionComponent } from "react";
 
-import Input, { type IInputError, type InputSize } from "@utilities/Components/Input";
+import Input, {
+  type IInputError,
+  type InputSize,
+} from "@utilities/Components/Input";
 
 interface Props {
   /**

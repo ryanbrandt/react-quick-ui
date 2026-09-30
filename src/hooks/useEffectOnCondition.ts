@@ -16,6 +16,8 @@ const useEffectOnCondition = (
     if (condition) {
       effect();
     }
+    // Callers pass their own dependencies; that's this hook's API.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [condition, effect, ...deps]);
 };
 
