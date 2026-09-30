@@ -26,7 +26,12 @@ export default {
   output: [
     // esModule: keep the __esModule marker Rollup 2 emitted (Rollup 3+ omits it
     // when there is no default export), so CJS interop is unchanged.
-    { file: fromRoot(packageFile.main), format: "cjs", sourcemap: true, esModule: true },
+    {
+      file: fromRoot(packageFile.main),
+      format: "cjs",
+      sourcemap: true,
+      esModule: true,
+    },
     { file: fromRoot(packageFile.module), format: "esm", sourcemap: true },
   ],
   external,

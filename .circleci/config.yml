@@ -33,6 +33,8 @@ jobs:
       - run:
           name: Check Formatting
           command: yarn format:check
+          # Report formatting even when lint fails, so one CI run shows both.
+          when: always
 
   typecheck:
     executor: node

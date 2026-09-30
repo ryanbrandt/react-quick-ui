@@ -110,6 +110,8 @@ export default defineConfig(
         },
       ],
       "react/jsx-max-depth": ["error", { max: 3 }],
+      // An error, not a warning, so it can't hide under --max-warnings.
+      "react-hooks/exhaustive-deps": "error",
       "react/no-unused-prop-types": "error",
       // Function components only (replaces react-prefer-function-component).
       "no-restricted-syntax": [
