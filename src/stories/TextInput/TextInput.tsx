@@ -1,6 +1,9 @@
 import type { FunctionComponent } from "react";
 
-import Input, { type IInputError, type InputSize } from "@utilities/Components/Input";
+import Input, {
+  type IInputError,
+  type InputSize,
+} from "@utilities/Components/Input";
 import createCompositeClassName from "@utilities/createCompositeClassName";
 
 interface Props {
