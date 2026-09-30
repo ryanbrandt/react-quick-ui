@@ -104,6 +104,13 @@ interface Props {
    * An optional string to set the wrapper class on Input
    */
   className?: string;
+
+  /**
+   * An optional id for the input element, which {@link label} is linked to
+   *
+   * @default a unique id from React's useId
+   */
+  id?: string;
 }
 
 const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
@@ -119,9 +126,11 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
     disabled = false,
     size = "md",
     className = "",
+    id,
   } = props;
 
-  const inputId = useId();
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
 
   let { error } = props;
   if (typeof error === "string") {
@@ -153,6 +162,7 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
       )}
       <div className="input__input-icon-container">
         <input
+          id={inputId}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className={inputClassNames}

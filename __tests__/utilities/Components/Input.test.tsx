@@ -80,11 +80,39 @@ describe("Input", () => {
   });
 
   describe("when a label is provided", () => {
-    it("renders the input label with the provided label", () => {
-      const mockLabel = "label";
-      render(<Input inputType={MOCK_INPUT_TYPE} label={mockLabel} />);
+    const mockLabel = "label";
 
-      expect(screen.getByText(mockLabel)).toBeInTheDocument();
+    it("renders the label linked to the input by a generated id", () => {
+      const { container } = render(
+        <Input inputType={MOCK_INPUT_TYPE} label={mockLabel} />
+      );
+
+      const input = getInput(container);
+      expect(input.id).not.toBe("");
+      expect(screen.getByLabelText(mockLabel)).toBe(input);
+    });
+
+    it("gives each input its own generated id", () => {
+      render(
+        <>
+          <Input inputType={MOCK_INPUT_TYPE} label="first" />
+          <Input inputType={MOCK_INPUT_TYPE} label="second" />
+        </>
+      );
+
+      expect(screen.getByLabelText("first").id).not.toBe(
+        screen.getByLabelText("second").id
+      );
+    });
+
+    describe("when an id is provided", () => {
+      it("uses the provided id for the input and the label", () => {
+        render(
+          <Input inputType={MOCK_INPUT_TYPE} label={mockLabel} id="foo" />
+        );
+
+        expect(screen.getByLabelText(mockLabel).id).toBe("foo");
+      });
     });
   });
 
