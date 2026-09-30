@@ -22,19 +22,19 @@ const aliasEntries = Object.entries(paths).map(([find, [target]]) => ({
 }));
 
 export default {
-  input: "src/index.ts",
+  input: fromRoot("src/index.ts"),
   output: [
     // esModule: keep the __esModule marker Rollup 2 emitted (Rollup 3+ omits it
     // when there is no default export), so CJS interop is unchanged.
-    { file: packageFile.main, format: "cjs", sourcemap: true, esModule: true },
-    { file: packageFile.module, format: "esm", sourcemap: true },
+    { file: fromRoot(packageFile.main), format: "cjs", sourcemap: true, esModule: true },
+    { file: fromRoot(packageFile.module), format: "esm", sourcemap: true },
   ],
   external,
   // A bare import that isn't a peer would otherwise ship as an unresolved
-  // require() with only a warning; fail the build instead.
-  onwarn(warning, warn) {
-    if (warning.code === "UNRESOLVED_IMPORT") throw new Error(warning.message);
-    warn(warning);
+  // require() with only a warning; report it as an error instead.
+  onLog(level, log, handler) {
+    if (log.code === "UNRESOLVED_IMPORT") return handler("error", log);
+    handler(level, log);
   },
   plugins: [
     alias({ entries: aliasEntries }),
