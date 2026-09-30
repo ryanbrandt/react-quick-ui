@@ -1,100 +1,106 @@
 @import "../colors.scss";
 @import "../common.scss";
 
-$modal-transition-time: 0.15s;
+$modal-base-transition-time: 0.15s;
+$modal-animated-transition-time: $modal-base-transition-time * 3;
 
 @keyframes fadeIn {
-    0% {
-        background: rgba(0, 0, 0, 0);
-    }
-    100% {
-        background: rgba(0, 0, 0, 0.4);
-    }
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.4);
+  }
 }
 
 @keyframes fadeOut {
-    0% {
-        background: rgba(0, 0, 0, 0.4);
-    }
-    100% {
-        background: rgba(0, 0, 0, 0);
-    }
+  0% {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0);
+  }
 }
 
 @keyframes scaleUp {
-    0% {
-        transform: scale(0.8) translateY(1000px);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1) translateY(0px);
-        opacity: 1;
-    }
+  0% {
+    transform: scale(0.8) translateY(1000px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
 }
 
 @keyframes scaleDown {
-    0% {
-        transform: scale(1) translateY(0px);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(0.8) translateY(1000px);
-        opacity: 0;
-    }
+  0% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) translateY(1000px);
+    opacity: 0;
+  }
+}
+
+@mixin modal-transition-enter-done {
+  &-enter-done {
+    background: rgba(0, 0, 0, 0.4);
+  }
 }
 
 .modal {
-    background-color: $white;
-    box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    border: 1px solid $gray;
-    bottom: 0;
+  background-color: $white;
+  box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border: 1px solid $gray;
+  bottom: 0;
+  left: 0;
+
+  &__background {
+    @extend .flex--align-center--justify-center;
+    height: 100%;
+    width: 100%;
+    top: 0;
     left: 0;
+    z-index: 9999;
+    position: fixed;
+  }
 
-    &--animated-open {
-        animation: scaleUp $modal-transition-time * 3 cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  &__transition {
+    @include modal-transition-enter-done();
+
+    &-enter {
+      animation: fadeIn $modal-base-transition-time forwards;
     }
 
-    &--animated-closed {
-        animation: scaleDown $modal-transition-time * 3 cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-    }
+    &-exit {
+      animation: fadeOut $modal-base-transition-time forwards;
 
-    &--open {
-        display: block;
-    }
-
-    &--closed {
+      .modal {
         display: none;
+      }
     }
 
-    &__container {
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        z-index: 9999;
+    &--animated {
+      @include modal-transition-enter-done();
 
-        &--open {
-            animation: scaleUp 0s $modal-transition-time linear forwards;
+      &-enter {
+        animation: fadeIn $modal-animated-transition-time forwards;
+        .modal {
+          animation: scaleUp $modal-animated-transition-time
+            cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
         }
+      }
 
-        &--closed {
-            animation: scaleDown 0s $modal-transition-time linear forwards;
+      &-exit {
+        animation: fadeOut $modal-animated-transition-time forwards;
+        .modal {
+          animation: scaleDown$modal-animated-transition-time
+            cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
         }
+      }
     }
-
-    &__background {
-        @extend .flex--align-center--justify-center;
-        height: 100%;
-        width: 100%;
-
-        &--open {
-            animation: fadeIn $modal-transition-time forwards;
-        }
-
-        &--closed {
-            animation: fadeOut $modal-transition-time forwards;
-        }
-    }
+  }
 }

@@ -15,8 +15,7 @@ $placeholder-left-padding: 5px;
   }
 
   .input__input {
-      padding-left: calc(30px + $placeholder-left-padding);
-      color: $primary-blue;
+    padding-left: calc(30px + $placeholder-left-padding);
+    color: $primary-blue;
   }
-  
 }

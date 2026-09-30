@@ -9,6 +9,11 @@ export interface IInputError {
   text?: string;
 }
 
+export interface IInputIcon {
+  position: "left" | "right";
+  icon: JSX.Element;
+}
+
 interface Props {
   /**
    * String representing the input value.
@@ -55,6 +60,11 @@ interface Props {
   error?: string | IInputError;
 
   /**
+   * Optional icon to stylize the input
+   */
+  icon?: IInputIcon;
+
+  /**
    * An optional flag controlling if the input is in a disabled state
    *
    * @default false
@@ -99,6 +109,7 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
     placeholder,
     min,
     max,
+    icon,
     value = "",
     onChange = () => null,
     disabled = false,
@@ -134,16 +145,29 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
           {label}
         </label>
       )}
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className={inputClassNames}
-        type={inputType}
-        disabled={disabled}
-        placeholder={placeholder}
-        min={min}
-        max={max}
-      />
+      <div className="input__input-icon-container">
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={inputClassNames}
+          type={inputType}
+          disabled={disabled}
+          placeholder={placeholder}
+          min={min}
+          max={max}
+        />
+        {icon && (
+          <span
+            className={createCompositeClassName({
+              baseInput__icon: true,
+              "baseInput__icon--right": icon.position === "right",
+              "baseInput__icon--left": icon.position === "left",
+            })}
+          >
+            {icon.icon}
+          </span>
+        )}
+      </div>
       {error?.text && (
         <span className="input__error-message">{error.text}</span>
       )}

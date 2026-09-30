@@ -1,15 +1,11 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
 
-import { JestUtilities } from "react-testing-utilities";
-
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import SpinnerLoader from "@stories/SpinnerLoader/SpinnerLoader";
 
 jest.mock("@utilities/createCompositeClassName");
-const mockcreateCompositeClassName = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockcreateCompositeClassName = jest.mocked(createCompositeClassName);
 
 describe("SpinnerLoader", () => {
   afterEach(() => {

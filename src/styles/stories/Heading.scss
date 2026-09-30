@@ -1,0 +1,21 @@
+@import "../colors.scss";
+
+.heading {
+  color: $primary-blue;
+  text-align: center;
+  line-height: 34px;
+  margin: 0;
+
+  &--h1 {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  &--h2 {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  &--h3 {
+    font-size: 14px;
+    font-weight: 300;
+  }
+}

@@ -3,16 +3,12 @@ import { HTMLInputTypeAttribute } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { JestUtilities } from "react-testing-utilities";
-
 import createCompositeClassName from "@utilities/createCompositeClassName";
-import Input from "@utilities/Components/Input/Input";
+import Input from "@utilities/Components/Input";
 
 jest.mock("@utilities/createCompositeClassName");
 const MOCK_CLASSNAMES = "class_name";
-const mockedcreateCompositeClassName = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockedcreateCompositeClassName = jest.mocked(createCompositeClassName);
 mockedcreateCompositeClassName.mockReturnValue(MOCK_CLASSNAMES);
 
 describe("Input", () => {
@@ -171,4 +167,25 @@ describe("Input", () => {
       });
     });
   });
+
+  describe.each(["left", "right"] as const)(
+    "when an icon positioned %s is provided",
+    (position) => {
+      it("renders the icon with the expected positional styling", () => {
+        render(
+          <Input
+            inputType={MOCK_INPUT_TYPE}
+            icon={{ position, icon: <span data-testid="icon" /> }}
+          />
+        );
+
+        expect(screen.getByTestId("icon")).toBeInTheDocument();
+        expect(mockedcreateCompositeClassName).toHaveBeenCalledWith({
+          baseInput__icon: true,
+          "baseInput__icon--right": position === "right",
+          "baseInput__icon--left": position === "left",
+        });
+      });
+    }
+  );
 });

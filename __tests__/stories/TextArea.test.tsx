@@ -2,16 +2,12 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { JestUtilities } from "react-testing-utilities";
-
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import TextArea from "@stories/TextArea/TextArea";
 
 jest.mock("@utilities/createCompositeClassName");
 const MOCK_CLASSNAMES = "class_name";
-const mockedcreateCompositeClassName = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockedcreateCompositeClassName = jest.mocked(createCompositeClassName);
 mockedcreateCompositeClassName.mockReturnValue(MOCK_CLASSNAMES);
 
 describe("TextArea", () => {

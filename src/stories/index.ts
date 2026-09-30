@@ -1,6 +1,6 @@
 export { default as Button } from "@stories/Button/Button";
 export { default as Badge } from "@stories/Badge/Badge";
-export { default as Input } from "@utilities/Components/Input/Input";
+export { default as Input } from "@utilities/Components/Input";
 export { default as TopBar } from "@stories/TopBar/TopBar";
 export { default as Modal } from "@stories/Modal/Modal";
 export { default as TextInput } from "@stories/TextInput/TextInput";
@@ -9,3 +9,4 @@ export { default as SpinnerLoader } from "@stories/SpinnerLoader/SpinnerLoader";
 export { default as LoadingOverlay } from "@stories/LoadingOverlay/LoadingOverlay";
 export { default as SearchInput } from "@stories/SearchInput/SearchInput";
 export { default as PasswordInput } from "@stories/PasswordInput/PasswordInput";
+export { default as EditAndConfirmInput } from "@stories/EditAndConfirmInput/EditAndConfirmInput";

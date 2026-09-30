@@ -1,22 +1,17 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import {
-  JestUtilities,
-  MockFunctionComponentWrapper,
-} from "react-testing-utilities";
+import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
-import Input from "@utilities/Components/Input/Input";
+import Input from "@utilities/Components/Input";
 import SearchInput from "@stories/SearchInput/SearchInput";
 
 jest.mock("@utilities/createCompositeClassName");
 const MOCK_CLASSNAMES = "class_name";
-const mockedcreateCompositeClassName = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockedcreateCompositeClassName = jest.mocked(createCompositeClassName);
 mockedcreateCompositeClassName.mockReturnValue(MOCK_CLASSNAMES);
 
-jest.mock("@utilities/Components/Input/Input");
+jest.mock("@utilities/Components/Input");
 const mockBaseInput = new MockFunctionComponentWrapper(Input);
 
 describe("Search", () => {

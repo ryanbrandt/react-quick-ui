@@ -1,13 +1,13 @@
 {
   "name": "@ryanbrandt/react-quick-ui",
-  "version": "0.2.0",
+  "version": "0.5.1",
   "author": "Ryan Brandt",
   "description": "React component/hooks library",
   "repository": "https://github.com/ryanbrandt/react-quick-ui",
   "main": "dist/index.js",
   "license": "MIT",
   "module": "dist/index.esm.js",
-  "typings": "dist/@types/index",
+  "typings": "dist/index",
   "files": [
     "dist"
   ],
@@ -39,6 +39,7 @@
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-node-resolve": "^13.2.1",
     "@rollup/plugin-typescript": "^8.3.2",
+    "@ryanbrandt/react-testing-utils": "^0.5.0",
     "@storybook/addon-actions": "^6.5.6",
     "@storybook/addon-docs": "^6.5.6",
     "@storybook/addon-essentials": "^6.5.6",
@@ -78,7 +79,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-test-renderer": "^18.2.0",
-    "react-testing-utilities": "ryanbrandt/react-testing-utils",
     "react-transition-group": "^4.4.5",
     "rollup": "^2.70.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
@@ -96,7 +96,7 @@
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
-    "react-transition-group": ">=4.4.2"
+    "react-transition-group": ">=4.4.5"
   },
   "packageManager": "yarn@3.2.0"
 }

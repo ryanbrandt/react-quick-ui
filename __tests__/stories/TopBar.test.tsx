@@ -1,15 +1,11 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 
-import { JestUtilities } from "react-testing-utilities";
-
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import TopBar from "@stories/TopBar/TopBar";
 
 jest.mock("@utilities/createCompositeClassName");
-const mockcreateCompositeClassName = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockcreateCompositeClassName = jest.mocked(createCompositeClassName);
 
 describe("TopBar", () => {
   const MOCK_CHILD_TEST_ID = "child";

@@ -12,7 +12,7 @@ interface IConditionalClassName {
  */
 const createCompositeClassName = (classNames: IConditionalClassName): string =>
   Object.keys(classNames).reduce((classNamesString, className) => {
-    if (className && classNames[className]) {
+    if (classNames[className]) {
       return `${classNamesString} ${className}`;
     }
 

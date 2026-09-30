@@ -1,0 +1,34 @@
+@import "../colors.scss";
+
+$icon-hover-transition: 0.25s;
+
+@mixin edit-and-confirm-input-icon {
+  fill: $primary-blue;
+  cursor: pointer;
+  filter: brightness(1);
+  transition: $icon-hover-transition;
+
+  &:hover {
+    filter: brightness(1.25);
+    transition: $icon-hover-transition;
+  }
+
+  &__disabled {
+    fill: $dark-gray;
+    pointer-events: none;
+  }
+}
+
+.edit-and-confirm-input {
+  &__confirm-icon {
+    @include edit-and-confirm-input-icon;
+    width: 33px;
+    height: 33px;
+  }
+
+  &__edit-icon {
+    @include edit-and-confirm-input-icon;
+    width: 15px;
+    height: 20px;
+  }
+}

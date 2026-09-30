@@ -1,9 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import {
-  JestUtilities,
-  MockFunctionComponentWrapper,
-} from "react-testing-utilities";
+import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import Button from "@stories/Button/Button";
@@ -11,9 +8,7 @@ import PencilSvg from "@svgs/SearchSvg/SearchSvg";
 
 jest.mock("@utilities/createCompositeClassName");
 const MOCK_CLASSNAMES = "class_name";
-const mockedcreateCompositeClassName = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockedcreateCompositeClassName = jest.mocked(createCompositeClassName);
 mockedcreateCompositeClassName.mockReturnValue(MOCK_CLASSNAMES);
 
 jest.mock("@svgs/SearchSvg/SearchSvg");
