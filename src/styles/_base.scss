@@ -1,0 +1,6 @@
+@use "sass/variables";
+
+html,
+body * {
+  font-family: variables.$work-sans-family;
+}

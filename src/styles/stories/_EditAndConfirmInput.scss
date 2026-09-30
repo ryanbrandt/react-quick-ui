@@ -1,9 +1,9 @@
-@import "../colors.scss";
+@use "../sass/colors";
 
 $icon-hover-transition: 0.25s;
 
 @mixin edit-and-confirm-input-icon {
-  fill: $primary-blue;
+  fill: colors.$primary-blue;
   cursor: pointer;
   filter: brightness(1);
   transition: $icon-hover-transition;
@@ -14,7 +14,7 @@ $icon-hover-transition: 0.25s;
   }
 
   &__disabled {
-    fill: $dark-gray;
+    fill: colors.$dark-gray;
     pointer-events: none;
   }
 }

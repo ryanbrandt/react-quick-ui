@@ -1,6 +1,6 @@
-@import "../colors.scss";
-@import "../common.scss";
-@import "../mixins.scss";
+@use "../sass/colors";
+@use "../sass/flex";
+@use "../sass/mixins";
 
 $button-hover-transition: 0.25s;
 $button-border-sizing: 2px;
@@ -61,31 +61,34 @@ $button-border-sizing: 2px;
   }
 
   &--primary {
-    @include button-variant-filled-with-hover($primary-blue, $white);
+    @include button-variant-filled-with-hover(
+      colors.$primary-blue,
+      colors.$white
+    );
   }
 
   &--success {
-    @include button-variant-filled-with-hover($green, $white);
+    @include button-variant-filled-with-hover(colors.$green, colors.$white);
   }
 
   &--danger {
-    @include button-variant-filled-with-hover($red, $white);
+    @include button-variant-filled-with-hover(colors.$red, colors.$white);
   }
 
   &--neutral {
-    @include button-variant-filled-with-hover($dark-gray, $white);
+    @include button-variant-filled-with-hover(colors.$dark-gray, colors.$white);
   }
 
   &__content {
-    @extend .flex--align-center--justify-center;
+    @extend %flex--align-center--justify-center;
 
     &__icon {
-      @extend .flex--justify-flex-start;
+      @extend %flex--justify-flex-start;
       margin: 0.5em;
     }
 
     &__text {
-      @include text-overflow-elipsis();
+      @include mixins.text-overflow-elipsis();
       flex: 1;
     }
   }

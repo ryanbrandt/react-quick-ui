@@ -1,24 +1,22 @@
-@import "../colors.scss";
-@import "../common.scss";
-@import "../mixins.scss";
+@use "../sass/mixins";
 
 .textArea {
-  @include input-container();
+  @include mixins.input-container();
 
   &__content {
     &__input {
-      @include input-base();
+      @include mixins.input-base();
       padding-top: 5px;
       width: 360px;
       height: 235px;
     }
 
     &__error {
-      @include input-error();
+      @include mixins.input-error();
     }
 
     &__label {
-      @include input-label();
+      @include mixins.input-label();
     }
   }
 }

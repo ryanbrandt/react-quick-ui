@@ -1,8 +1,11 @@
-@import "../mixins.scss";
+@use "../sass/flex";
+
+@use "../sass/mixins";
+
 $icon-margin-modifier: 20px;
 
 .input {
-  @include input-container();
+  @include mixins.input-container();
 
   &--sm {
     width: 100px;
@@ -29,7 +32,7 @@ $icon-margin-modifier: 20px;
   }
 
   &__input {
-    @include input-base();
+    @include mixins.input-base();
     height: 38px;
     width: 100%;
 
@@ -45,15 +48,15 @@ $icon-margin-modifier: 20px;
   }
 
   &__label {
-    @include input-label();
+    @include mixins.input-label();
   }
 
   &__error-message {
-    @include input-error();
+    @include mixins.input-error();
   }
 
   &__icon {
-    @extend .flex--align-center;
+    @extend %flex--align-center;
 
     &--right {
       justify-content: flex-end;
