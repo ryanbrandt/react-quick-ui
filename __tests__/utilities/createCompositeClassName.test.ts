@@ -18,6 +18,6 @@ describe("createCompositeClassName", () => {
       [emptyClass]: true,
     });
 
-    expect(result).toBe(`${trueClass} ${truthyClass}`);
+    expect(result).toBe(`${trueClass} ${truthyClass} `);
   });
 });

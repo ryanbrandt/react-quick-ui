@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import Modal from "@stories/Modal/Modal";
 
 export default {
-  title: "Core/Modal",
+  title: "Core/Layout/Modal",
   text: Modal.name,
   component: Modal,
   argTypes: {
@@ -15,6 +15,9 @@ export default {
     },
     onClose: {
       control: false,
+    },
+    modalHeading: {
+      defaultValue: undefined,
     },
   },
 } as ComponentMeta<typeof Modal>;
@@ -38,7 +41,6 @@ const DefaultTemplate: ComponentStory<typeof Modal> = (args) => (
           alignItems: "center",
         }}
       >
-        <h2>Its a Modal!</h2>
         <p>This is where modal content would go</p>
       </div>
     </Modal>
@@ -140,5 +142,8 @@ const DefaultTemplate: ComponentStory<typeof Modal> = (args) => (
 export const Default = DefaultTemplate.bind({});
 Default.args = {
   open: true,
-  animated: false,
+  modalHeading: {
+    text: "Its a Modal!",
+    variant: "h1",
+  },
 };

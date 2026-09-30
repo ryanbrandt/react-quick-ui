@@ -3,7 +3,7 @@ import { HTMLInputTypeAttribute } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { JestUtilities } from "react-testing-utilities";
+import { JestUtilities } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import Input from "@utilities/Components/Input/Input";

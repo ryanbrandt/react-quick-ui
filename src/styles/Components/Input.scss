@@ -1,4 +1,5 @@
 @import "../mixins.scss";
+$icon-margin-modifier: 20px;
 
 .input {
   @include input-container();
@@ -30,6 +31,17 @@
   &__input {
     @include input-base();
     height: 38px;
+    width: 100%;
+
+    &--with-icon {
+      &--right {
+        padding-right: calc($icon-margin-modifier + 5px);
+      }
+
+      &--left {
+        padding-left: calc($icon-margin-modifier + 5px);
+      }
+    }
   }
 
   &__label {
@@ -38,5 +50,19 @@
 
   &__error-message {
     @include input-error();
+  }
+
+  &__icon {
+    @extend .flex--align-center;
+
+    &--right {
+      justify-content: flex-end;
+      margin-left: -$icon-margin-modifier;
+    }
+
+    &--left {
+      justify-content: flex-start;
+      margin-right: -$icon-margin-modifier;
+    }
   }
 }

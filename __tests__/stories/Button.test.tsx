@@ -1,9 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import {
-  JestUtilities,
-  MockFunctionComponentWrapper,
-} from "react-testing-utilities";
+import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import Button from "@stories/Button/Button";

@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 
-import { JestUtilities } from "react-testing-utilities";
+import { JestUtilities } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import TopBar from "@stories/TopBar/TopBar";

@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import {
   JestUtilities,
   MockFunctionComponentWrapper,
-} from "react-testing-utilities";
+} from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import SpinnerLoader from "@stories/SpinnerLoader/SpinnerLoader";

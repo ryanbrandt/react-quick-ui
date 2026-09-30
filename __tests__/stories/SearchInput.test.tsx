@@ -3,10 +3,10 @@ import { render } from "@testing-library/react";
 import {
   JestUtilities,
   MockFunctionComponentWrapper,
-} from "react-testing-utilities";
+} from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
-import Input from "@utilities/Components/Input/Input";
+import Input from "@utilities/Components/Input";
 import SearchInput from "@stories/SearchInput/SearchInput";
 
 jest.mock("@utilities/createCompositeClassName");

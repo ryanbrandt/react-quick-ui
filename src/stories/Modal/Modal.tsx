@@ -1,6 +1,8 @@
 import { FunctionComponent, PropsWithChildren } from "react";
+import { CSSTransition } from "react-transition-group";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
+import Heading, { HeadingProps } from "@stories/Heading/Heading";
 
 interface BaseProps {
   /**
@@ -26,42 +28,68 @@ interface BaseProps {
    *
    */
   className?: string;
+
+  /**
+   * Optional heading data to apply to the modal
+   *
+   */
+  modalHeading?: HeadingProps;
 }
 
-type Props = PropsWithChildren<BaseProps>;
+export type Props = PropsWithChildren<BaseProps>;
+
+export const BASE_MODAL_TRANSITION_TIMEOUT = 150;
+
+export const MODAL_ANIMATED_TRANSITION_TIMEOUT =
+  BASE_MODAL_TRANSITION_TIMEOUT * 3;
 
 const Modal: FunctionComponent<Props> = (props: Props): JSX.Element => {
-  const { children, open, onClose, animated = false, className = "" } = props;
+  const {
+    children,
+    open,
+    onClose,
+    modalHeading,
+    animated = false,
+    className = "",
+  } = props;
 
-  const modalClassNames = createCompositeClassName({
-    [className]: true,
+  const modalTransitionClassNames = createCompositeClassName({
+    modal__transition: !animated,
+    "modal__transition--animated": animated,
+  });
+
+  const modalContentClassNames = createCompositeClassName({
     modal: true,
-    "modal--open": open && !animated,
-    "modal--closed": !open && !animated,
-    "modal--animated-open": open && animated,
-    "modal--animated-closed": !open && animated,
-  });
-
-  const modalContainerClassNames = createCompositeClassName({
-    modal__container: true,
-    "modal__container--open": open,
-    "modal__container--closed": !open,
-  });
-
-  const modalBackgroundClassNames = createCompositeClassName({
-    modal__background: true,
-    "modal__background--open": open,
-    "modal__background--closed": !open,
+    [className]: true,
   });
 
   return (
-    <div className={modalContainerClassNames}>
-      <div onClick={onClose} className={modalBackgroundClassNames}>
-        <div onClick={(e) => e.stopPropagation()} className={modalClassNames}>
+    <CSSTransition
+      unmountOnExit
+      in={open}
+      timeout={
+        animated
+          ? MODAL_ANIMATED_TRANSITION_TIMEOUT
+          : BASE_MODAL_TRANSITION_TIMEOUT
+      }
+      classNames={modalTransitionClassNames}
+    >
+      <div onClick={() => onClose()} className="modal__background">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={modalContentClassNames}
+        >
+          {modalHeading && (
+            <Heading
+              text={modalHeading.text}
+              variant={modalHeading.variant}
+              className={modalHeading.className}
+            />
+          )}
           {children}
         </div>
       </div>
-    </div>
+    </CSSTransition>
   );
 };
 

@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import { MockFunctionComponentWrapper } from "react-testing-utilities";
+import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
-import Input from "@utilities/Components/Input/Input";
+import Input from "@utilities/Components/Input";
 import PasswordInput from "@stories/PasswordInput/PasswordInput";
 
 jest.mock("@utilities/Components/Input/Input");

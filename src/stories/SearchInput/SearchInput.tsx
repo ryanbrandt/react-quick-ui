@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
-import Input, { InputSize } from "@utilities/Components/Input/Input";
+import Input, { InputSize } from "@utilities/Components/Input";
 import SearchSvg from "@svgs/SearchSvg/SearchSvg";
 
 interface Props {

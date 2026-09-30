@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
 
-import { JestUtilities } from "react-testing-utilities";
+import { JestUtilities } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import SpinnerLoader from "@stories/SpinnerLoader/SpinnerLoader";
