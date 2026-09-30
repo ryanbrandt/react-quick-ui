@@ -25,6 +25,6 @@
       "@svgs/*": ["./src/assets/svgs/*"]
     }
   },
-  "include": ["src", "__tests__"],
+  "include": ["src", "__tests__", "jest.setup.ts"],
   "exclude": ["dist"]
 }

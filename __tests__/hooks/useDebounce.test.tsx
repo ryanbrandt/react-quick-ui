@@ -25,7 +25,7 @@ describe("useDebounce", () => {
   };
 
   beforeAll(() => {
-    jest.useFakeTimers("legacy");
+    jest.useFakeTimers({ legacyFakeTimers: true });
 
     jest
       .spyOn(React, "useState")

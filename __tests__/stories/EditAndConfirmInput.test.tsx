@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom";
 import { act, render } from "@testing-library/react";
 
 import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
