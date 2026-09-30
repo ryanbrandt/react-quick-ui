@@ -21,7 +21,12 @@ module.exports = {
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   moduleDirectories: ["node_modules", "<rootDir>/src"],
-  coveragePathIgnorePatterns: ["node_modules"],
+  // Measure all of src, not just files some test happens to import.
+  collectCoverageFrom: [
+    "src/**/*.{ts,tsx}",
+    "!src/**/*.stories.tsx",
+    "!src/**/index.ts",
+  ],
   coverageThreshold: {
     global: {
       branches: 100,
