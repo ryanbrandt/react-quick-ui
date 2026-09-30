@@ -150,7 +150,7 @@ $work-sans-dir: "worksans";
   @include add-font-face(
     variables.$work-sans-family,
     italic,
-    200,
+    900,
     "#{$work-sans-dir}/work-sans-v16-latin-900italic"
   );
 }
