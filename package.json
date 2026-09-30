@@ -96,7 +96,7 @@
     "react-dom": "18.2.0",
     "react-transition-group": "^4.4.5",
     "rollup": "^4.63.5",
-    "sass": "^1.50.0",
+    "sass": "^1.105.0",
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
     "ts-jest": "^29.4.14",
