@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { HTMLInputTypeAttribute } from "react";
+import type { HTMLInputTypeAttribute } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 

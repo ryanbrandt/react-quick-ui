@@ -1,4 +1,4 @@
-import { FunctionComponent, HTMLInputTypeAttribute, useId } from "react";
+import { type FunctionComponent, type HTMLInputTypeAttribute, useId } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 
