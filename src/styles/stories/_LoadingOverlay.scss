@@ -1,10 +1,10 @@
-@import "../common.scss";
-@import "../colors.scss";
+@use "../sass/colors";
+@use "../sass/flex";
 
 $loading-overlay-transition-time: 0.3s;
 
 .loading-overlay {
-  @extend .flex--justify-center;
+  @extend %flex--justify-center;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -27,12 +27,12 @@ $loading-overlay-transition-time: 0.3s;
   }
 
   &__content {
-    @extend .flex--column--align-center--justify-center;
+    @extend %flex--column--align-center--justify-center;
 
     &__message {
       font-size: 24px;
       font-weight: 600;
-      color: $primary-blue;
+      color: colors.$primary-blue;
       padding: 30px;
     }
   }

@@ -1,4 +1,4 @@
-@import "../colors.scss";
+@use "../sass/colors";
 
 @keyframes spinner-loader-bounce {
   0%,
@@ -39,7 +39,7 @@
 
   > div {
     &:before {
-      background-color: $primary-blue;
+      background-color: colors.$primary-blue;
     }
   }
 

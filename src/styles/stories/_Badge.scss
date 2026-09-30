@@ -1,6 +1,6 @@
-@import "../colors.scss";
-@import "../common.scss";
-@import "../mixins.scss";
+@use "../sass/colors";
+@use "../sass/flex";
+@use "../sass/mixins";
 
 @mixin badge-size($fontSize, $width, $height) {
   font-size: $fontSize;
@@ -15,7 +15,7 @@
 }
 
 .badge {
-  @extend .flex--align-center--justify-center;
+  @extend %flex--align-center--justify-center;
   font-weight: 500;
   border-radius: 8px;
 
@@ -40,27 +40,27 @@
   }
 
   &--primary {
-    @include badge-variant($primary-blue, $white);
+    @include badge-variant(colors.$primary-blue, colors.$white);
   }
 
   &--success {
-    @include badge-variant($green, $white);
+    @include badge-variant(colors.$green, colors.$white);
   }
 
   &--danger {
-    @include badge-variant($red, $white);
+    @include badge-variant(colors.$red, colors.$white);
   }
 
   &--neutral {
-    @include badge-variant($dark-gray, $white);
+    @include badge-variant(colors.$dark-gray, colors.$white);
   }
 
   &--warning {
-    @include badge-variant($yellow, $white);
+    @include badge-variant(colors.$yellow, colors.$white);
   }
 
   &__text {
-    @include text-overflow-elipsis();
+    @include mixins.text-overflow-elipsis();
     padding: 1em;
   }
 }

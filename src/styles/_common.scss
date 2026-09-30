@@ -1,0 +1,86 @@
+// Public `.flex…` utility classes, one per placeholder in `sass/_flex.scss`.
+@use "sass/flex";
+
+.flex {
+  @extend %flex;
+
+  &--align-center {
+    @extend %flex--align-center;
+
+    &--justify-center {
+      @extend %flex--align-center--justify-center;
+    }
+
+    &--justify-space-between {
+      @extend %flex--align-center--justify-space-between;
+    }
+
+    &--justify-flex-start {
+      @extend %flex--align-center--justify-flex-start;
+    }
+
+    &--justify-space-around {
+      @extend %flex--align-center--justify-space-around;
+    }
+
+    &--justify-flex-end {
+      @extend %flex--align-center--justify-flex-end;
+    }
+  }
+
+  &--justify-flex-start {
+    @extend %flex--justify-flex-start;
+  }
+
+  &--justify-center {
+    @extend %flex--justify-center;
+  }
+
+  &--justify-space-between {
+    @extend %flex--justify-space-between;
+  }
+
+  &--column {
+    @extend %flex--column;
+
+    &--align-center {
+      @extend %flex--column--align-center;
+
+      &--justify-flex-start {
+        @extend %flex--column--align-center--justify-flex-start;
+      }
+
+      &--justify-flex-end {
+        @extend %flex--column--align-center--justify-flex-end;
+      }
+
+      &--justify-center {
+        @extend %flex--column--align-center--justify-center;
+      }
+
+      &--justify-space-around {
+        @extend %flex--column--align-center--justify-space-around;
+      }
+    }
+
+    &--align-flex-start {
+      @extend %flex--column--align-flex-start;
+
+      &--justify-flex-start {
+        @extend %flex--column--align-flex-start--justify-flex-start;
+      }
+    }
+
+    &--justify-flex-start {
+      @extend %flex--column--justify-flex-start;
+    }
+
+    &--justify-flex-end {
+      @extend %flex--column--justify-flex-end;
+    }
+
+    &--justify-space-between {
+      @extend %flex--column--justify-space-between;
+    }
+  }
+}

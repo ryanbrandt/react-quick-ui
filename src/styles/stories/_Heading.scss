@@ -1,7 +1,7 @@
-@import "../colors.scss";
+@use "../sass/colors";
 
 .heading {
-  color: $primary-blue;
+  color: colors.$primary-blue;
   text-align: center;
   line-height: 34px;
   margin: 0;

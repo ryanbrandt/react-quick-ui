@@ -1,7 +1,7 @@
-@import "../colors.scss";
+@use "../sass/colors";
 
 .textInput {
   font-weight: 400;
   font-size: 12px;
-  color: $dark-gray;
+  color: colors.$dark-gray;
 }

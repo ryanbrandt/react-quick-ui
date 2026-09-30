@@ -1,0 +1,22 @@
+@use "../sass/mixins";
+
+.textArea {
+  @include mixins.input-container();
+
+  &__content {
+    &__input {
+      @include mixins.input-base();
+      padding-top: 5px;
+      width: 360px;
+      height: 235px;
+    }
+
+    &__error {
+      @include mixins.input-error();
+    }
+
+    &__label {
+      @include mixins.input-label();
+    }
+  }
+}

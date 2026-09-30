@@ -1,7 +1,7 @@
-@import "./colors.scss";
-@import "./common.scss";
+@use "colors";
+@use "flex";
 
-@mixin hr-divider($color: $light-gray) {
+@mixin hr-divider($color: colors.$light-gray) {
   hr {
     width: 100%;
     border-top: 1px solid $color;
@@ -22,20 +22,20 @@
 }
 
 @mixin input-container {
-  @extend .flex--column;
+  @extend %flex--column;
   row-gap: 0.5em;
-  color: $dark-gray;
+  color: colors.$dark-gray;
 }
 
 @mixin input-base {
-  border: 1px solid $gray;
+  border: 1px solid colors.$gray;
   border-radius: 5px;
   padding: 0px 5px;
 
   &:focus {
-    border: 1px solid $light-blue;
-    box-shadow: 0px 0px 4px 2px $light-blue;
-    outline: 1px solid $dark-gray;
+    border: 1px solid colors.$light-blue;
+    box-shadow: 0px 0px 4px 2px colors.$light-blue;
+    outline: 1px solid colors.$dark-gray;
   }
 
   &:disabled {
@@ -43,18 +43,18 @@
   }
 
   &::placeholder {
-    color: $dark-gray;
+    color: colors.$dark-gray;
   }
 
   &--error {
-    border: 1px solid $red;
-    box-shadow: 0px 0px 4px 2px $red;
+    border: 1px solid colors.$red;
+    box-shadow: 0px 0px 4px 2px colors.$red;
 
     &:focus,
     &:focus-within,
     &:focus-visible {
-      border: 1px solid $red;
-      box-shadow: 0px 0px 4px 2px $red;
+      border: 1px solid colors.$red;
+      box-shadow: 0px 0px 4px 2px colors.$red;
     }
   }
 }
@@ -65,7 +65,7 @@
   padding-left: 0.5em;
 
   > span {
-    color: $red;
+    color: colors.$red;
     padding-left: 0.5em;
   }
 }
@@ -75,7 +75,7 @@
   vertical-align: middle;
   padding-left: 0.5em;
   font-style: italic;
-  color: $red;
+  color: colors.$red;
 }
 
 @mixin scroll-bar() {
@@ -87,12 +87,12 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: $gray;
+    background: colors.$gray;
     border-radius: $scrollBar-radius;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: $primary-blue;
+    background: colors.$primary-blue;
     border-radius: $scrollBar-radius;
   }
 }

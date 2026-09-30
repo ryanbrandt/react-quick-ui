@@ -45,9 +45,9 @@ const DefaultTemplate: ComponentStory<typeof $1> = (args) => (
 export const Default = DefaultTemplate.bind({});
 " >src/stories/$1/$1.stories.tsx
 
-    echo ".${1,,} {}" >src/styles/stories/$1.scss
+    echo ".${1,,} {}" >src/styles/stories/_$1.scss
 
-    echo "@import "\""./stories/$1.scss"\"";" >>src/styles/index.scss
+    echo "@use "\""stories/$1"\"";" >>src/styles/index.scss
 
     printf "\n${GREEN} $1 story created!\n"
 fi

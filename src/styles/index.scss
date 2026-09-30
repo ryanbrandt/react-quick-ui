@@ -1,24 +1,19 @@
-@import "./fonts.scss";
-@import "./colors.scss";
-@import "./mixins.scss";
-@import "./variables.scss";
-@import "./common.scss";
+// Entry point for the compiled stylesheet (`dist/stylesheets/index.css`).
+// Modules are emitted in the order they are first loaded.
+@use "fonts";
+@use "common";
+@use "base";
 
-html,
-body * {
-  font-family: $work-sans-family;
-}
+@use "Components/Input";
 
-@import "./Components/Input.scss";
-
-@import "./stories/Heading.scss";
-@import "./stories/EditAndConfirmInput.scss";
-@import "./stories/Button.scss";
-@import "./stories/Badge.scss";
-@import "./stories/TopBar.scss";
-@import "./stories/Modal.scss";
-@import "./stories/TextInput.scss";
-@import "./stories/TextArea.scss";
-@import "./stories/SpinnerLoader.scss";
-@import "./stories/LoadingOverlay.scss";
-@import "./stories/SearchInput.scss";
+@use "stories/Heading";
+@use "stories/EditAndConfirmInput";
+@use "stories/Button";
+@use "stories/Badge";
+@use "stories/TopBar";
+@use "stories/Modal";
+@use "stories/TextInput";
+@use "stories/TextArea";
+@use "stories/SpinnerLoader";
+@use "stories/LoadingOverlay";
+@use "stories/SearchInput";
