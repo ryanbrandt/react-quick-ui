@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import {
@@ -14,7 +14,7 @@ import Modal, {
   BASE_MODAL_TRANSITION_TIMEOUT,
   MODAL_ANIMATED_TRANSITION_TIMEOUT,
 } from "@stories/Modal/Modal";
-import Heading, { HeadingProps } from "@stories/Heading/Heading";
+import Heading, { type HeadingProps } from "@stories/Heading/Heading";
 
 jest.mock("@stories/Heading/Heading");
 const mockHeading = new MockFunctionComponentWrapper(Heading);

@@ -86,7 +86,7 @@ describe("BaseEditAndConfirmInput", () => {
       mockPencilSvg.assertOnScreen();
       mockCheckSvg.assertNotOnScreen();
 
-      const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0];
+      const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0]!;
       act(() => (onClick as Function)());
 
       mockPencilSvg.assertNotOnScreen();
@@ -106,7 +106,7 @@ describe("BaseEditAndConfirmInput", () => {
 
         expect(mockOnEditClick).toHaveBeenCalledTimes(0);
 
-        const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0];
+        const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0]!;
         act(() => (onClick as Function)());
 
         expect(mockOnEditClick).toHaveBeenCalledTimes(1);
@@ -123,7 +123,7 @@ describe("BaseEditAndConfirmInput", () => {
       });
 
       const [{ onClick: onEditClick }] =
-        mockPencilSvg.__OVERRIDE__mock.mock.calls[0];
+        mockPencilSvg.__OVERRIDE__mock.mock.calls[0]!;
       act(() => (onEditClick as Function)());
 
       mockPencilSvg.assertNotOnScreen();
@@ -134,7 +134,7 @@ describe("BaseEditAndConfirmInput", () => {
       });
 
       const [{ onClick: onConfirmClick }] =
-        mockCheckSvg.__OVERRIDE__mock.mock.calls[0];
+        mockCheckSvg.__OVERRIDE__mock.mock.calls[0]!;
       act(() => (onConfirmClick as Function)());
 
       mockBaseInput.assertLastCalledWith({
@@ -156,11 +156,11 @@ describe("BaseEditAndConfirmInput", () => {
           />
         );
 
-        const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0];
+        const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0]!;
         act(() => (onClick as Function)());
 
         const [{ onClick: onConfirmClick }] =
-          mockCheckSvg.__OVERRIDE__mock.mock.calls[0];
+          mockCheckSvg.__OVERRIDE__mock.mock.calls[0]!;
         act(() => (onConfirmClick as Function)());
 
         expect(mockOnConfirmClick).toHaveBeenCalledTimes(1);

@@ -1,4 +1,4 @@
-import { DependencyList, EffectCallback, useEffect } from "react";
+import { type DependencyList, type EffectCallback, useEffect } from "react";
 
 /**
  * Generic hook to run an effect given a specific condition

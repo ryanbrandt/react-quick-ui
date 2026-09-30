@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 
-import { IWindowSize } from "@hooks/types";
+import type { IWindowSize } from "@hooks/types";
 
 const useWindowSize = (): IWindowSize => {
   const [size, setSize] = useState<IWindowSize>({

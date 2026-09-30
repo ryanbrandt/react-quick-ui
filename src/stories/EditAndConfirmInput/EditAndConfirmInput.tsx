@@ -1,7 +1,7 @@
-import { FunctionComponent, HTMLInputTypeAttribute, useState } from "react";
+import { type FunctionComponent, type HTMLInputTypeAttribute, useState } from "react";
 
 import createCompositeClassname from "@utilities/createCompositeClassName";
-import Input, { IInputError, InputSize } from "@utilities/Components/Input";
+import Input, { type IInputError, type InputSize } from "@utilities/Components/Input";
 import PencilSvg from "@svgs/PencilSvg/PencilSvg";
 import CheckSvg from "@svgs/CheckSvg/CheckSvg";
 

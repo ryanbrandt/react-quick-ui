@@ -31,6 +31,14 @@ jobs:
           name: Run Linter
           command: yarn lint
 
+  typecheck:
+    executor: node
+    steps:
+      - install
+      - run:
+          name: Type Check
+          command: yarn typecheck
+
   unit_test:
     executor: node
     steps:
@@ -52,11 +60,15 @@ workflows:
     jobs:
       - lint:
           name: Lint
+      - typecheck:
+          name: Typecheck
       - unit_test:
           name: Unit Tests
           requires:
             - Lint
+            - Typecheck
       - build:
           name: Build
           requires:
             - Lint
+            - Typecheck
