@@ -11,15 +11,13 @@ describe("useWindowSize", () => {
 
     jest
       .spyOn(window, "addEventListener")
-      .mockImplementation((event, handle, _options) => {
+      .mockImplementation((event, handle) => {
         events[event] = handle;
       });
 
-    jest
-      .spyOn(window, "removeEventListener")
-      .mockImplementation((event, _handle, _options) => {
-        events[event] = undefined;
-      });
+    jest.spyOn(window, "removeEventListener").mockImplementation((event) => {
+      events[event] = undefined;
+    });
 
     const hook = renderHook(() => useWindowSize());
 

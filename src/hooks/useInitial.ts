@@ -11,6 +11,9 @@ import { useRef } from "react";
 const useInitial = <T>(value: T): T => {
   const ref = useRef<T>(value);
 
+  // Reading a ref during render breaks React Compiler memoization. Keeping the
+  // current behaviour until Q7 (React 19) revisits this hook.
+  // eslint-disable-next-line react-hooks/refs
   return ref.current;
 };
 

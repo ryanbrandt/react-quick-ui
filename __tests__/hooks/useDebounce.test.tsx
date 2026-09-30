@@ -8,11 +8,10 @@ describe("useDebounce", () => {
   const mockInitialValue = "bar";
   const mockUpdateValue = "foo";
 
-  let mockSetStateValue = mockInitialValue;
-  const mockSetStateSetter = jest.fn(
-    // eslint-disable-next-line no-return-assign
-    (value: any) => (mockSetStateValue = value)
-  );
+  let mockSetStateValue: unknown = mockInitialValue;
+  const mockSetStateSetter = jest.fn((value: unknown) => {
+    mockSetStateValue = value;
+  });
 
   const MockComponent = () => {
     const [value, setValue] = React.useState(mockInitialValue);
@@ -20,7 +19,9 @@ describe("useDebounce", () => {
     const debouncedValue = useDebounce(value);
 
     return (
-      <div onClick={() => setValue(mockUpdateValue)}>{debouncedValue}</div>
+      <button onClick={() => setValue(mockUpdateValue)}>
+        {debouncedValue}
+      </button>
     );
   };
 
@@ -49,7 +50,8 @@ describe("useDebounce", () => {
     expect(mockSetStateSetter).toHaveBeenCalledTimes(1);
     expect(mockSetStateSetter).toHaveBeenCalledWith(mockInitialValue);
 
-    userEvent.click(stateUpdateBtn);
+    // Not awaited: user-event's internal delays would wait on the fake timers.
+    void userEvent.click(stateUpdateBtn);
     jest.advanceTimersByTime(DEFAULT_VALUE_DEBOUNCE_TIME);
 
     await waitFor(() => expect(mockSetStateSetter).toHaveBeenCalledTimes(2));

@@ -23,7 +23,7 @@ const reactVersion = createRequire(import.meta.url)(
 ).version;
 
 // tsconfig "paths" aliases, grouped after packages by import-x/order.
-const aliases = ["@stories", "@hooks", "@utilities", "@styles", "@svgs"];
+const aliases = ["@utilities", "@hooks", "@stories", "@svgs", "@styles"];
 
 export default defineConfig(
   globalIgnores([

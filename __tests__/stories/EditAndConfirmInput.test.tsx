@@ -1,4 +1,5 @@
-import { act, render } from "@testing-library/react";
+import type { ReactElement } from "react";
+import { act as untypedAct, render } from "@testing-library/react";
 
 import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
@@ -19,6 +20,11 @@ const mockConditionalClassNames = jest.mocked(createCompositeClassName);
 
 jest.mock("@utilities/Components/Input");
 const mockBaseInput = new MockFunctionComponentWrapper(Input);
+
+// RTL types `act` through React's own `act` export, which @types/react 18.2
+// lacks, so typed linting sees an unresolved type. Drop this alias once the
+// React types are upgraded (Q7).
+const act = untypedAct as (callback: () => void) => void;
 mockBaseInput.mockImplementation(({ icon }) => (
   <div>{icon ? icon.icon : undefined}</div>
 ));
@@ -68,7 +74,7 @@ describe("BaseEditAndConfirmInput", () => {
       className: "",
       icon: {
         position: "right",
-        icon: expect.anything(),
+        icon: expect.anything() as ReactElement,
       },
       disabled: true,
     });
@@ -86,7 +92,7 @@ describe("BaseEditAndConfirmInput", () => {
       mockCheckSvg.assertNotOnScreen();
 
       const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0]!;
-      act(() => (onClick as Function)());
+      act(() => (onClick as () => void)());
 
       mockPencilSvg.assertNotOnScreen();
       mockCheckSvg.assertOnScreen();
@@ -106,7 +112,7 @@ describe("BaseEditAndConfirmInput", () => {
         expect(mockOnEditClick).toHaveBeenCalledTimes(0);
 
         const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0]!;
-        act(() => (onClick as Function)());
+        act(() => (onClick as () => void)());
 
         expect(mockOnEditClick).toHaveBeenCalledTimes(1);
       });
@@ -123,7 +129,7 @@ describe("BaseEditAndConfirmInput", () => {
 
       const [{ onClick: onEditClick }] =
         mockPencilSvg.__OVERRIDE__mock.mock.calls[0]!;
-      act(() => (onEditClick as Function)());
+      act(() => (onEditClick as () => void)());
 
       mockPencilSvg.assertNotOnScreen();
       mockCheckSvg.assertOnScreen();
@@ -134,7 +140,7 @@ describe("BaseEditAndConfirmInput", () => {
 
       const [{ onClick: onConfirmClick }] =
         mockCheckSvg.__OVERRIDE__mock.mock.calls[0]!;
-      act(() => (onConfirmClick as Function)());
+      act(() => (onConfirmClick as () => void)());
 
       mockBaseInput.assertLastCalledWith({
         disabled: true,
@@ -156,11 +162,11 @@ describe("BaseEditAndConfirmInput", () => {
         );
 
         const [{ onClick }] = mockPencilSvg.__OVERRIDE__mock.mock.calls[0]!;
-        act(() => (onClick as Function)());
+        act(() => (onClick as () => void)());
 
         const [{ onClick: onConfirmClick }] =
           mockCheckSvg.__OVERRIDE__mock.mock.calls[0]!;
-        act(() => (onConfirmClick as Function)());
+        act(() => (onConfirmClick as () => void)());
 
         expect(mockOnConfirmClick).toHaveBeenCalledTimes(1);
       });
