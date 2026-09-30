@@ -1,53 +1,28 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Builds the library into dist/. Any failing command aborts the build.
+set -euo pipefail
 
-RED='\033[0;31m'
-YELLOW='\033[0;33m'
-GREEN='\033[0;32m'
+cd "$(dirname "$0")/.."
 
-function build_failure() {
-    printf "\n${YELLOW}$1\n"
-    printf "${RED}Build Failed!\n"
-    exit 1
-}
+step() { printf '\n==> %s\n' "$1"; }
 
-function main() {
-    printf "\nPreparing to build library...\n"
+step "Cleaning dist"
+rm -rf dist
 
-    rm -rf dist
+step "Bundling JavaScript (rollup)"
+yarn rollup -c
 
-    if [ $? -ne 0 ]; then
-        build_failure "Failed preparation"
-    fi
+step "Emitting type declarations (tsc + tsc-alias)"
+yarn tsc -p tsconfig.build.json
+yarn tsc-alias -p tsconfig.build.json
 
-    printf "\nBundling library...\n"
+step "Compiling stylesheets"
+yarn sass src/styles/index.scss dist/stylesheets/index.css --no-source-map --style compressed
+yarn sass src/styles/index.scss dist/stylesheets/index.scss --no-source-map --style compressed
+cp src/styles/colors.scss dist/stylesheets/colors.scss
 
-    yarn rollup -c
+step "Copying fonts"
+mkdir -p dist/assets
+cp -R src/assets/fonts dist/assets/fonts
 
-    if [ $? -ne 0 ]; then
-        build_failure "Failed bundling library"
-    fi
-
-    printf "\nCompiling stylesheets...\n"
-
-    yarn sass src/styles/index.scss dist/stylesheets/index.css --no-source-map --style compressed && yarn sass src/styles/index.scss dist/stylesheets/index.scss --no-source-map --style compressed
-
-    cp src/styles/colors.scss dist/stylesheets/colors.scss
-
-    if [ $? -ne 0 ]; then
-        build_failure "Failed compiling stylesheets"
-    fi
-
-    printf "\nCopying assets...\n"
-
-    mkdir -p dist/assets/ && cp -r src/assets/fonts/ dist/assets/fonts/
-
-    if [ $? -ne 0 ]; then
-        build_failure "Failed copying assets"
-    fi
-
-    printf "\n${GREEN}Build succeeded!\n"
-
-    exit 0
-}
-
-main
+printf '\nBuild succeeded.\n'

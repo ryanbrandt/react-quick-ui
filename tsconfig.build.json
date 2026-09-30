@@ -1,9 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "noEmit": false,
     "declaration": true,
+    "emitDeclarationOnly": true,
     "rootDir": "./src",
     "outDir": "./dist"
   },
-  "exclude": ["src/stories/**/*.stories.*", "__tests__"]
+  "include": ["src"],
+  "exclude": ["src/**/*.stories.*"]
 }
