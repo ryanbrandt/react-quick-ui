@@ -16,7 +16,6 @@ commands:
       - restore_cache:
           keys:
             - v3-yarn-{{ checksum "yarn.lock" }}
-            - v3-yarn-
       - run: yarn install --immutable
       - save_cache:
           key: v3-yarn-{{ checksum "yarn.lock" }}
@@ -49,7 +48,7 @@ jobs:
           command: yarn build
 
 workflows:
-  build:
+  ci:
     jobs:
       - lint:
           name: Lint
