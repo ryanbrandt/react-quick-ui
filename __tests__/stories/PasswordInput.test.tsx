@@ -5,7 +5,7 @@ import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 import Input from "@utilities/Components/Input";
 import PasswordInput from "@stories/PasswordInput/PasswordInput";
 
-jest.mock("@utilities/Components/Input/Input");
+jest.mock("@utilities/Components/Input");
 const mockBaseInput = new MockFunctionComponentWrapper(Input);
 
 describe("PasswordInput", () => {

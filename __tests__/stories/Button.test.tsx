@@ -8,9 +8,7 @@ import PencilSvg from "@svgs/SearchSvg/SearchSvg";
 
 jest.mock("@utilities/createCompositeClassName");
 const MOCK_CLASSNAMES = "class_name";
-const mockedcreateCompositeClassName = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockedcreateCompositeClassName = jest.mocked(createCompositeClassName);
 mockedcreateCompositeClassName.mockReturnValue(MOCK_CLASSNAMES);
 
 jest.mock("@svgs/SearchSvg/SearchSvg");

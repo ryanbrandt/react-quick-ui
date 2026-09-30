@@ -1,9 +1,6 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import {
-  JestUtilities,
-  MockFunctionComponentWrapper,
-} from "@ryanbrandt/react-testing-utils";
+import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import Input from "@utilities/Components/Input";
@@ -11,12 +8,10 @@ import TextInput from "@stories/TextInput/TextInput";
 
 jest.mock("@utilities/createCompositeClassName");
 const MOCK_CLASSNAMES = "class_name";
-const mockedcreateCompositeClassName = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockedcreateCompositeClassName = jest.mocked(createCompositeClassName);
 mockedcreateCompositeClassName.mockReturnValue(MOCK_CLASSNAMES);
 
-jest.mock("@utilities/Components/Input/Input");
+jest.mock("@utilities/Components/Input");
 const mockBaseInput = new MockFunctionComponentWrapper(Input);
 const MOCK_BASE_INPUT = "mockBaseInput";
 mockBaseInput.mockReturnValue(<div data-testid={MOCK_BASE_INPUT} />);

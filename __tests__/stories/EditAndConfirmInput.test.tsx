@@ -1,10 +1,7 @@
 import "@testing-library/jest-dom";
 import { act, render } from "@testing-library/react";
 
-import {
-  JestUtilities,
-  MockFunctionComponentWrapper,
-} from "@ryanbrandt/react-testing-utils";
+import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import Input from "@utilities/Components/Input";
@@ -19,9 +16,7 @@ jest.mock("@svgs/CheckSvg/CheckSvg");
 const mockCheckSvg = new MockFunctionComponentWrapper(CheckSvg);
 
 jest.mock("@utilities/createCompositeClassName");
-const mockConditionalClassNames = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockConditionalClassNames = jest.mocked(createCompositeClassName);
 
 jest.mock("@utilities/Components/Input");
 const mockBaseInput = new MockFunctionComponentWrapper(Input);

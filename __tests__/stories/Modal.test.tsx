@@ -5,7 +5,6 @@ import { ReactNode } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import {
-  JestUtilities,
   MockClassComponentWrapper,
   MockFunctionComponentWrapper,
 } from "@ryanbrandt/react-testing-utils";
@@ -22,9 +21,7 @@ const mockHeading = new MockFunctionComponentWrapper(Heading);
 
 jest.mock("@utilities/createCompositeClassName");
 const mockcreateCompositeClassNameOutput = "conditional_classnames_output";
-const mockconditionalClasssNames = JestUtilities.assertAsMockFunction(
-  createCompositeClassName
-);
+const mockconditionalClasssNames = jest.mocked(createCompositeClassName);
 mockconditionalClasssNames.mockReturnValue(mockcreateCompositeClassNameOutput);
 
 jest.mock("react-transition-group");
