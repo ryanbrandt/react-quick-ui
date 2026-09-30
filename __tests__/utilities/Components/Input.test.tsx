@@ -2,66 +2,47 @@ import type { HTMLInputTypeAttribute } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import createCompositeClassName from "@utilities/createCompositeClassName";
 import Input from "@utilities/Components/Input";
 
-jest.mock("@utilities/createCompositeClassName");
-const MOCK_CLASSNAMES = "class_name";
-const mockedcreateCompositeClassName = jest.mocked(createCompositeClassName);
-mockedcreateCompositeClassName.mockReturnValue(MOCK_CLASSNAMES);
-
 describe("Input", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   const MOCK_INPUT_TYPE = "text";
+
+  const getWrapper = (container: HTMLElement) =>
+    container.firstChild as HTMLElement;
+
+  const getInput = (container: HTMLElement) =>
+    container.querySelector("input") as HTMLInputElement;
 
   const assertInputAttributes = (
     container: HTMLElement,
     attributes: {
       value: string;
       type: HTMLInputTypeAttribute;
-      className: string;
       disabled: boolean;
       placeholder: string | undefined;
       min: string | undefined;
       max: string | undefined;
     }
   ) => {
-    const input = container.querySelector("input") as HTMLInputElement;
+    const input = getInput(container);
 
     expect(input.value).toBe(attributes.value);
     expect(input.type).toBe(attributes.type);
-    expect(input.className).toBe(attributes.className);
     expect(input.disabled).toBe(attributes.disabled);
     expect(input.placeholder).toBe(attributes.placeholder);
     expect(input.min).toBe(attributes.min);
     expect(input.max).toBe(attributes.max);
   };
 
-  const assertInputStyling = (error: boolean, size = "md", className = "") => {
-    expect(mockedcreateCompositeClassName).toHaveBeenCalledWith({
-      input: true,
-      [`input--${size}`]: true,
-      [className]: true,
-    });
-
-    expect(mockedcreateCompositeClassName).toHaveBeenCalledWith({
-      input__input: true,
-      "input__input--error": error,
-    });
-  };
-
-  it("renders the input with the expected default attributes applied", () => {
+  it("renders the input with the expected default attributes and classes applied", () => {
     const { container } = render(<Input inputType={MOCK_INPUT_TYPE} />);
 
-    assertInputStyling(false);
+    expect(getWrapper(container).className).toBe("input input--md");
+    expect(getInput(container).className).toBe("input__input");
     assertInputAttributes(container, {
       value: "",
       disabled: false,
       type: MOCK_INPUT_TYPE,
-      className: MOCK_CLASSNAMES,
       placeholder: "",
       min: "",
       max: "",
@@ -72,9 +53,13 @@ describe("Input", () => {
     describe("when the error is a string", () => {
       it("converts the error to an IInput error, stylizes the input and renders the error as expected", () => {
         const mockError = "error";
-        render(<Input inputType={MOCK_INPUT_TYPE} error={mockError} />);
+        const { container } = render(
+          <Input inputType={MOCK_INPUT_TYPE} error={mockError} />
+        );
 
-        assertInputStyling(true);
+        expect(getInput(container).className).toBe(
+          "input__input input__input--error"
+        );
         expect(screen.getByText(mockError)).toBeInTheDocument();
       });
     });
@@ -82,9 +67,13 @@ describe("Input", () => {
     describe("when the error is an IInputError", () => {
       it("stylizes the input and renders the error as expected", () => {
         const mockError = { error: true, text: "foo" };
-        render(<Input inputType={MOCK_INPUT_TYPE} error={mockError} />);
+        const { container } = render(
+          <Input inputType={MOCK_INPUT_TYPE} error={mockError} />
+        );
 
-        assertInputStyling(true);
+        expect(getInput(container).className).toBe(
+          "input__input input__input--error"
+        );
         expect(screen.getByText(mockError.text)).toBeInTheDocument();
       });
     });
@@ -101,10 +90,11 @@ describe("Input", () => {
 
   describe("when a size is provided", () => {
     it("applies the provided size", () => {
-      const mockSize = "lg";
-      render(<Input inputType={MOCK_INPUT_TYPE} size={mockSize} />);
+      const { container } = render(
+        <Input inputType={MOCK_INPUT_TYPE} size="lg" />
+      );
 
-      assertInputStyling(false, mockSize);
+      expect(getWrapper(container).className).toBe("input input--lg");
     });
   });
 
@@ -118,9 +108,8 @@ describe("Input", () => {
         );
 
         const mockNewValue = "A";
-        const input = container.querySelector("input") as HTMLInputElement;
 
-        await userEvent.type(input, mockNewValue);
+        await userEvent.type(getInput(container), mockNewValue);
 
         expect(mockOnChange).toHaveBeenLastCalledWith(mockNewValue);
       });
@@ -132,37 +121,36 @@ describe("Input", () => {
       it("does nothing", async () => {
         const { container } = render(<Input inputType={MOCK_INPUT_TYPE} />);
 
-        const mockNewValue = "A";
-        const input = container.querySelector("input") as HTMLInputElement;
+        await userEvent.type(getInput(container), "A");
 
-        await userEvent.type(input, mockNewValue);
+        expect(getInput(container).value).toBe("");
       });
     });
   });
 
   describe("when a className is provided", () => {
-    it("applies the provided class name", () => {
-      const mockClassName = "Foo";
-      render(<Input inputType={MOCK_INPUT_TYPE} className={mockClassName} />);
+    it("applies the provided class name to the wrapper", () => {
+      const { container } = render(
+        <Input inputType={MOCK_INPUT_TYPE} className="Foo" />
+      );
 
-      assertInputStyling(false, undefined, mockClassName);
+      expect(getWrapper(container).className).toBe("input input--md Foo");
     });
+  });
 
-    describe("when disabled is provided", () => {
-      it("stylizes the input and applies the provided disabled attribute", () => {
-        const { container } = render(
-          <Input inputType={MOCK_INPUT_TYPE} disabled />
-        );
+  describe("when disabled is provided", () => {
+    it("applies the provided disabled attribute", () => {
+      const { container } = render(
+        <Input inputType={MOCK_INPUT_TYPE} disabled />
+      );
 
-        assertInputAttributes(container, {
-          value: "",
-          disabled: true,
-          type: MOCK_INPUT_TYPE,
-          className: MOCK_CLASSNAMES,
-          placeholder: "",
-          min: "",
-          max: "",
-        });
+      assertInputAttributes(container, {
+        value: "",
+        disabled: true,
+        type: MOCK_INPUT_TYPE,
+        placeholder: "",
+        min: "",
+        max: "",
       });
     });
   });
@@ -170,20 +158,22 @@ describe("Input", () => {
   describe.each(["left", "right"] as const)(
     "when an icon positioned %s is provided",
     (position) => {
-      it("renders the icon with the expected positional styling", () => {
-        render(
+      it("renders the icon with the positional icon class and pads the input on that side", () => {
+        const { container } = render(
           <Input
             inputType={MOCK_INPUT_TYPE}
             icon={{ position, icon: <span data-testid="icon" /> }}
           />
         );
 
-        expect(screen.getByTestId("icon")).toBeInTheDocument();
-        expect(mockedcreateCompositeClassName).toHaveBeenCalledWith({
-          baseInput__icon: true,
-          "baseInput__icon--right": position === "right",
-          "baseInput__icon--left": position === "left",
-        });
+        const icon = screen.getByTestId("icon");
+        expect(icon).toBeInTheDocument();
+        expect((icon.parentElement as HTMLElement).className).toBe(
+          `input__icon input__icon--${position}`
+        );
+        expect(getInput(container).className).toBe(
+          `input__input input__input--with-icon--${position}`
+        );
       });
     }
   );

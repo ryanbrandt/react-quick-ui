@@ -140,6 +140,8 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
   const inputClassNames = createCompositeClassName({
     input__input: true,
     "input__input--error": !!error?.error,
+    "input__input--with-icon--left": icon?.position === "left",
+    "input__input--with-icon--right": icon?.position === "right",
   });
 
   return (
@@ -163,9 +165,9 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
         {icon && (
           <span
             className={createCompositeClassName({
-              baseInput__icon: true,
-              "baseInput__icon--right": icon.position === "right",
-              "baseInput__icon--left": icon.position === "left",
+              input__icon: true,
+              "input__icon--right": icon.position === "right",
+              "input__icon--left": icon.position === "left",
             })}
           >
             {icon.icon}

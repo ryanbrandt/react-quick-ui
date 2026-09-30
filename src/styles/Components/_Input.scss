@@ -47,6 +47,10 @@ $icon-margin-modifier: 20px;
     }
   }
 
+  &__input-icon-container {
+    @extend %flex--align-center;
+  }
+
   &__label {
     @include mixins.input-label();
   }
@@ -57,6 +61,8 @@ $icon-margin-modifier: 20px;
 
   &__icon {
     @extend %flex--align-center;
+    // Paint above the input it overlaps.
+    z-index: 1;
 
     &--right {
       justify-content: flex-end;
@@ -66,6 +72,7 @@ $icon-margin-modifier: 20px;
     &--left {
       justify-content: flex-start;
       margin-right: -$icon-margin-modifier;
+      order: -1;
     }
   }
 }
