@@ -10,8 +10,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.js"
+      "module": "./dist/index.esm.js",
+      "default": "./dist/index.js"
     },
     "./stylesheets/*": "./dist/stylesheets/*",
     "./assets/*": "./dist/assets/*",
