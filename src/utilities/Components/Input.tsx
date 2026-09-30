@@ -160,7 +160,12 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
           {label}
         </label>
       )}
-      <div className="input__input-icon-container">
+      <div
+        className={createCompositeClassName({
+          "input__input-icon-container": true,
+          "input__input-icon-container--with-icon": !!icon,
+        })}
+      >
         <input
           id={inputId}
           value={value}

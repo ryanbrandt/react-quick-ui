@@ -202,7 +202,20 @@ describe("Input", () => {
         expect(getInput(container).className).toBe(
           `input__input input__input--with-icon--${position}`
         );
+        expect(getInput(container).parentElement?.className).toBe(
+          "input__input-icon-container input__input-icon-container--with-icon"
+        );
       });
     }
   );
+
+  describe("when no icon is provided", () => {
+    it("keeps the plain icon container so the input's width is unchanged", () => {
+      const { container } = render(<Input inputType={MOCK_INPUT_TYPE} />);
+
+      expect(getInput(container).parentElement?.className).toBe(
+        "input__input-icon-container"
+      );
+    });
+  });
 });
