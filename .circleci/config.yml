@@ -30,6 +30,9 @@ jobs:
       - run:
           name: Run Linter
           command: yarn lint
+      - run:
+          name: Check Formatting
+          command: yarn format:check
 
   typecheck:
     executor: node
