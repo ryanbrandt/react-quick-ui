@@ -15,7 +15,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
-- `usePrevious` keeps its values in state instead of a ref. It now returns the
+- **Breaking:** TypeScript consumers need `@types/react` 18.2.6 or later. The
+  type declarations now import `JSX` from `react` (React 19 removed the global
+  `JSX` namespace).
+- **Breaking:** `usePrevious` keeps its values in state instead of a ref. It now returns the
   value before the most recent _change_: a re-render with the same value no
   longer makes it return the current value.
 
