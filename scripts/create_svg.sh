@@ -28,20 +28,19 @@ export default $1;
     echo "export { default as $1 } from "\""@svgs/$1/$1"\"";" >>src/assets/svgs/index.ts
 
     echo "
-import { ComponentStory, ComponentMeta } from "\""@storybook/react"\"";
+import type { Meta, StoryObj } from "\""@storybook/react-vite"\"";
 
 import $1 from "\""@svgs/$1/$1"\"";
 
-export default {
+const meta = {
     title: "\""SVG/$1"\"",
-    text: $1.name,
     component: $1,
-} as ComponentMeta<typeof $1>;
+} satisfies Meta<typeof $1>;
 
-const IconTemplate: ComponentStory<typeof $1> = (args) => (
-    <$1 {...args} />
-);
-export const Icon = IconTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Icon: Story = {};
 " >src/assets/svgs/$1/$1.stories.tsx
 
     printf "\n${GREEN} $1 SVG created!\n"

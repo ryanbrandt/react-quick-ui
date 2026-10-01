@@ -1,49 +1,32 @@
-import type { StoryFn, Meta } from "@storybook/react-webpack5";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import Badge from "@stories/Badge/Badge";
 
-export default {
+const meta = {
   title: "Core/Badge",
-  text: Badge.name,
   component: Badge,
-} as Meta<typeof Badge>;
+  args: { size: "md" },
+} satisfies Meta<typeof Badge>;
 
-export const Primary = {
-  args: {
-    text: "Primary",
-    size: "md",
-    variant: "primary",
-  },
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: { text: "Primary", variant: "primary" },
 };
 
-export const Warning = {
-  args: {
-    text: "Warning",
-    size: "md",
-    variant: "warning",
-  },
+export const Warning: Story = {
+  args: { text: "Warning", variant: "warning" },
 };
 
-export const Danger = {
-  args: {
-    text: "Danger",
-    size: "md",
-    variant: "danger",
-  },
+export const Danger: Story = {
+  args: { text: "Danger", variant: "danger" },
 };
 
-export const Success = {
-  args: {
-    text: "Success",
-    size: "md",
-    variant: "success",
-  },
+export const Success: Story = {
+  args: { text: "Success", variant: "success" },
 };
 
-export const Neutral = {
-  args: {
-    text: "Neutral",
-    size: "md",
-    variant: "neutral",
-  },
+export const Neutral: Story = {
+  args: { text: "Neutral", variant: "neutral" },
 };

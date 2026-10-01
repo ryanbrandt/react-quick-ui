@@ -30,19 +30,19 @@ export default $1;
     echo "export { default as $1 } from "\""@stories/$1/$1"\"";" >>src/stories/index.ts
 
     echo "
-import { ComponentStory, ComponentMeta } from "\""@storybook/react"\"";
+import type { Meta, StoryObj } from "\""@storybook/react-vite"\"";
 
 import $1 from "\""@stories/$1/$1"\"";
 
-export default {
-    text: $1.name,
+const meta = {
+    title: "\""Core/$1"\"",
     component: $1,
-} as ComponentMeta<typeof $1>;
+} satisfies Meta<typeof $1>;
 
-const DefaultTemplate: ComponentStory<typeof $1> = (args) => (
-    <$1 {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
 " >src/stories/$1/$1.stories.tsx
 
     echo ".${1,,} {}" >src/styles/stories/_$1.scss

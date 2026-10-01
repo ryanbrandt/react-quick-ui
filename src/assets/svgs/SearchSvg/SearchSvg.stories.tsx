@@ -1,14 +1,13 @@
-import type { StoryFn, Meta } from "@storybook/react-webpack5";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import SearchSvg from "@svgs/SearchSvg/SearchSvg";
 
-export default {
+const meta = {
   title: "SVG/SearchSvg",
-  text: SearchSvg.name,
   component: SearchSvg,
-  argTypes: {},
-} as Meta<typeof SearchSvg>;
+} satisfies Meta<typeof SearchSvg>;
 
-export const Icon = {
-  args: {},
-};
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Icon: Story = {};

@@ -1,29 +1,21 @@
-import type { StoryFn, Meta } from "@storybook/react-webpack5";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
-import Search from "@stories/SearchInput/SearchInput";
+import SearchInput from "@stories/SearchInput/SearchInput";
 
-export default {
+const meta = {
   title: "Core/Inputs/SearchInput",
-  text: Search.name,
-  component: Search,
-  argTypes: {
-    value: {
-      defaultValue: "",
-    },
-    placeholder: {
-      defaultValue: "Placeholder Text",
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    disabled: {
-      defaultValue: false,
-    },
-    size: {
-      defaultValue: "xlg",
-    },
+  component: SearchInput,
+  args: {
+    value: "",
+    placeholder: "Placeholder Text",
+    disabled: false,
+    size: "xlg",
+    onChange: fn(),
   },
-} as Meta<typeof Search>;
+} satisfies Meta<typeof SearchInput>;
 
-export const Default = {};
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

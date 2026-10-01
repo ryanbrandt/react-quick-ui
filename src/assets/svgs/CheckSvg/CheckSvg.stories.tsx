@@ -1,27 +1,14 @@
-import type { StoryFn, Meta } from "@storybook/react-webpack5";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import CheckSvg from "@svgs/CheckSvg/CheckSvg";
 
-export default {
+const meta = {
   title: "SVG/CheckSvg",
-  text: CheckSvg.name,
   component: CheckSvg,
-  argTypes: {
-    fill: {
-      defaultValue: false,
-    },
-    width: {
-      defaultValue: 33,
-    },
-    height: {
-      defaultValue: 33,
-    },
-  },
-} as Meta<typeof CheckSvg>;
+  args: { width: 33, height: 33 },
+} satisfies Meta<typeof CheckSvg>;
 
-export const Icon = {
-  args: {
-    width: 33,
-    height: 33,
-  },
-};
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Icon: Story = {};

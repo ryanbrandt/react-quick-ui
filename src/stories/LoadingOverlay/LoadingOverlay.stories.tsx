@@ -1,132 +1,124 @@
-import type { StoryFn, Meta } from "@storybook/react-webpack5";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import LoadingOverlay from "@stories/LoadingOverlay/LoadingOverlay";
 
-export default {
+const meta = {
   title: "Core/Loaders/LoadingOverlay",
-  text: LoadingOverlay.name,
   component: LoadingOverlay,
-  argTypes: {
-    show: {
-      defaultValue: true,
-    },
-    message: {
-      defaultValue: "",
-    },
+  args: { show: true, message: "Loading some content..." },
+  parameters: {
+    // The overlay is position: fixed; render it in its own iframe on the docs
+    // page so it doesn't cover the whole page.
+    docs: { story: { inline: false, iframeHeight: 400 } },
   },
-} as Meta<typeof LoadingOverlay>;
-
-const DefaultTemplate: StoryFn<typeof LoadingOverlay> = (args) => (
-  <div
-    style={{
-      height: "100%",
-      width: "90vw",
-      backgroundColor: "white",
-      display: "flex",
-    }}
-  >
-    <div style={{ padding: "25px" }}>
-      <h3>Lorem ipsum</h3>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
+  render: (args) => (
+    <div
+      style={{
+        height: "100%",
+        width: "90vw",
+        backgroundColor: "white",
+        display: "flex",
+      }}
+    >
+      <div style={{ padding: "25px" }}>
+        <h3>Lorem ipsum</h3>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum
+          at nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac
+          euismod mi dignissim. Ut commodo, magna eget hendrerit condimentum,
+          risus nisi mollis ipsum, et malesuada diam eros non metus. Praesent id
+          ligula ullamcorper, vulputate felis sed, feugiat nulla. Quisque
+          commodo rhoncus massa sed imperdiet. Etiam rhoncus porttitor felis, ut
+          porta nibh auctor quis. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Donec eget mattis turpis.
+        </p>
+      </div>
+      <LoadingOverlay {...args} />
     </div>
-    <LoadingOverlay {...args} />
-  </div>
-);
+  ),
+} satisfies Meta<typeof LoadingOverlay>;
 
-export const Default = {
-  render: DefaultTemplate,
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-  args: {
-    show: true,
-    message: "Loading some content...",
-  },
-};
+export const Default: Story = {};

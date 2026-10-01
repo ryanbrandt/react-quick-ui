@@ -1,35 +1,22 @@
-import type { StoryFn, Meta } from "@storybook/react-webpack5";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import TextArea from "@stories/TextArea/TextArea";
 
-export default {
+const meta = {
   title: "Core/Inputs/TextArea",
-  text: TextArea.name,
   component: TextArea,
-  argTypes: {
-    value: {
-      defaultValue: "",
-    },
-    label: {
-      defaultValue: "This is a Label",
-    },
-    required: {
-      defaultValue: false,
-    },
-    disabled: {
-      defaultValue: false,
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    placeholder: {
-      defaultValue: "",
-    },
-    error: {
-      defaultValue: "",
-    },
+  args: {
+    value: "",
+    label: "This is a Label",
+    disabled: false,
+    placeholder: "",
+    error: "",
+    onChange: fn(),
   },
-} as Meta<typeof TextArea>;
+} satisfies Meta<typeof TextArea>;
 
-export const Default = {};
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

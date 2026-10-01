@@ -1,38 +1,22 @@
-import type { StoryFn, Meta } from "@storybook/react-webpack5";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import TextInput from "@stories/TextInput/TextInput";
 
-export default {
+const meta = {
   title: "Core/Inputs/TextInput",
-  text: TextInput.name,
   component: TextInput,
-  argTypes: {
-    value: {
-      defaultValue: "",
-    },
-    size: {
-      defaultValue: "md",
-    },
-    disabled: {
-      defaultValue: false,
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    error: {
-      defaultValue: undefined,
-    },
-    placeholder: {
-      defaultValue: "",
-    },
-    label: {
-      defaultValue: "",
-    },
-    required: {
-      defaultValue: false,
-    },
+  args: {
+    value: "",
+    size: "md",
+    disabled: false,
+    placeholder: "",
+    label: "",
+    onChange: fn(),
   },
-} as Meta<typeof TextInput>;
+} satisfies Meta<typeof TextInput>;
 
-export const Default = {};
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

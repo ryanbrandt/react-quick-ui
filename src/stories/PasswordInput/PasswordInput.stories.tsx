@@ -1,38 +1,20 @@
-import type { StoryFn, Meta } from "@storybook/react-webpack5";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import PasswordInput from "@stories/PasswordInput/PasswordInput";
 
-export default {
+const meta = {
   title: "Core/Inputs/PasswordInput",
-  text: PasswordInput.name,
   component: PasswordInput,
-  argTypes: {
-    value: {
-      defaultValue: undefined,
-    },
-    size: {
-      defaultValue: "md",
-    },
-    label: {
-      defaultValue: undefined,
-    },
-    required: {
-      defaultValue: false,
-    },
-    disabled: {
-      defaultValue: false,
-    },
-    error: {
-      defaultValue: { error: false, text: "" },
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    className: {
-      defaultValue: undefined,
-    },
+  args: {
+    size: "md",
+    disabled: false,
+    error: { error: false, text: "" },
+    onChange: fn(),
   },
-} as Meta<typeof PasswordInput>;
+} satisfies Meta<typeof PasswordInput>;
 
-export const Default = {};
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
