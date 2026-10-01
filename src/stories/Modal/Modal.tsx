@@ -43,10 +43,27 @@ interface BaseProps {
 
 export type Props = PropsWithChildren<BaseProps>;
 
-export const BASE_MODAL_TRANSITION_TIMEOUT = 150;
+/**
+ * Calls `done` once the CSS animations and transitions running on `node` and
+ * its panel have finished, so the stylesheet alone sets how long the modal
+ * enters and exits (the --rq-duration-* tokens; 0ms under reduced motion).
+ * With no animations (or no stylesheet) it calls `done` straight away.
+ */
+const whenAnimationsEnd = (
+  node: HTMLElement | null,
+  done: () => void
+): void => {
+  const animations = [node, node?.firstElementChild]
+    .flatMap((element) => element?.getAnimations?.() ?? [])
+    // An infinite animation never finishes; don't wait on it.
+    .filter(({ effect }) => effect?.getComputedTiming().endTime !== Infinity);
 
-export const MODAL_ANIMATED_TRANSITION_TIMEOUT =
-  BASE_MODAL_TRANSITION_TIMEOUT * 3;
+  // A cancelled animation (e.g. an interrupted transition) rejects
+  // `finished`, but has stopped either way.
+  void Promise.all(
+    animations.map(({ finished }) => finished.catch(() => undefined))
+  ).then(done);
+};
 
 const Modal: FunctionComponent<Props> = (props: Props): JSX.Element => {
   const {
@@ -77,11 +94,7 @@ const Modal: FunctionComponent<Props> = (props: Props): JSX.Element => {
       nodeRef={backgroundRef}
       unmountOnExit
       in={open}
-      timeout={
-        animated
-          ? MODAL_ANIMATED_TRANSITION_TIMEOUT
-          : BASE_MODAL_TRANSITION_TIMEOUT
-      }
+      addEndListener={(done) => whenAnimationsEnd(backgroundRef.current, done)}
       classNames={modalTransitionClassNames}
     >
       <div

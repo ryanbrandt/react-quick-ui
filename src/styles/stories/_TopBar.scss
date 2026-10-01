@@ -1,12 +1,13 @@
-@use "../sass/colors";
 @use "../sass/flex";
 
+// The spec's top bar: a surface with a bottom border, no shadow.
 .topbar {
-  @extend %flex;
-  background-color: colors.$white;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  @include flex.flex;
+  box-sizing: border-box;
+  background-color: var(--rq-color-surface);
+  border-bottom: 1px solid var(--rq-color-border);
   flex: 1;
-  height: 76px;
+  height: 72px;
 
   &--sticky {
     position: sticky;

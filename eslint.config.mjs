@@ -38,7 +38,14 @@ const typeChecked = {
 };
 
 export default defineConfig(
-  globalIgnores(["dist/", "coverage/", "storybook-static/", ".yarn/"]),
+  globalIgnores([
+    "dist/",
+    "coverage/",
+    "storybook-static/",
+    ".yarn/",
+    "test-results/",
+    "playwright-report/",
+  ]),
 
   // Base rule sets for every linted file.
   js.configs.recommended,
@@ -87,6 +94,13 @@ export default defineConfig(
 
   // Storybook config.
   { files: [".storybook/**/*.{ts,tsx}"], ...typeChecked },
+
+  // Playwright suite (runs in Node, drives the built Storybook).
+  {
+    files: ["e2e/**/*.ts", "playwright.config.ts"],
+    ...typeChecked,
+    languageOptions: { ...typeChecked.languageOptions, globals: globals.node },
+  },
 
   // Library source and tests: browser, React, type-aware rules.
   {

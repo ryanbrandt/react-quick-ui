@@ -3,10 +3,11 @@ import { mergeConfig } from "vite";
 
 const config: StorybookConfig = {
   stories: [
+    "./docs/*.mdx",
     "../src/stories/**/*.stories.tsx",
     "../src/assets/svgs/**/*.stories.tsx",
   ],
-  addons: ["@storybook/addon-docs"],
+  addons: ["@storybook/addon-docs", "@storybook/addon-a11y"],
   framework: "@storybook/react-vite",
   // The default (react-docgen) can't expand types such as Modal's
   // PropsWithChildren<BaseProps>, and lists unions as "union" instead of

@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { CSSTransition } from "react-transition-group";
+import type { CSSTransitionProps } from "react-transition-group/CSSTransition";
 
 import {
   MockClassComponentWrapper,
@@ -9,10 +10,7 @@ import {
 } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
-import Modal, {
-  BASE_MODAL_TRANSITION_TIMEOUT,
-  MODAL_ANIMATED_TRANSITION_TIMEOUT,
-} from "@stories/Modal/Modal";
+import Modal from "@stories/Modal/Modal";
 import Heading, { type HeadingProps } from "@stories/Heading/Heading";
 
 jest.mock("@stories/Heading/Heading");
@@ -25,9 +23,11 @@ mockconditionalClasssNames.mockReturnValue(mockcreateCompositeClassNameOutput);
 
 jest.mock("react-transition-group");
 const mockCSSTransition = new MockClassComponentWrapper(CSSTransition);
-mockCSSTransition.mockRenderImplementation((props) => (
-  <div>{props.children as ReactNode}</div>
-));
+let transitionProps: CSSTransitionProps<HTMLDivElement> | undefined;
+mockCSSTransition.mockRenderImplementation((props) => {
+  transitionProps = props as CSSTransitionProps<HTMLDivElement>;
+  return <div>{props.children as ReactNode}</div>;
+});
 
 describe("Modal", () => {
   const MOCK_CHILD_TEST_ID = "child";
@@ -55,7 +55,8 @@ describe("Modal", () => {
       nodeRef: { current: background },
       unmountOnExit: true,
       in: false,
-      timeout: BASE_MODAL_TRANSITION_TIMEOUT,
+      // No timeout: the transition ends when the CSS animations do.
+      addEndListener: expect.any(Function) as (done: () => void) => void,
       classNames: mockcreateCompositeClassNameOutput,
     });
     expect(background).toHaveClass("modal__background");
@@ -136,8 +137,43 @@ describe("Modal", () => {
 
       mockCSSTransition.assertLastCalledWith({
         classNames: mockcreateCompositeClassNameOutput,
-        timeout: MODAL_ANIMATED_TRANSITION_TIMEOUT,
+        addEndListener: expect.any(Function) as (done: () => void) => void,
       });
+    });
+  });
+
+  describe("when the transition ends", () => {
+    const endTransition = async () => {
+      const done = jest.fn();
+      const addEndListener = transitionProps?.addEndListener as (
+        done: () => void
+      ) => void;
+      await act(() => {
+        addEndListener(done);
+        return Promise.resolve();
+      });
+      return done;
+    };
+
+    it("ends it at once when nothing is animating", async () => {
+      render(
+        <Modal onClose={mockOnClose} open>
+          <MockChildren />
+        </Modal>
+      );
+
+      expect(await endTransition()).toHaveBeenCalledTimes(1);
+    });
+
+    it("ends it at once when the modal is no longer rendered", async () => {
+      const { unmount } = render(
+        <Modal onClose={mockOnClose} open>
+          <MockChildren />
+        </Modal>
+      );
+      unmount();
+
+      expect(await endTransition()).toHaveBeenCalledTimes(1);
     });
   });
 

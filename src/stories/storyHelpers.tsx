@@ -33,7 +33,7 @@ interface FillerPageProps {
   layout?: "row" | "column";
 }
 
-/** A white page of filler text to show layout components against. */
+/** A page of filler text (in the theme's colours) to show layout components against. */
 export const FillerPage = ({
   children,
   before,
@@ -44,7 +44,8 @@ export const FillerPage = ({
     style={{
       height: "100%",
       width: "90vw",
-      backgroundColor: "white",
+      backgroundColor: "var(--rq-color-surface)",
+      color: "var(--rq-color-text)",
       ...(layout === "row" && { display: "flex" }),
     }}
   >

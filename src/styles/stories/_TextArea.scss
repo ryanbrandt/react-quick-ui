@@ -5,10 +5,9 @@
 
   &__content {
     &__input {
-      @include mixins.input-base();
-      padding-top: 5px;
       width: 360px;
       height: 235px;
+      @include mixins.input-base($padding: var(--rq-space-2) var(--rq-space-3));
     }
 
     &__error {

@@ -8,5 +8,9 @@
     "outDir": "./dist"
   },
   "include": ["src"],
-  "exclude": ["src/**/*.stories.*", "src/stories/storyHelpers.tsx"]
+  "exclude": [
+    "src/**/*.stories.*",
+    "src/stories/storyHelpers.tsx",
+    "src/styles/contrast.ts"
+  ]
 }

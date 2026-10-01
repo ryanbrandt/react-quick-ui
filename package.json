@@ -41,7 +41,11 @@
     "storybook": "storybook dev -p 6006",
     "story:create": "bash ./scripts/create_story.sh",
     "svg:create": "bash ./scripts/create_svg.sh",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test:visual": "yarn build-storybook --quiet && playwright test",
+    "test:visual:run": "playwright test",
+    "test:visual:update": "yarn build-storybook --quiet && playwright test --update-snapshots",
+    "test:visual:install": "playwright install chromium"
   },
   "browserslist": {
     "production": [
@@ -56,11 +60,14 @@
     ]
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "1.63.0",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
     "@ryanbrandt/react-testing-utils": "^0.6.0",
+    "@storybook/addon-a11y": "10.6.1",
     "@storybook/addon-docs": "10.6.1",
     "@storybook/react-vite": "10.6.1",
     "@testing-library/dom": "^10.4.2",
@@ -84,6 +91,7 @@
     "globals": "^17.12.0",
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
+    "postcss": "^8.5.28",
     "prettier": "^3.9.9",
     "react": "^19.3.0",
     "react-18": "npm:react@^18.3.1",

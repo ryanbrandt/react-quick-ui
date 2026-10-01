@@ -5,6 +5,98 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+The visual redesign starts here (ticket L1, D0 spec direction A
+"Evolved"): design tokens, light and dark themes, a variable font and a
+restyle of every component. Visual changes are intended.
+
+### Added
+
+- Design tokens as `--rq-*` CSS custom properties: colour, space, radius,
+  font family/sizes/weights, line height, letter spacing, shadow, focus
+  ring, duration and easing. They ship in the new `stylesheets/tokens.css`
+  and are included in `index.css`. Every text colour meets WCAG AA in both
+  themes, and control edges (`control-border`, `accent-fill`, the focus
+  ring) reach 3:1. `--rq-focus-ring-color`/`-width`/`-offset` let plain CSS
+  draw the same focus ring.
+- Light and dark themes. Light is the default; dark applies under
+  `data-theme="dark"`, or when the OS prefers dark and the root does not
+  set `data-theme="light"`. `data-theme` also works on any element.
+- `stylesheets/fonts.css`: Work Sans as one variable font (weights
+  100–900, latin, `font-display: swap`), with its SIL OFL 1.1 license in
+  `assets/fonts/work-sans/OFL.txt`.
+- Sass API: the token values as maps (`$colors-light`, `$colors-dark`,
+  `$space`, `$radii`, `$focus-ring`, `$font-sizes`, …); every flex helper
+  as a mixin, listed in `$flex-names`
+  (`@include rq.flex--column;`, usable inside `@media`); the
+  `text-overflow-ellipsis` and `focus-ring` mixins; `flex--justify-space-evenly`
+  and `flex--column--justify-center` (also as `.flex…` classes).
+- `TextArea` accepts an optional `id` and links its label to the textarea.
+- Storybook: a light/dark theme toolbar, the a11y addon and a
+  Foundations/Tokens page. `yarn test:visual` screenshots every story in
+  both themes and checks each for console errors and axe violations.
+
+### Changed
+
+- **Breaking:** `index.css` and `tokens.css` set `color-scheme` on `:root`, so
+  when the OS prefers dark the whole page's default background, text and form
+  controls turn dark, not only this library's components. Apps with their own
+  theme toggle should set `data-theme` on `<html>` from it and paint `body`
+  with `--rq-color-bg` / `--rq-color-text` (see the README).
+- **Breaking:** `index.css` no longer declares any fonts. Import
+  `stylesheets/fonts.css` as well to keep Work Sans (or provide your own
+  `"Work Sans"` face). Text otherwise falls back to `system-ui`.
+- **Breaking:** the 32 static Work Sans files under
+  `assets/fonts/worksans/` are gone (650 KB). Two variable files replace
+  them in `assets/fonts/work-sans/` (98 KB; the italic one only downloads
+  when used).
+- **Breaking (visual):** every component is restyled with the tokens and
+  follows the theme:
+  - Button: 12px radius, weight 500; primary/success/danger are filled
+    with white text, neutral is now an outlined secondary button (3:1
+    `control-border` edge); hover
+    darkens; `xlg` is 48px tall; a visible keyboard focus ring.
+  - Badge: pill shape with tinted backgrounds (primary is the accent tint,
+    neutral is outlined).
+  - Inputs, TextArea, SearchInput, PasswordInput, EditAndConfirmInput:
+    surface background, a 3:1 `control-border` edge, 12px radius, 16px
+    text, 14px labels, accent focus ring, red error state; inputs use
+    `box-sizing: border-box`.
+  - TopBar: bottom border instead of a shadow, 72px tall (was 76px).
+  - Modal: rounded card (16px) with a border and shadow over a themed
+    scrim. Its enter/exit transition now ends when the CSS animations do,
+    instead of after fixed 150/450ms timeouts, so the stylesheet alone sets
+    the timing and, under reduced motion, the backdrop goes at once.
+  - Heading, LoadingOverlay, SpinnerLoader and the input icons use the
+    accent colours; LoadingOverlay's backdrop is a frosted page colour.
+  - Font sizes below 13px are raised to 13px.
+  - `SearchSvg` strokes with `currentColor` (was `#D6D7E3`).
+- **Breaking:** the mixins `input-base`, `input-container`, `input-label`,
+  `input-error`, `hr-divider` and `scroll-bar` now emit `var(--rq-*)`
+  values, so pages using them need `tokens.css` or `index.css`.
+  `input-base` takes an optional `$padding`.
+- **Breaking:** `Modal.tsx` no longer exports `BASE_MODAL_TRANSITION_TIMEOUT`
+  and `MODAL_ANIMATED_TRANSITION_TIMEOUT` (they were never exported from
+  the package entry point).
+- **Breaking:** the Sass API forwards the new flex mixins (`flex`,
+  `flex--column`, …). A stylesheet that `@forward`s the API next to its
+  own mixins of the same names gets a conflict; delete the local copies.
+- Transitions and animations respect `prefers-reduced-motion: reduce`:
+  the duration tokens drop to 0ms, and the spinner fades instead of
+  scaling.
+- `_common.scss` is renamed `_flex-utilities.scss` (internal).
+- `$work-sans-family` is now the first family of the token font stack
+  (still `"Work Sans"`).
+
+### Deprecated
+
+- The legacy colour variables (`$primary-blue`, …, `sass/_colors.scss`).
+  They are unchanged real colours that don't follow the theme; the README
+  lists the token that replaces each. They will be removed in a future
+  major release.
+- The `text-overflow-elipsis` mixin (misspelled). Use
+  `text-overflow-ellipsis`; the old name warns and will be removed in a
+  future major release.
+
 ## 0.6.0-next.0 - 2026-10-01
 
 A prerelease (npm tag `next`) for testing in personal-page before 0.6.0.

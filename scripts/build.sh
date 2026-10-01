@@ -23,6 +23,10 @@ sass_version="$(yarn sass --version | cut -d ' ' -f 1)"
 sass() { yarn sass --no-source-map --fatal-deprecation="$sass_version" "$@"; }
 
 sass --style compressed src/styles/index.scss dist/stylesheets/index.css
+# Just the --rq-* custom properties, for consumers styling their own markup.
+sass --style compressed src/styles/tokens.scss dist/stylesheets/tokens.css
+# Opt-in Work Sans @font-face rules (fonts are copied below).
+sass --style compressed src/styles/fonts.scss dist/stylesheets/fonts.css
 
 # Public Sass API (tokens + mixins). Loading it must not emit any CSS.
 cp -R src/styles/sass dist/stylesheets/sass
@@ -36,7 +40,7 @@ fi
 cp dist/stylesheets/index.css dist/stylesheets/index.scss
 printf '@forward "sass/colors";\n' >dist/stylesheets/colors.scss
 
-step "Copying fonts"
+step "Copying fonts (with their license)"
 mkdir -p dist/assets
 cp -R src/assets/fonts dist/assets/fonts
 

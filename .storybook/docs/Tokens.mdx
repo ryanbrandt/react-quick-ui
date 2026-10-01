@@ -1,0 +1,73 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import {
+  ColorTokens,
+  FontWeights,
+  NonTextContrast,
+  OtherTokens,
+  Radii,
+  Spacing,
+  TextContrast,
+  TypeScale,
+} from "./TokenTables";
+
+<Meta title="Foundations/Tokens" />
+
+# Design tokens
+
+The library's design tokens (D0 spec, direction A "Evolved") are CSS custom
+properties prefixed `--rq-`, shipped in `stylesheets/tokens.css` and included
+in `stylesheets/index.css`. Light is the default; dark applies under
+`data-theme="dark"`, or when the OS prefers dark and the root doesn't set
+`data-theme="light"`. Use the **Theme** toolbar button to switch the stories.
+
+The same values are Sass maps in the Sass API (`rq.$colors-light`,
+`rq.$space`, …). These tables are generated from the compiled `tokens.css`.
+
+## Colour
+
+`brand` is for the logo mark and decoration only; on light backgrounds it is
+below AA, so text uses `accent-text`. `border` is for decorative dividers and
+the edges of cards; `control-border` is the edge of an interactive control.
+
+<ColorTokens />
+
+## Contrast
+
+These are the pairs the unit tests enforce, in both themes (the list lives in
+`src/styles/contrast.ts`). Every text token meets WCAG AA (4.5:1) on the
+backgrounds it's used on:
+
+<TextContrast />
+
+The edges that identify a control or its state reach 3:1 (WCAG 1.4.11):
+
+<NonTextContrast />
+
+## Type scale
+
+Work Sans (variable, 100–900; load `stylesheets/fonts.css`). Spec roles: hero
+`6xl`/300 (`5xl` on mobile), h2 `4xl`/400 (`3xl` on mobile), card titles
+`2xl`/600, body `lg`–`2xl` at line height `body` (1.6), nav and buttons `md`,
+eyebrow and meta `xs`, tags `2xs`.
+
+<TypeScale />
+
+<FontWeights />
+
+## Spacing
+
+A 4px scale (`--rq-space-N` is N × 4px) plus the spec's layout values: page
+gutter, section gap and card grid gap.
+
+<Spacing />
+
+## Radii
+
+<Radii />
+
+## Line height, shadows, focus ring and motion
+
+Durations drop to `0ms` when the user prefers reduced motion.
+
+<OtherTokens />

@@ -1,107 +1,160 @@
-// Flexbox layout placeholders. Placeholders emit no CSS on their own: a
-// selector that `@extend`s one is added to its rule wherever it is used.
-// `_common.scss` turns them into the public `.flex…` utility classes.
+@use "sass:meta";
 
-%flex {
+// Flexbox layout helpers, as mixins and as placeholders with the same names.
+//
+// Prefer the mixins: `@include rq.flex--column;` works anywhere, including
+// inside `@media`, which `@extend` can't reach into. The `%flex…`
+// placeholders remain for existing `@extend` users. `_flex-utilities.scss`
+// turns the mixins into the public `.flex…` utility classes. A new helper
+// needs its mixin and an entry in `$flex-names`.
+//
+// Names read as `flex[--column][--align-<value>][--justify-<value>]`.
+
+@mixin flex {
   display: flex;
+}
 
-  &--align-center {
-    @extend %flex;
-    align-items: center;
+@mixin flex--align-center {
+  @include flex;
+  align-items: center;
+}
 
-    &--justify-center {
-      @extend %flex--align-center;
-      justify-content: center;
-    }
+@mixin flex--align-center--justify-center {
+  @include flex--align-center;
+  justify-content: center;
+}
 
-    &--justify-space-between {
-      @extend %flex--align-center;
-      justify-content: space-between;
-    }
+@mixin flex--align-center--justify-space-between {
+  @include flex--align-center;
+  justify-content: space-between;
+}
 
-    &--justify-flex-start {
-      @extend %flex--align-center;
-      justify-content: flex-start;
-    }
+@mixin flex--align-center--justify-flex-start {
+  @include flex--align-center;
+  justify-content: flex-start;
+}
 
-    &--justify-space-around {
-      @extend %flex--align-center;
-      justify-content: space-around;
-    }
+@mixin flex--align-center--justify-space-around {
+  @include flex--align-center;
+  justify-content: space-around;
+}
 
-    &--justify-flex-end {
-      @extend %flex--align-center;
-      justify-content: flex-end;
-    }
-  }
+@mixin flex--align-center--justify-flex-end {
+  @include flex--align-center;
+  justify-content: flex-end;
+}
 
-  &--justify-flex-start {
-    @extend %flex;
-    justify-content: flex-start;
-  }
+@mixin flex--justify-flex-start {
+  @include flex;
+  justify-content: flex-start;
+}
 
-  &--justify-center {
-    @extend %flex;
-    justify-content: center;
-  }
+@mixin flex--justify-center {
+  @include flex;
+  justify-content: center;
+}
 
-  &--justify-space-between {
-    @extend %flex;
-    justify-content: space-between;
-  }
+@mixin flex--justify-space-between {
+  @include flex;
+  justify-content: space-between;
+}
 
-  &--column {
-    @extend %flex;
-    flex-direction: column;
+@mixin flex--justify-space-evenly {
+  @include flex;
+  justify-content: space-evenly;
+}
 
-    &--align-center {
-      @extend %flex--column;
-      align-items: center;
+@mixin flex--column {
+  @include flex;
+  flex-direction: column;
+}
 
-      &--justify-flex-start {
-        @extend %flex--column--align-center;
-        justify-content: flex-start;
-      }
+@mixin flex--column--align-center {
+  @include flex--column;
+  align-items: center;
+}
 
-      &--justify-flex-end {
-        @extend %flex--column--align-center;
-        justify-content: flex-end;
-      }
+@mixin flex--column--align-center--justify-flex-start {
+  @include flex--column--align-center;
+  justify-content: flex-start;
+}
 
-      &--justify-center {
-        @extend %flex--column--align-center;
-        justify-content: center;
-      }
+@mixin flex--column--align-center--justify-flex-end {
+  @include flex--column--align-center;
+  justify-content: flex-end;
+}
 
-      &--justify-space-around {
-        @extend %flex--column--align-center;
-        justify-content: space-around;
-      }
-    }
+@mixin flex--column--align-center--justify-center {
+  @include flex--column--align-center;
+  justify-content: center;
+}
 
-    &--align-flex-start {
-      @extend %flex--column;
-      align-items: flex-start;
+@mixin flex--column--align-center--justify-space-around {
+  @include flex--column--align-center;
+  justify-content: space-around;
+}
 
-      &--justify-flex-start {
-        @extend %flex--column--align-flex-start;
-        justify-content: flex-start;
-      }
-    }
+@mixin flex--column--align-flex-start {
+  @include flex--column;
+  align-items: flex-start;
+}
 
-    &--justify-flex-start {
-      @extend %flex--column;
-      justify-content: flex-start;
-    }
+@mixin flex--column--align-flex-start--justify-flex-start {
+  @include flex--column--align-flex-start;
+  justify-content: flex-start;
+}
 
-    &--justify-flex-end {
-      @extend %flex--column;
-      justify-content: flex-end;
-    }
+@mixin flex--column--justify-flex-start {
+  @include flex--column;
+  justify-content: flex-start;
+}
 
-    &--justify-space-between {
-      @extend %flex--column;
-      justify-content: space-between;
-    }
+@mixin flex--column--justify-flex-end {
+  @include flex--column;
+  justify-content: flex-end;
+}
+
+@mixin flex--column--justify-center {
+  @include flex--column;
+  justify-content: center;
+}
+
+@mixin flex--column--justify-space-between {
+  @include flex--column;
+  justify-content: space-between;
+}
+
+// Every helper above, in order. The `%flex…` placeholders below and the
+// `.flex…` classes in `_flex-utilities.scss` are generated from it.
+$flex-names: (
+  flex,
+  flex--align-center,
+  flex--align-center--justify-center,
+  flex--align-center--justify-space-between,
+  flex--align-center--justify-flex-start,
+  flex--align-center--justify-space-around,
+  flex--align-center--justify-flex-end,
+  flex--justify-flex-start,
+  flex--justify-center,
+  flex--justify-space-between,
+  flex--justify-space-evenly,
+  flex--column,
+  flex--column--align-center,
+  flex--column--align-center--justify-flex-start,
+  flex--column--align-center--justify-flex-end,
+  flex--column--align-center--justify-center,
+  flex--column--align-center--justify-space-around,
+  flex--column--align-flex-start,
+  flex--column--align-flex-start--justify-flex-start,
+  flex--column--justify-flex-start,
+  flex--column--justify-flex-end,
+  flex--column--justify-center,
+  flex--column--justify-space-between
+);
+
+// Placeholders (emit no CSS unless extended). Kept for `@extend` users.
+@each $name in $flex-names {
+  %#{$name} {
+    @include meta.apply(meta.get-mixin($name));
   }
 }

@@ -1,0 +1,9 @@
+// Public `.flex…` utility classes, one per mixin in `sass/_flex.scss`.
+@use "sass:meta";
+@use "sass/flex";
+
+@each $name in flex.$flex-names {
+  .#{$name} {
+    @include meta.apply(meta.get-mixin($name, flex));
+  }
+}

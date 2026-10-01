@@ -1,0 +1,166 @@
+// Design tokens (D0 spec, direction A "Evolved") as Sass maps of raw values.
+//
+// `tokens.css` turns each map into `--rq-<group>-<key>` custom properties;
+// components use those (`var(--rq-color-text)`), so they follow the theme.
+// Use the maps when you need a raw value at compile time, e.g. colour math:
+//
+//   color.adjust(map.get(rq.$colors-light, accent-text), $alpha: -0.5)
+//
+// Theme-dependent groups have a light and a dark map with the same keys.
+
+// Text tokens meet WCAG AA (4.5:1) on bg, surface and their tint, and the
+// edges of controls (control-border, accent-fill, the focus ring) reach 3:1
+// (WCAG 1.4.11). src/styles/contrast.ts lists the pairs, and
+// __tests__/styles/tokens.test.ts checks every one in both themes.
+$colors-light: (
+  bg: #f6f7fb,
+  surface: #ffffff,
+  text: #1a1c24,
+  muted: #585e6e,
+  // Decorative dividers and the edges of cards, the top bar and modals.
+  border: #e2e5ee,
+  // The edge of an interactive control (inputs, the neutral button).
+  control-border: #7c8294,
+  tint: #eaeffb,
+  accent-text: #3d5fbf,
+  accent-fill: #3d5fbf,
+  on-accent: #ffffff,
+  // Logo mark and decoration only: 2.6:1 on bg, too low for text.
+  brand: #7599e6,
+  success-text: #2a7341,
+  success-tint: #e3f2e8,
+  success-fill: #2a7341,
+  danger-text: #b83a33,
+  danger-tint: #fbe7e5,
+  danger-fill: #b83a33,
+  warning-text: #855400,
+  warning-tint: #fbefd6,
+  // Behind a modal.
+  scrim: rgba(26, 28, 36, 0.4),
+  // Over content while it loads (frosted page).
+  overlay: rgba(246, 247, 251, 0.8),
+);
+
+$colors-dark: (
+  bg: #12141b,
+  surface: #1b1e28,
+  text: #eceef4,
+  muted: #a3a9ba,
+  border: #2c3140,
+  control-border: #737a8f,
+  tint: #222a40,
+  accent-text: #a5bcf1,
+  accent-fill: #4a6cd0,
+  on-accent: #ffffff,
+  brand: #7599e6,
+  success-text: #86d19f,
+  success-tint: #1c3226,
+  success-fill: #2e7d4a,
+  danger-text: #f3a19b,
+  danger-tint: #3d2225,
+  danger-fill: #c0413a,
+  warning-text: #f0c46a,
+  warning-tint: #3a2f1a,
+  scrim: rgba(0, 0, 0, 0.6),
+  overlay: rgba(18, 20, 27, 0.8),
+);
+
+$shadows-light: (
+  sm: (
+    0 1px 2px rgba(26, 28, 36, 0.06),
+    0 1px 3px rgba(26, 28, 36, 0.08),
+  ),
+  lg: 0 12px 32px rgba(26, 28, 36, 0.16),
+);
+
+$shadows-dark: (
+  sm: 0 1px 3px rgba(0, 0, 0, 0.4),
+  lg: 0 12px 32px rgba(0, 0, 0, 0.5),
+);
+
+// A 4px scale (key × 4px), plus the layout values the spec names (use those
+// for page layout rather than a raw step).
+$space: (
+  1: 4px,
+  2: 8px,
+  3: 12px,
+  4: 16px,
+  5: 20px,
+  6: 24px,
+  8: 32px,
+  10: 40px,
+  12: 48px,
+  16: 64px,
+  gutter: 120px,
+  gutter-mobile: 20px,
+  section: 112px,
+  section-mobile: 64px,
+  grid-gap: 24px,
+);
+
+$radii: (
+  control: 12px,
+  card: 16px,
+  pill: 999px,
+);
+
+$font-family: (
+  "Work Sans",
+  system-ui,
+  -apple-system,
+  "Segoe UI",
+  Roboto,
+  sans-serif
+);
+
+// Spec roles: hero 6xl (5xl on mobile), h2 4xl (3xl on mobile), card title
+// 2xl, body lg–2xl, nav and buttons md, eyebrow and meta xs, tags 2xs.
+$font-sizes: (
+  2xs: 13px,
+  xs: 14px,
+  sm: 15px,
+  md: 16px,
+  lg: 17px,
+  xl: 18px,
+  2xl: 20px,
+  3xl: 26px,
+  4xl: 32px,
+  5xl: 44px,
+  6xl: 72px,
+);
+
+$font-weights: (
+  light: 300,
+  regular: 400,
+  medium: 500,
+  semibold: 600,
+  bold: 700,
+);
+
+$line-heights: (
+  tight: 1.05,
+  body: 1.6,
+);
+
+$letter-spacings: (
+  tight: -0.02em,
+);
+
+// The keyboard focus ring (the `focus-ring` mixin). Its colour follows the
+// theme: `--rq-focus-ring-color` is the accent text colour.
+$focus-ring: (
+  width: 2px,
+  offset: 2px,
+);
+
+// All durations become 0ms under `prefers-reduced-motion: reduce`.
+$durations: (
+  fast: 150ms,
+  base: 250ms,
+  slow: 450ms,
+);
+
+$easings: (
+  standard: cubic-bezier(0.4, 0, 0.2, 1),
+  emphasized: cubic-bezier(0.165, 0.84, 0.44, 1),
+);

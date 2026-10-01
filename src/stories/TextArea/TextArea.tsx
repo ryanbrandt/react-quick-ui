@@ -1,4 +1,9 @@
-import type { FunctionComponent, ChangeEvent, JSX } from "react";
+import {
+  type FunctionComponent,
+  type ChangeEvent,
+  type JSX,
+  useId,
+} from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 
@@ -38,6 +43,13 @@ interface Props {
    * @default (() => null)
    */
   onChange?: (text: string) => void;
+
+  /**
+   * An optional id for the textarea element, which {@link label} is linked to
+   *
+   * @default a unique id from React's useId
+   */
+  id?: string;
 }
 
 const TextArea: FunctionComponent<Props> = (props: Props): JSX.Element => {
@@ -48,7 +60,11 @@ const TextArea: FunctionComponent<Props> = (props: Props): JSX.Element => {
     error,
     label,
     placeholder,
+    id,
   } = props;
+
+  const generatedId = useId();
+  const textAreaId = id ?? generatedId;
 
   const textAreaClassNames = createCompositeClassName({
     textArea__content__input: true,
@@ -57,8 +73,13 @@ const TextArea: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   return (
     <div className="textArea">
-      {label && <label className="textArea__content__label">{label}</label>}
+      {label && (
+        <label htmlFor={textAreaId} className="textArea__content__label">
+          {label}
+        </label>
+      )}
       <textarea
+        id={textAreaId}
         className={textAreaClassNames}
         placeholder={placeholder}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>

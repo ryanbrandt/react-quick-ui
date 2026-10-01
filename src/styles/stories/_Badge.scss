@@ -1,6 +1,7 @@
-@use "../sass/colors";
 @use "../sass/flex";
 @use "../sass/mixins";
+
+// Badges are the spec's pill tags: a tint background with matching text.
 
 @mixin badge-size($fontSize, $width, $height) {
   font-size: $fontSize;
@@ -8,59 +9,73 @@
   height: $height;
 }
 
-@mixin badge-variant($primaryColor, $secondaryColor) {
-  background-color: $primaryColor;
-  color: $secondaryColor;
-  border: $primaryColor 2px;
+@mixin badge-variant($background, $color, $border: $background) {
+  background-color: $background;
+  color: $color;
+  border: 1px solid $border;
 }
 
 .badge {
-  @extend %flex--align-center--justify-center;
-  font-weight: 500;
-  border-radius: 8px;
+  @include flex.flex--align-center--justify-center;
+  box-sizing: border-box;
+  font-weight: var(--rq-font-weight-medium);
+  border-radius: var(--rq-radius-pill);
 
   &--xlg {
-    @include badge-size(14px, 170px, 35px);
+    @include badge-size(var(--rq-font-size-xs), 170px, 35px);
   }
 
   &--lg {
-    @include badge-size(12px, 140px, 30px);
+    @include badge-size(var(--rq-font-size-2xs), 140px, 30px);
   }
 
   &--md {
-    @include badge-size(10px, 110px, 25px);
+    @include badge-size(var(--rq-font-size-2xs), 110px, 25px);
   }
 
   &--sm {
-    @include badge-size(8px, 80px, 20px);
+    @include badge-size(var(--rq-font-size-2xs), 80px, 20px);
   }
 
   &--fit-content {
-    @include badge-size(10px, fit-content, fit-content);
+    @include badge-size(var(--rq-font-size-2xs), fit-content, fit-content);
   }
 
   &--primary {
-    @include badge-variant(colors.$primary-blue, colors.$white);
+    @include badge-variant(var(--rq-color-tint), var(--rq-color-accent-text));
   }
 
   &--success {
-    @include badge-variant(colors.$green, colors.$white);
+    @include badge-variant(
+      var(--rq-color-success-tint),
+      var(--rq-color-success-text)
+    );
   }
 
   &--danger {
-    @include badge-variant(colors.$red, colors.$white);
+    @include badge-variant(
+      var(--rq-color-danger-tint),
+      var(--rq-color-danger-text)
+    );
   }
 
   &--neutral {
-    @include badge-variant(colors.$dark-gray, colors.$white);
+    @include badge-variant(
+      var(--rq-color-surface),
+      var(--rq-color-muted),
+      var(--rq-color-border)
+    );
   }
 
   &--warning {
-    @include badge-variant(colors.$yellow, colors.$white);
+    @include badge-variant(
+      var(--rq-color-warning-tint),
+      var(--rq-color-warning-text)
+    );
   }
 
   &__text {
-    @include mixins.text-overflow-elipsis();
-    padding: 1em;
+    @include mixins.text-overflow-ellipsis();
+    padding: var(--rq-space-1) var(--rq-space-3);
   }
 }

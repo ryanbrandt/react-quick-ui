@@ -1,7 +1,8 @@
-@use "colors";
+// Mixins that style with the `--rq-*` custom properties, so the CSS they emit
+// needs tokens.css (or index.css) on the page.
 @use "flex";
 
-@mixin hr-divider($color: colors.$light-gray) {
+@mixin hr-divider($color: var(--rq-color-border)) {
   hr {
     width: 100%;
     border-top: 1px solid $color;
@@ -10,10 +11,17 @@
   }
 }
 
-@mixin text-overflow-elipsis {
+@mixin text-overflow-ellipsis {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+// Deprecated: misspelled alias of `text-overflow-ellipsis`, kept so existing
+// stylesheets compile. It will be removed in a future major release.
+@mixin text-overflow-elipsis {
+  @warn "text-overflow-elipsis is deprecated; use text-overflow-ellipsis.";
+  @include text-overflow-ellipsis;
 }
 
 @mixin user-control-disabled {
@@ -21,21 +29,32 @@
   pointer-events: none;
 }
 
-@mixin input-container {
-  @extend %flex--column;
-  row-gap: 0.5em;
-  color: colors.$dark-gray;
+// A visible keyboard focus ring, from the --rq-focus-ring-* tokens (the
+// accent colour, 3:1 or more on bg and surface in both themes). CSS-only
+// consumers can write the same outline with those custom properties.
+@mixin focus-ring($color: var(--rq-focus-ring-color)) {
+  outline: var(--rq-focus-ring-width) solid $color;
+  outline-offset: var(--rq-focus-ring-offset);
 }
 
-@mixin input-base {
-  border: 1px solid colors.$gray;
-  border-radius: 5px;
-  padding: 0px 5px;
+@mixin input-container {
+  @include flex.flex--column;
+  row-gap: var(--rq-space-2);
+  color: var(--rq-color-muted);
+}
+
+@mixin input-base($padding: 0 var(--rq-space-3)) {
+  box-sizing: border-box;
+  border: 1px solid var(--rq-color-control-border);
+  border-radius: var(--rq-radius-control);
+  padding: $padding;
+  background-color: var(--rq-color-surface);
+  color: var(--rq-color-text);
+  font-size: var(--rq-font-size-md);
 
   &:focus {
-    border: 1px solid colors.$light-blue;
-    box-shadow: 0px 0px 4px 2px colors.$light-blue;
-    outline: 1px solid colors.$dark-gray;
+    border-color: var(--rq-color-accent-text);
+    @include focus-ring;
   }
 
   &:disabled {
@@ -43,43 +62,44 @@
   }
 
   &::placeholder {
-    color: colors.$dark-gray;
+    color: var(--rq-color-muted);
   }
 
   &--error {
-    border: 1px solid colors.$red;
-    box-shadow: 0px 0px 4px 2px colors.$red;
+    border-color: var(--rq-color-danger-text);
+    box-shadow: 0 0 0 1px var(--rq-color-danger-text);
 
     &:focus,
     &:focus-within,
     &:focus-visible {
-      border: 1px solid colors.$red;
-      box-shadow: 0px 0px 4px 2px colors.$red;
+      border-color: var(--rq-color-danger-text);
+      @include focus-ring(var(--rq-color-danger-text));
     }
   }
 }
 
 @mixin input-label {
-  font-weight: 500;
-  font-size: 10px;
-  padding-left: 0.5em;
+  font-weight: var(--rq-font-weight-medium);
+  font-size: var(--rq-font-size-xs);
+  color: var(--rq-color-text);
+  padding-left: var(--rq-space-1);
 
   > span {
-    color: colors.$red;
-    padding-left: 0.5em;
+    color: var(--rq-color-danger-text);
+    padding-left: var(--rq-space-1);
   }
 }
 
 @mixin input-error {
-  font-size: 10px;
+  font-size: var(--rq-font-size-2xs);
   vertical-align: middle;
-  padding-left: 0.5em;
+  padding-left: var(--rq-space-1);
   font-style: italic;
-  color: colors.$red;
+  color: var(--rq-color-danger-text);
 }
 
 @mixin scroll-bar() {
-  $scrollBar-radius: 50px;
+  $scrollBar-radius: var(--rq-radius-pill);
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -87,12 +107,12 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: colors.$gray;
+    background: var(--rq-color-border);
     border-radius: $scrollBar-radius;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: colors.$primary-blue;
+    background: var(--rq-color-brand);
     border-radius: $scrollBar-radius;
   }
 }

@@ -1,24 +1,27 @@
-@use "../sass/colors";
 @use "../sass/flex";
 
-$modal-base-transition-time: 0.15s;
-$modal-animated-transition-time: $modal-base-transition-time * 3;
+// These durations alone set how long the modal enters and exits: Modal.tsx
+// ends the transition when these animations finish. Under
+// prefers-reduced-motion both are 0ms, so the modal appears and goes at once.
+$modal-base-duration: var(--rq-duration-fast);
+$modal-animated-duration: var(--rq-duration-slow);
+$modal-easing: var(--rq-easing-emphasized);
 
 @keyframes fadeIn {
   0% {
-    background: rgba(0, 0, 0, 0);
+    background: transparent;
   }
   100% {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--rq-color-scrim);
   }
 }
 
 @keyframes fadeOut {
   0% {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--rq-color-scrim);
   }
   100% {
-    background: rgba(0, 0, 0, 0);
+    background: transparent;
   }
 }
 
@@ -46,20 +49,22 @@ $modal-animated-transition-time: $modal-base-transition-time * 3;
 
 @mixin modal-transition-enter-done {
   &-enter-done {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--rq-color-scrim);
   }
 }
 
 .modal {
-  background-color: colors.$white;
-  box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.1);
+  background-color: var(--rq-color-surface);
+  color: var(--rq-color-text);
+  box-shadow: var(--rq-shadow-lg);
   box-sizing: border-box;
-  border: 1px solid colors.$gray;
+  border: 1px solid var(--rq-color-border);
+  border-radius: var(--rq-radius-card);
   bottom: 0;
   left: 0;
 
   &__background {
-    @extend %flex--align-center--justify-center;
+    @include flex.flex--align-center--justify-center;
     height: 100%;
     width: 100%;
     top: 0;
@@ -72,11 +77,11 @@ $modal-animated-transition-time: $modal-base-transition-time * 3;
     @include modal-transition-enter-done();
 
     &-enter {
-      animation: fadeIn $modal-base-transition-time forwards;
+      animation: fadeIn $modal-base-duration forwards;
     }
 
     &-exit {
-      animation: fadeOut $modal-base-transition-time forwards;
+      animation: fadeOut $modal-base-duration forwards;
 
       .modal {
         display: none;
@@ -87,18 +92,16 @@ $modal-animated-transition-time: $modal-base-transition-time * 3;
       @include modal-transition-enter-done();
 
       &-enter {
-        animation: fadeIn $modal-animated-transition-time forwards;
+        animation: fadeIn $modal-animated-duration forwards;
         .modal {
-          animation: scaleUp $modal-animated-transition-time
-            cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+          animation: scaleUp $modal-animated-duration $modal-easing forwards;
         }
       }
 
       &-exit {
-        animation: fadeOut $modal-animated-transition-time forwards;
+        animation: fadeOut $modal-animated-duration forwards;
         .modal {
-          animation: scaleDown $modal-animated-transition-time
-            cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+          animation: scaleDown $modal-animated-duration $modal-easing forwards;
         }
       }
     }

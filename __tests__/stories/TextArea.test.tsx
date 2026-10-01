@@ -38,6 +38,24 @@ describe("TextArea", () => {
       );
       expect(screen.getByText(MOCK_LABEL)).toBeInTheDocument();
     });
+
+    it("links the label to the textarea", () => {
+      const { container } = render(<TextArea label="first" />);
+      render(<TextArea label="second" />);
+
+      expect(screen.getByLabelText("first")).toBe(
+        container.querySelector("textarea")
+      );
+      expect(screen.getByLabelText("first").id).not.toBe(
+        screen.getByLabelText("second").id
+      );
+    });
+
+    it("uses the provided id", () => {
+      render(<TextArea label="label" id="foo" />);
+
+      expect(screen.getByLabelText("label").id).toBe("foo");
+    });
   });
 
   describe("when a placeholder is provided", () => {

@@ -1,0 +1,6 @@
+// Paint the preview canvas (and docs story blocks) in the active theme.
+html,
+.docs-story {
+  background-color: var(--rq-color-bg);
+  color: var(--rq-color-text);
+}

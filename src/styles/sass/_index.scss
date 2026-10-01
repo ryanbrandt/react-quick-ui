@@ -1,14 +1,26 @@
 // Public Sass API: design tokens and mixins. Loading it emits no CSS.
 //
+// Components are styled with the `--rq-*` custom properties from
+// `tokens.css`; the token maps here (`$colors-light`, `$space`, …) hold the
+// same raw values for compile-time use. The older colour variables
+// (`$primary-blue`, …, in `_colors.scss`) are deprecated: they are real
+// colours that don't follow the theme.
+//
 //   @use "@ryanbrandt/react-quick-ui/stylesheets/sass" as rq;
 //
 //   .card {
-//     color: rq.$primary-blue;
-//     @include rq.text-overflow-elipsis;
+//     @include rq.flex--column;
+//     color: var(--rq-color-accent-text);
+//
+//     &__title {
+//       @include rq.text-overflow-ellipsis;
+//     }
 //   }
 //
-// The flex placeholders (`%flex`, `%flex--column`, …) in `_flex.scss` can be
-// extended too; they have no members, so there is nothing to forward.
+// The `%flex…` placeholders in `_flex.scss` can still be extended, but the
+// mixins of the same names also work inside `@media`.
+@forward "tokens";
 @forward "colors";
 @forward "variables";
 @forward "mixins";
+@forward "flex";
