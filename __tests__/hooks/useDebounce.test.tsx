@@ -1,5 +1,5 @@
-import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { useState } from "react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import useDebounce, { DEFAULT_VALUE_DEBOUNCE_TIME } from "@hooks/useDebounce";
@@ -8,13 +8,8 @@ describe("useDebounce", () => {
   const mockInitialValue = "bar";
   const mockUpdateValue = "foo";
 
-  let mockSetStateValue: unknown = mockInitialValue;
-  const mockSetStateSetter = jest.fn((value: unknown) => {
-    mockSetStateValue = value;
-  });
-
   const MockComponent = () => {
-    const [value, setValue] = React.useState(mockInitialValue);
+    const [value, setValue] = useState(mockInitialValue);
 
     const debouncedValue = useDebounce(value);
 
@@ -25,36 +20,33 @@ describe("useDebounce", () => {
     );
   };
 
-  beforeAll(() => {
-    jest.useFakeTimers({ legacyFakeTimers: true });
-
-    jest
-      .spyOn(React, "useState")
-      .mockImplementation(() => [mockSetStateValue, mockSetStateSetter]);
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.spyOn(global, "setTimeout");
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.useRealTimers();
+    jest.restoreAllMocks();
   });
 
   it("debounces updates applied to the value", async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<MockComponent />);
-    jest.advanceTimersByTime(DEFAULT_VALUE_DEBOUNCE_TIME);
 
-    const stateUpdateBtn = screen.getByText(mockInitialValue);
-
+    expect(screen.getByRole("button")).toHaveTextContent(mockInitialValue);
     expect(setTimeout).toHaveBeenLastCalledWith(
       expect.any(Function),
       DEFAULT_VALUE_DEBOUNCE_TIME
     );
-    expect(mockSetStateSetter).toHaveBeenCalledTimes(1);
-    expect(mockSetStateSetter).toHaveBeenCalledWith(mockInitialValue);
 
-    // Not awaited: user-event's internal delays would wait on the fake timers.
-    void userEvent.click(stateUpdateBtn);
-    jest.advanceTimersByTime(DEFAULT_VALUE_DEBOUNCE_TIME);
+    await user.click(screen.getByRole("button"));
 
-    await waitFor(() => expect(mockSetStateSetter).toHaveBeenCalledTimes(2));
-    expect(mockSetStateSetter).toHaveBeenCalledWith(mockUpdateValue);
+    // No timer fires here, so no state update happens outside act().
+    jest.advanceTimersByTime(DEFAULT_VALUE_DEBOUNCE_TIME - 1);
+    expect(screen.getByRole("button")).toHaveTextContent(mockInitialValue);
+
+    // findBy* advances the fake timers inside act() until the update renders.
+    expect(await screen.findByText(mockUpdateValue)).toBeInTheDocument();
   });
 });

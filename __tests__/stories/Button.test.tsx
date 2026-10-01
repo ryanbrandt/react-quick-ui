@@ -1,17 +1,12 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import Button from "@stories/Button/Button";
-import PencilSvg from "@svgs/SearchSvg/SearchSvg";
 
 jest.mock("@utilities/createCompositeClassName");
 const MOCK_CLASSNAMES = "class_name";
 const mockedcreateCompositeClassName = jest.mocked(createCompositeClassName);
 mockedcreateCompositeClassName.mockReturnValue(MOCK_CLASSNAMES);
-
-jest.mock("@svgs/SearchSvg/SearchSvg");
-const mockPencilSvg = new MockFunctionComponentWrapper(PencilSvg);
 
 describe("Button", () => {
   const MOCK_TEXT = "Button";
@@ -83,17 +78,29 @@ describe("Button", () => {
 
   describe("when an iconLeft value is provided", () => {
     it("renders the icon to the left of the button text", () => {
-      render(<Button text={MOCK_TEXT} iconLeft={<PencilSvg />} />);
+      render(
+        <Button text={MOCK_TEXT} iconLeft={<span data-testid="icon" />} />
+      );
 
-      mockPencilSvg.assertOnScreen();
+      const iconWrapper = screen.getByTestId("icon").parentElement;
+
+      expect(iconWrapper).toHaveClass("button__content__icon");
+      expect(iconWrapper?.nextElementSibling).toBe(screen.getByText(MOCK_TEXT));
     });
   });
 
   describe("when an iconRight value is provided", () => {
     it("renders the icon to the right of the button text", () => {
-      render(<Button text={MOCK_TEXT} iconRight={<PencilSvg />} />);
+      render(
+        <Button text={MOCK_TEXT} iconRight={<span data-testid="icon" />} />
+      );
 
-      mockPencilSvg.assertOnScreen();
+      const iconWrapper = screen.getByTestId("icon").parentElement;
+
+      expect(iconWrapper).toHaveClass("button__content__icon");
+      expect(iconWrapper?.previousElementSibling).toBe(
+        screen.getByText(MOCK_TEXT)
+      );
     });
   });
 });

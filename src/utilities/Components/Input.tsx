@@ -104,6 +104,13 @@ interface Props {
    * An optional string to set the wrapper class on Input
    */
   className?: string;
+
+  /**
+   * An optional id for the input element, which {@link label} is linked to
+   *
+   * @default a unique id from React's useId
+   */
+  id?: string;
 }
 
 const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
@@ -119,9 +126,11 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
     disabled = false,
     size = "md",
     className = "",
+    id,
   } = props;
 
-  const inputId = useId();
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
 
   let { error } = props;
   if (typeof error === "string") {
@@ -140,6 +149,8 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
   const inputClassNames = createCompositeClassName({
     input__input: true,
     "input__input--error": !!error?.error,
+    "input__input--with-icon--left": icon?.position === "left",
+    "input__input--with-icon--right": icon?.position === "right",
   });
 
   return (
@@ -149,8 +160,14 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
           {label}
         </label>
       )}
-      <div className="input__input-icon-container">
+      <div
+        className={createCompositeClassName({
+          "input__input-icon-container": true,
+          "input__input-icon-container--with-icon": !!icon,
+        })}
+      >
         <input
+          id={inputId}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className={inputClassNames}
@@ -163,9 +180,9 @@ const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
         {icon && (
           <span
             className={createCompositeClassName({
-              baseInput__icon: true,
-              "baseInput__icon--right": icon.position === "right",
-              "baseInput__icon--left": icon.position === "left",
+              input__icon: true,
+              "input__icon--right": icon.position === "right",
+              "input__icon--left": icon.position === "left",
             })}
           >
             {icon.icon}
