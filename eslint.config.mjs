@@ -1,9 +1,6 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-
 // @ts-check
 // `.mjs` because the package is CommonJS (no "type": "module"): jest.config.js
-// and .storybook/main.js rely on `module.exports`, like rollup.config.mjs does.
+// relies on `module.exports`, like rollup.config.mjs does.
 import { createRequire } from "node:module";
 
 import js from "@eslint/js";
@@ -13,6 +10,7 @@ import { importX } from "eslint-plugin-import-x";
 import jsxA11y from "eslint-plugin-jsx-a11y-x";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
+import storybook from "eslint-plugin-storybook";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -29,14 +27,7 @@ const reactVersion = createRequire(import.meta.url)(
 const aliases = ["@utilities", "@hooks", "@stories", "@svgs", "@styles"];
 
 export default defineConfig(
-  globalIgnores([
-    "dist/",
-    "coverage/",
-    "storybook-static/",
-    ".yarn/",
-    // Storybook 6 webpack config; rewritten by Q8 (Storybook 10).
-    ".storybook/",
-  ]),
+  globalIgnores(["dist/", "coverage/", "storybook-static/", ".yarn/"]),
 
   // Base rule sets for every linted file.
   js.configs.recommended,
@@ -81,6 +72,18 @@ export default defineConfig(
     files: ["*.config.js"],
     languageOptions: { sourceType: "commonjs" },
     rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
+
+  // Storybook config: type-aware rules; relative imports are fine here.
+  {
+    files: [".storybook/**/*.ts"],
+    extends: [tseslint.configs.recommendedTypeChecked],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
   },
 
   // Library source and tests: browser, React, type-aware rules.
@@ -142,6 +145,9 @@ export default defineConfig(
       ],
     },
   },
+
+  // Storybook's CSF and main.ts rules (stories and .storybook/main.ts).
+  storybook.configs["flat/recommended"],
 
   // Known a11y debt: the Modal backdrop and panel are clickable divs with no
   // keyboard support (Escape to close). Changing them changes the published
