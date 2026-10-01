@@ -179,3 +179,80 @@ describe("tokens.css", () => {
     );
   });
 });
+
+describe("index.css", () => {
+  const rules = compileRules("index.scss");
+  const declarations = rules.flatMap((rule) =>
+    [...rule.declarations].map(([property, value]) => ({
+      rule,
+      property,
+      value,
+    }))
+  );
+
+  it("only uses --rq-* tokens that tokens.css defines", () => {
+    const defined = new Set(
+      compileRules("tokens.scss").flatMap((rule) => [
+        ...rule.declarations.keys(),
+      ])
+    );
+    const used = declarations.flatMap(({ value }) =>
+      [...value.matchAll(/var\((--[\w-]+)/g)].map(([, name = ""]) => name)
+    );
+
+    expect(used).not.toHaveLength(0);
+    expect(used.filter((name) => !defined.has(name))).toEqual([]);
+  });
+
+  it("has no hard-coded colours outside the tokens", () => {
+    const tokenSelectors = new Set(
+      compileRules("tokens.scss").flatMap((rule) => rule.selectors)
+    );
+    const colourLiteral = /#[0-9a-f]{3,8}\b|\b(rgba?|hsla?)\(/i;
+
+    expect(
+      declarations
+        .filter(({ rule }) =>
+          rule.selectors.every((selector) => !tokenSelectors.has(selector))
+        )
+        .filter(({ value }) => colourLiteral.test(value))
+        .map(
+          ({ rule, property, value }) =>
+            `${rule.selectors.join(", ")}: ${property}: ${value}`
+        )
+    ).toEqual([]);
+  });
+
+  it("lets every transition and animation respect prefers-reduced-motion", () => {
+    // A duration written as a literal (not a --rq-duration-* token, which
+    // drops to 0ms) needs a reduced-motion override for the same selector.
+    const reducedMotionSelectors = new Set(
+      rules
+        .filter(
+          (rule) => rule.atRule === "@media (prefers-reduced-motion: reduce)"
+        )
+        .flatMap((rule) => rule.selectors)
+    );
+    const motion = declarations.filter(
+      ({ rule, property }) =>
+        !rule.atRule?.startsWith("@keyframes") &&
+        /^(transition|animation)(-duration)?$/.test(property)
+    );
+    const literalDuration = /(^|[\s,])-?[\d.]+m?s\b/;
+
+    expect(motion).not.toHaveLength(0);
+    expect(
+      motion
+        .filter(({ value }) => literalDuration.test(value))
+        .filter(({ rule }) =>
+          rule.selectors.some(
+            (selector) => !reducedMotionSelectors.has(selector)
+          )
+        )
+        .map(
+          ({ rule, property, value }) =>
+            `${rule.selectors.join(", ")}: ${property}: ${value}`
+        )
+    ).toEqual([]);
+  });
+});

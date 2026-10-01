@@ -1,34 +1,29 @@
-@use "../sass/colors";
-
-$icon-hover-transition: 0.25s;
-
-@mixin edit-and-confirm-input-icon {
-  fill: colors.$primary-blue;
+@mixin edit-and-confirm-input-icon($fill) {
+  fill: $fill;
   cursor: pointer;
-  filter: brightness(1);
-  transition: $icon-hover-transition;
+  transition: filter var(--rq-duration-base) var(--rq-easing-standard);
 
   &:hover {
-    filter: brightness(1.25);
-    transition: $icon-hover-transition;
+    filter: brightness(0.9);
   }
 
   &__disabled {
-    fill: colors.$dark-gray;
+    fill: var(--rq-color-muted);
     pointer-events: none;
   }
 }
 
 .edit-and-confirm-input {
+  // A filled square with a white check: the accent fill keeps it AA.
   &__confirm-icon {
     width: 33px;
     height: 33px;
-    @include edit-and-confirm-input-icon;
+    @include edit-and-confirm-input-icon(var(--rq-color-accent-fill));
   }
 
   &__edit-icon {
     width: 15px;
     height: 20px;
-    @include edit-and-confirm-input-icon;
+    @include edit-and-confirm-input-icon(var(--rq-color-accent-text));
   }
 }

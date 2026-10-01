@@ -1,7 +1,4 @@
-@use "../sass/colors";
 @use "../sass/flex";
-
-$placeholder-left-padding: 5px;
 
 .search-input {
   @include flex.flex--align-center;
@@ -10,12 +7,13 @@ $placeholder-left-padding: 5px;
     &__icon {
       @include flex.flex--align-center;
       position: absolute;
-      padding-left: 7.5px;
+      padding-left: var(--rq-space-3);
+      color: var(--rq-color-muted);
     }
   }
 
   .input__input {
-    padding-left: calc(30px + $placeholder-left-padding);
-    color: colors.$primary-blue;
+    padding-left: var(--rq-space-10);
+    color: var(--rq-color-accent-text);
   }
 }

@@ -1,6 +1,5 @@
-@use "sass/variables";
-
+// Form controls don't inherit the font, hence `body *`.
 html,
 body * {
-  font-family: variables.$work-sans-family;
+  font-family: var(--rq-font-family);
 }

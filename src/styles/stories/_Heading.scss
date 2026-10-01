@@ -1,21 +1,19 @@
-@use "../sass/colors";
-
 .heading {
-  color: colors.$primary-blue;
+  color: var(--rq-color-accent-text);
   text-align: center;
   line-height: 34px;
   margin: 0;
 
   &--h1 {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: var(--rq-font-size-md);
+    font-weight: var(--rq-font-weight-bold);
   }
   &--h2 {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: var(--rq-font-size-xs);
+    font-weight: var(--rq-font-weight-semibold);
   }
   &--h3 {
-    font-size: 14px;
-    font-weight: 300;
+    font-size: var(--rq-font-size-xs);
+    font-weight: var(--rq-font-weight-light);
   }
 }

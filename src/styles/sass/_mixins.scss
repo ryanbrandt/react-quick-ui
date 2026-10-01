@@ -1,7 +1,8 @@
-@use "colors";
+// Mixins that style with the `--rq-*` custom properties, so the CSS they emit
+// needs tokens.css (or index.css) on the page.
 @use "flex";
 
-@mixin hr-divider($color: colors.$light-gray) {
+@mixin hr-divider($color: var(--rq-color-border)) {
   hr {
     width: 100%;
     border-top: 1px solid $color;
@@ -28,21 +29,30 @@
   pointer-events: none;
 }
 
-@mixin input-container {
-  @include flex.flex--column;
-  row-gap: 0.5em;
-  color: colors.$dark-gray;
+// A visible keyboard focus ring in the accent colour (AA in both themes).
+@mixin focus-ring($color: var(--rq-color-accent-text)) {
+  outline: 2px solid $color;
+  outline-offset: 2px;
 }
 
-@mixin input-base($padding: 0px 5px) {
-  border: 1px solid colors.$gray;
-  border-radius: 5px;
+@mixin input-container {
+  @include flex.flex--column;
+  row-gap: var(--rq-space-2);
+  color: var(--rq-color-muted);
+}
+
+@mixin input-base($padding: 0 var(--rq-space-3)) {
+  box-sizing: border-box;
+  border: 1px solid var(--rq-color-border);
+  border-radius: var(--rq-radius-control);
   padding: $padding;
+  background-color: var(--rq-color-surface);
+  color: var(--rq-color-text);
+  font-size: var(--rq-font-size-md);
 
   &:focus {
-    border: 1px solid colors.$light-blue;
-    box-shadow: 0px 0px 4px 2px colors.$light-blue;
-    outline: 1px solid colors.$dark-gray;
+    border-color: var(--rq-color-accent-text);
+    @include focus-ring;
   }
 
   &:disabled {
@@ -50,43 +60,44 @@
   }
 
   &::placeholder {
-    color: colors.$dark-gray;
+    color: var(--rq-color-muted);
   }
 
   &--error {
-    border: 1px solid colors.$red;
-    box-shadow: 0px 0px 4px 2px colors.$red;
+    border-color: var(--rq-color-danger-text);
+    box-shadow: 0 0 0 1px var(--rq-color-danger-text);
 
     &:focus,
     &:focus-within,
     &:focus-visible {
-      border: 1px solid colors.$red;
-      box-shadow: 0px 0px 4px 2px colors.$red;
+      border-color: var(--rq-color-danger-text);
+      @include focus-ring(var(--rq-color-danger-text));
     }
   }
 }
 
 @mixin input-label {
-  font-weight: 500;
-  font-size: 10px;
-  padding-left: 0.5em;
+  font-weight: var(--rq-font-weight-medium);
+  font-size: var(--rq-font-size-xs);
+  color: var(--rq-color-text);
+  padding-left: var(--rq-space-1);
 
   > span {
-    color: colors.$red;
-    padding-left: 0.5em;
+    color: var(--rq-color-danger-text);
+    padding-left: var(--rq-space-1);
   }
 }
 
 @mixin input-error {
-  font-size: 10px;
+  font-size: var(--rq-font-size-2xs);
   vertical-align: middle;
-  padding-left: 0.5em;
+  padding-left: var(--rq-space-1);
   font-style: italic;
-  color: colors.$red;
+  color: var(--rq-color-danger-text);
 }
 
 @mixin scroll-bar() {
-  $scrollBar-radius: 50px;
+  $scrollBar-radius: var(--rq-radius-pill);
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -94,12 +105,12 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: colors.$gray;
+    background: var(--rq-color-border);
     border-radius: $scrollBar-radius;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: colors.$primary-blue;
+    background: var(--rq-color-brand);
     border-radius: $scrollBar-radius;
   }
 }

@@ -1,7 +1,4 @@
-@use "../sass/colors";
 @use "../sass/flex";
-
-$loading-overlay-transition-time: 0.3s;
 
 .loading-overlay {
   @include flex.flex--justify-center;
@@ -12,28 +9,27 @@ $loading-overlay-transition-time: 0.3s;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  transition: all var(--rq-duration-base) var(--rq-easing-standard);
 
   &--hidden {
     width: 100%;
     height: 0%;
     visibility: collapse;
-    transition: all $loading-overlay-transition-time;
   }
 
   &--revealed {
     backdrop-filter: blur(1px);
-    background-color: rgba(148, 141, 141, 0.397);
-    transition: all $loading-overlay-transition-time;
+    background-color: var(--rq-color-overlay);
   }
 
   &__content {
     @include flex.flex--column--align-center--justify-center;
 
     &__message {
-      font-size: 24px;
-      font-weight: 600;
-      color: colors.$primary-blue;
-      padding: 30px;
+      font-size: var(--rq-font-size-3xl);
+      font-weight: var(--rq-font-weight-semibold);
+      color: var(--rq-color-accent-text);
+      padding: var(--rq-space-8);
     }
   }
 }

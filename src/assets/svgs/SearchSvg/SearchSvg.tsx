@@ -11,7 +11,7 @@ const SearchSvg = (props: SVGProps<SVGSVGElement>) => (
   >
     <path
       d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM21 21l-4.35-4.35"
-      stroke="#D6D7E3"
+      stroke="currentColor"
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"

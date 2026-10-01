@@ -38,11 +38,11 @@ $icon-margin-modifier: 20px;
 
     &--with-icon {
       &--right {
-        padding-right: calc($icon-margin-modifier + 5px);
+        padding-right: calc($icon-margin-modifier + var(--rq-space-3));
       }
 
       &--left {
-        padding-left: calc($icon-margin-modifier + 5px);
+        padding-left: calc($icon-margin-modifier + var(--rq-space-3));
       }
     }
   }
