@@ -43,6 +43,7 @@
     "svg:create": "bash ./scripts/create_svg.sh",
     "build-storybook": "storybook build",
     "test:visual": "yarn build-storybook --quiet && playwright test",
+    "test:visual:run": "playwright test",
     "test:visual:update": "yarn build-storybook --quiet && playwright test --update-snapshots",
     "test:visual:install": "playwright install chromium"
   },

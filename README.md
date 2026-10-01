@@ -51,16 +51,17 @@ Components are styled with design tokens: CSS custom properties prefixed `--rq-`
 }
 ```
 
-| Group              | Tokens                                                                                                                                                                                                                          |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Colour (per theme) | `--rq-color-` `bg`, `surface`, `text`, `muted`, `border`, `tint`, `accent-text`, `accent-fill`, `on-accent`, `brand`, `success-text`/`-tint`/`-fill`, `danger-text`/`-tint`/`-fill`, `warning-text`/`-tint`, `scrim`, `overlay` |
-| Space              | `--rq-space-N` (N × 4px: 1–8, 10, 12, 14, 16, 24, 28, 30), `gutter`, `gutter-mobile`, `section`, `section-mobile`, `grid-gap`                                                                                                   |
-| Radius             | `--rq-radius-control` (12px), `-card` (16px), `-pill`                                                                                                                                                                           |
-| Font               | `--rq-font-family`, `--rq-font-size-` `2xs` (13px) … `6xl` (72px), `--rq-font-weight-` `light`…`bold`, `--rq-line-height-tight`/`-body`, `--rq-letter-spacing-tight`                                                            |
-| Shadow (per theme) | `--rq-shadow-sm`, `--rq-shadow-lg`                                                                                                                                                                                              |
-| Motion             | `--rq-duration-fast`/`-base`/`-slow` (0ms under `prefers-reduced-motion: reduce`), `--rq-easing-standard`/`-emphasized`                                                                                                         |
+| Group              | Tokens                                                                                                                                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Colour (per theme) | `--rq-color-` `bg`, `surface`, `text`, `muted`, `border`, `control-border`, `tint`, `accent-text`, `accent-fill`, `on-accent`, `brand`, `success-text`/`-tint`/`-fill`, `danger-text`/`-tint`/`-fill`, `warning-text`/`-tint`, `scrim`, `overlay` |
+| Space              | `--rq-space-N` (N × 4px: 1–6, 8, 10, 12, 16), `gutter`, `gutter-mobile`, `section`, `section-mobile`, `grid-gap`                                                                                                                                  |
+| Radius             | `--rq-radius-control` (12px), `-card` (16px), `-pill`                                                                                                                                                                                             |
+| Font               | `--rq-font-family`, `--rq-font-size-` `2xs` (13px) … `6xl` (72px), `--rq-font-weight-` `light`…`bold`, `--rq-line-height-tight`/`-body`, `--rq-letter-spacing-tight`                                                                              |
+| Focus ring         | `--rq-focus-ring-color` (per theme: the accent text colour), `--rq-focus-ring-width` (2px), `--rq-focus-ring-offset` (2px)                                                                                                                        |
+| Shadow (per theme) | `--rq-shadow-sm`, `--rq-shadow-lg`                                                                                                                                                                                                                |
+| Motion             | `--rq-duration-fast`/`-base`/`-slow` (0ms under `prefers-reduced-motion: reduce`), `--rq-easing-standard`/`-emphasized`                                                                                                                           |
 
-Every text colour meets WCAG AA (4.5:1) on its backgrounds in both themes. `brand` (`#7599e6`) is for logos and decoration only. Storybook's "Foundations/Tokens" page lists every value.
+Every text colour meets WCAG AA (4.5:1) on its backgrounds in both themes, and the edges of controls (`control-border`, `accent-fill`, the focus ring) reach 3:1 (WCAG 1.4.11). Use `border` for decorative dividers and the edges of cards, and `control-border` for the edge of anything interactive. `brand` (`#7599e6`) is for logos and decoration only. Storybook's "Foundations/Tokens" page lists every value.
 
 **Light and dark.** Light is the default. The dark theme applies when:
 
@@ -102,11 +103,11 @@ $faded-accent: rgb(map.get(rq.$colors-light, accent-text), 0.2);
 
 It provides:
 
-- token maps (raw values, for compile-time use): `$colors-light`, `$colors-dark`, `$shadows-light`, `$shadows-dark`, `$space`, `$radii`, `$font-family`, `$font-sizes`, `$font-weights`, `$line-heights`, `$letter-spacings`, `$durations` and `$easings`
-- colours: `$primary-blue`, `$light-blue`, `$extra-light-blue`, `$black`, `$dark-gray`, `$gray`, `$light-gray`, `$white`, `$green`, `$dark-green`, `$red` and `$yellow`. They are plain colour values, so Sass colour functions keep working, but they don't follow the theme. Prefer the tokens: `$primary-blue` → `--rq-color-brand` (decoration) or `--rq-color-accent-text`/`-fill`; `$white` → `--rq-color-surface`; `$dark-gray`/`$gray` → `--rq-color-muted`/`-border`; `$light-gray` → `--rq-color-bg`; `$green`, `$red`, `$yellow` → the `success-`, `danger-` and `warning-` tokens.
-- variables: `$work-sans-family` and `$accordion-transition-time`
-- flex mixins: `flex`, `flex--align-center`, `flex--column`, `flex--column--align-center--justify-center` and the rest of the `flex[--column][--align-…][--justify-…]` set (the same names as the `.flex…` classes and the `%flex…` placeholders, which can still be extended)
-- other mixins: `hr-divider`, `text-overflow-ellipsis`, `user-control-disabled`, `focus-ring`, `input-container`, `input-base`, `input-label`, `input-error` and `scroll-bar`. These style with the `--rq-*` tokens, so the page needs `tokens.css` or `index.css`. `text-overflow-elipsis` (misspelled) still works but is deprecated.
+- token maps (raw values, for compile-time use): `$colors-light`, `$colors-dark`, `$shadows-light`, `$shadows-dark`, `$space`, `$radii`, `$focus-ring`, `$font-family`, `$font-sizes`, `$font-weights`, `$line-heights`, `$letter-spacings`, `$durations` and `$easings`
+- **deprecated** legacy colours: `$primary-blue`, `$light-blue`, `$extra-light-blue`, `$black`, `$dark-gray`, `$gray`, `$light-gray`, `$white`, `$green`, `$dark-green`, `$red` and `$yellow`. They are plain colour values, so Sass colour functions keep working, but they don't follow the theme, and they will be removed in a future major release. Use the tokens instead: `$primary-blue` → `--rq-color-brand` (decoration) or `--rq-color-accent-text`/`-fill`; `$white` → `--rq-color-surface`; `$dark-gray`/`$gray` → `--rq-color-muted`/`-border`; `$light-gray` → `--rq-color-bg`; `$green`, `$red`, `$yellow` → the `success-`, `danger-` and `warning-` tokens.
+- variables: `$work-sans-family` (the first family of `$font-family`) and `$accordion-transition-time`
+- flex mixins: `flex`, `flex--align-center`, `flex--column`, `flex--column--align-center--justify-center` and the rest of the `flex[--column][--align-…][--justify-…]` set, listed in `$flex-names` (the same names as the `.flex…` classes and the `%flex…` placeholders, which can still be extended)
+- other mixins: `hr-divider`, `text-overflow-ellipsis`, `user-control-disabled`, `focus-ring` (from the `--rq-focus-ring-*` tokens), `input-container`, `input-base`, `input-label`, `input-error` and `scroll-bar`. These style with the `--rq-*` tokens, so the page needs `tokens.css` or `index.css`. `text-overflow-elipsis` (misspelled) still works but is deprecated.
 
 That path goes through the package's `exports` map, which Vite and Sass's `pkg:` importer (`@use "pkg:@ryanbrandt/react-quick-ui/stylesheets/sass"`) both follow. With a plain `node_modules` load path, use `@ryanbrandt/react-quick-ui/dist/stylesheets/sass` instead.
 
@@ -122,7 +123,7 @@ That path goes through the package's `exports` map, which Vite and Sass's `pkg:`
 
 - `yarn storybook`: the component explorer, with a light/dark **Theme** toolbar button and the a11y panel.
 - `yarn test:coverage` (100% coverage required) and `yarn test:react18`.
-- `yarn test:visual`: builds Storybook, then screenshots every story in both themes (exact-pixel comparison) and checks each for console errors and axe violations. Run `yarn test:visual:install` once to install Chromium, and `yarn test:visual:update` to accept intended visual changes. The baseline is recorded on macOS; other platforms need their own.
+- `yarn test:visual`: builds Storybook, then screenshots every story in both themes (exact-pixel comparison) and checks each for console errors and axe violations. Run `yarn test:visual:install` once to install Chromium, `yarn test:visual:run` to rerun against the existing build, and `yarn test:visual:update` to accept intended visual changes. The baseline is recorded on macOS; other platforms need their own.
 
 **Warning: Peer Dependencies Required**
 

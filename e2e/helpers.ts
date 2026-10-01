@@ -37,8 +37,9 @@ export async function gotoStory(
   id: string,
   theme: Theme
 ): Promise<void> {
+  // a11y.manual: the addon's own axe pass is skipped; a11y.spec.ts runs axe.
   await page.goto(
-    `/iframe.html?id=${id}&viewMode=story&globals=theme:${theme}`
+    `/iframe.html?id=${id}&viewMode=story&globals=theme:${theme};a11y.manual:!true`
   );
   const phase = await page.waitForFunction(() => {
     const preview = (
@@ -56,14 +57,11 @@ export async function gotoStory(
 
 /**
  * Waits until nothing on the page is still changing: web fonts are loaded,
- * images have decoded, CSS animations (e.g. the modal's fade/scale) have
- * finished, and the browser has painted the final frame.
+ * CSS animations (e.g. the modal's fade/scale) have finished, and the
+ * browser has painted the final frame. (No story renders an <img>.)
  */
 export async function waitForStableRender(page: Page): Promise<void> {
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForFunction(() =>
-    Array.from(document.images).every((img) => img.complete)
-  );
   await page.evaluate(async () => {
     // Infinite animations (e.g. the spinner) never finish, so only wait on
     // ones that end. Re-check a few times: finishing one can start another

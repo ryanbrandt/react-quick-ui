@@ -4,8 +4,7 @@ import "@styles/fonts.scss";
 import "@styles/index.scss";
 import "./preview.scss";
 
-// WCAG 2.x A and AA rules. e2e/a11y.spec.ts runs axe with the same tags.
-const A11Y_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
+import { A11Y_TAGS } from "./a11yTags";
 
 // The toolbar's theme sets data-theme on the preview's <html>; the --rq-*
 // tokens follow it. Set while rendering, so the first paint is themed.

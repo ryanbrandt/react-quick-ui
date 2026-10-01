@@ -1,10 +1,9 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-import { gotoStory, loadStoryIds, THEMES } from "./helpers";
+import { A11Y_TAGS } from "../.storybook/a11yTags";
 
-// The same rules as the Storybook a11y addon (.storybook/preview.ts).
-const A11Y_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
+import { gotoStory, loadStoryIds, THEMES } from "./helpers";
 
 // Every story renders in both themes without console errors or axe
 // violations (colour contrast included).
