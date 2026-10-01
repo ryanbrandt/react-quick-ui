@@ -9,7 +9,8 @@ module.exports = {
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-webpack5-compiler-babel",
-    "@storybook/addon-docs"
+    "@storybook/addon-docs",
+    "@storybook/addon-mcp"
   ],
 
   framework: {
