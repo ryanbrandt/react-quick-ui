@@ -1,0 +1,62 @@
+// Entry point for `dist/stylesheets/tokens.css`: the design tokens as
+// `--rq-*` custom properties. `index.css` includes it too.
+//
+// Light is the default. Dark applies under `[data-theme="dark"]`, or when the
+// OS prefers dark and no `data-theme="light"` is set on the root. Either
+// `data-theme` value also works on any element, to theme a subtree.
+@use "sass:meta";
+@use "sass/tokens";
+
+@mixin -custom-properties($group, $values) {
+  @each $key, $value in $values {
+    --rq-#{$group}-#{$key}: #{$value};
+  }
+}
+
+@mixin -light-theme {
+  color-scheme: light;
+  @include -custom-properties(color, tokens.$colors-light);
+  @include -custom-properties(shadow, tokens.$shadows-light);
+}
+
+@mixin -dark-theme {
+  color-scheme: dark;
+  @include -custom-properties(color, tokens.$colors-dark);
+  @include -custom-properties(shadow, tokens.$shadows-dark);
+}
+
+:root {
+  --rq-font-family: #{meta.inspect(tokens.$font-family)};
+  @include -custom-properties(font-size, tokens.$font-sizes);
+  @include -custom-properties(font-weight, tokens.$font-weights);
+  @include -custom-properties(line-height, tokens.$line-heights);
+  @include -custom-properties(letter-spacing, tokens.$letter-spacings);
+  @include -custom-properties(space, tokens.$space);
+  @include -custom-properties(radius, tokens.$radii);
+  @include -custom-properties(duration, tokens.$durations);
+  @include -custom-properties(easing, tokens.$easings);
+}
+
+:root,
+[data-theme="light"] {
+  @include -light-theme;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include -dark-theme;
+  }
+}
+
+// After the light rule, so an explicit dark choice on the root wins.
+[data-theme="dark"] {
+  @include -dark-theme;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    @each $key, $value in tokens.$durations {
+      --rq-duration-#{$key}: 0ms;
+    }
+  }
+}

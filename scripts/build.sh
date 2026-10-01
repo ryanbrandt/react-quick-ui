@@ -23,6 +23,8 @@ sass_version="$(yarn sass --version | cut -d ' ' -f 1)"
 sass() { yarn sass --no-source-map --fatal-deprecation="$sass_version" "$@"; }
 
 sass --style compressed src/styles/index.scss dist/stylesheets/index.css
+# Just the --rq-* custom properties, for consumers styling their own markup.
+sass --style compressed src/styles/tokens.scss dist/stylesheets/tokens.css
 
 # Public Sass API (tokens + mixins). Loading it must not emit any CSS.
 cp -R src/styles/sass dist/stylesheets/sass

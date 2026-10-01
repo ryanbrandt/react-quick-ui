@@ -1,5 +1,10 @@
 // Public Sass API: design tokens and mixins. Loading it emits no CSS.
 //
+// Components are styled with the `--rq-*` custom properties from
+// `tokens.css`; the token maps here (`$colors-light`, `$space`, …) hold the
+// same raw values for compile-time use. The older colour variables
+// (`$primary-blue`, …) are unchanged real colours.
+//
 //   @use "@ryanbrandt/react-quick-ui/stylesheets/sass" as rq;
 //
 //   .card {
@@ -13,6 +18,7 @@
 //
 // The `%flex…` placeholders in `_flex.scss` can still be extended, but the
 // mixins of the same names also work inside `@media`.
+@forward "tokens";
 @forward "colors";
 @forward "variables";
 @forward "mixins";
