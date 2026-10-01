@@ -4,7 +4,7 @@
 $loading-overlay-transition-time: 0.3s;
 
 .loading-overlay {
-  @extend %flex--justify-center;
+  @include flex.flex--justify-center;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -27,7 +27,7 @@ $loading-overlay-transition-time: 0.3s;
   }
 
   &__content {
-    @extend %flex--column--align-center--justify-center;
+    @include flex.flex--column--align-center--justify-center;
 
     &__message {
       font-size: 24px;

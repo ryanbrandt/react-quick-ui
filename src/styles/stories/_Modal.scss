@@ -59,7 +59,7 @@ $modal-animated-transition-time: $modal-base-transition-time * 3;
   left: 0;
 
   &__background {
-    @extend %flex--align-center--justify-center;
+    @include flex.flex--align-center--justify-center;
     height: 100%;
     width: 100%;
     top: 0;

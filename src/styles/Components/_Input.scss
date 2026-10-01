@@ -32,9 +32,9 @@ $icon-margin-modifier: 20px;
   }
 
   &__input {
-    @include mixins.input-base();
     height: 38px;
     width: 100%;
+    @include mixins.input-base();
 
     &--with-icon {
       &--right {
@@ -51,7 +51,7 @@ $icon-margin-modifier: 20px;
     // Only lay out as a row when there is an icon: as a flex item the input
     // would otherwise shrink to the container and lose its padding overflow.
     &--with-icon {
-      @extend %flex--align-center;
+      @include flex.flex--align-center;
       // Keep the icon's z-index local so it can't paint over sticky headers.
       isolation: isolate;
     }
@@ -66,7 +66,7 @@ $icon-margin-modifier: 20px;
   }
 
   &__icon {
-    @extend %flex--align-center;
+    @include flex.flex--align-center;
     // Paint above the input it overlaps (a left icon is reordered before it).
     z-index: 1;
 

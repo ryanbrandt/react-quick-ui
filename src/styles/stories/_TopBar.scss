@@ -2,7 +2,7 @@
 @use "../sass/flex";
 
 .topbar {
-  @extend %flex;
+  @include flex.flex;
   background-color: colors.$white;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   flex: 1;

@@ -15,7 +15,7 @@
 }
 
 .badge {
-  @extend %flex--align-center--justify-center;
+  @include flex.flex--align-center--justify-center;
   font-weight: 500;
   border-radius: 8px;
 
@@ -60,7 +60,7 @@
   }
 
   &__text {
-    @include mixins.text-overflow-elipsis();
+    @include mixins.text-overflow-ellipsis();
     padding: 1em;
   }
 }

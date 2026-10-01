@@ -1,0 +1,94 @@
+// Public `.flex…` utility classes, one per mixin in `sass/_flex.scss`.
+@use "sass/flex";
+
+.flex {
+  @include flex.flex;
+
+  &--align-center {
+    @include flex.flex--align-center;
+
+    &--justify-center {
+      @include flex.flex--align-center--justify-center;
+    }
+
+    &--justify-space-between {
+      @include flex.flex--align-center--justify-space-between;
+    }
+
+    &--justify-flex-start {
+      @include flex.flex--align-center--justify-flex-start;
+    }
+
+    &--justify-space-around {
+      @include flex.flex--align-center--justify-space-around;
+    }
+
+    &--justify-flex-end {
+      @include flex.flex--align-center--justify-flex-end;
+    }
+  }
+
+  &--justify-flex-start {
+    @include flex.flex--justify-flex-start;
+  }
+
+  &--justify-center {
+    @include flex.flex--justify-center;
+  }
+
+  &--justify-space-between {
+    @include flex.flex--justify-space-between;
+  }
+
+  &--justify-space-evenly {
+    @include flex.flex--justify-space-evenly;
+  }
+
+  &--column {
+    @include flex.flex--column;
+
+    &--align-center {
+      @include flex.flex--column--align-center;
+
+      &--justify-flex-start {
+        @include flex.flex--column--align-center--justify-flex-start;
+      }
+
+      &--justify-flex-end {
+        @include flex.flex--column--align-center--justify-flex-end;
+      }
+
+      &--justify-center {
+        @include flex.flex--column--align-center--justify-center;
+      }
+
+      &--justify-space-around {
+        @include flex.flex--column--align-center--justify-space-around;
+      }
+    }
+
+    &--align-flex-start {
+      @include flex.flex--column--align-flex-start;
+
+      &--justify-flex-start {
+        @include flex.flex--column--align-flex-start--justify-flex-start;
+      }
+    }
+
+    &--justify-flex-start {
+      @include flex.flex--column--justify-flex-start;
+    }
+
+    &--justify-flex-end {
+      @include flex.flex--column--justify-flex-end;
+    }
+
+    &--justify-center {
+      @include flex.flex--column--justify-center;
+    }
+
+    &--justify-space-between {
+      @include flex.flex--column--justify-space-between;
+    }
+  }
+}

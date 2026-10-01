@@ -21,14 +21,14 @@ $icon-hover-transition: 0.25s;
 
 .edit-and-confirm-input {
   &__confirm-icon {
-    @include edit-and-confirm-input-icon;
     width: 33px;
     height: 33px;
+    @include edit-and-confirm-input-icon;
   }
 
   &__edit-icon {
-    @include edit-and-confirm-input-icon;
     width: 15px;
     height: 20px;
+    @include edit-and-confirm-input-icon;
   }
 }

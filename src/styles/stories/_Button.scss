@@ -80,15 +80,15 @@ $button-border-sizing: 2px;
   }
 
   &__content {
-    @extend %flex--align-center--justify-center;
+    @include flex.flex--align-center--justify-center;
 
     &__icon {
-      @extend %flex--justify-flex-start;
+      @include flex.flex--justify-flex-start;
       margin: 0.5em;
     }
 
     &__text {
-      @include mixins.text-overflow-elipsis();
+      @include mixins.text-overflow-ellipsis();
       flex: 1;
     }
   }

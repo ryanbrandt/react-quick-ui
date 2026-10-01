@@ -1,7 +1,7 @@
 // Entry point for the compiled stylesheet (`dist/stylesheets/index.css`).
 // Modules are emitted in the order they are first loaded.
 @use "fonts";
-@use "common";
+@use "flex-utilities";
 @use "base";
 
 @use "Components/Input";

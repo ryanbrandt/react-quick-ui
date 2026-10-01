@@ -10,10 +10,17 @@
   }
 }
 
-@mixin text-overflow-elipsis {
+@mixin text-overflow-ellipsis {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+// Deprecated: misspelled alias of `text-overflow-ellipsis`, kept so existing
+// stylesheets compile. It will be removed in a future major release.
+@mixin text-overflow-elipsis {
+  @warn "text-overflow-elipsis is deprecated; use text-overflow-ellipsis.";
+  @include text-overflow-ellipsis;
 }
 
 @mixin user-control-disabled {
@@ -22,15 +29,15 @@
 }
 
 @mixin input-container {
-  @extend %flex--column;
+  @include flex.flex--column;
   row-gap: 0.5em;
   color: colors.$dark-gray;
 }
 
-@mixin input-base {
+@mixin input-base($padding: 0px 5px) {
   border: 1px solid colors.$gray;
   border-radius: 5px;
-  padding: 0px 5px;
+  padding: $padding;
 
   &:focus {
     border: 1px solid colors.$light-blue;

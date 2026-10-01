@@ -3,12 +3,17 @@
 //   @use "@ryanbrandt/react-quick-ui/stylesheets/sass" as rq;
 //
 //   .card {
+//     @include rq.flex--column;
 //     color: rq.$primary-blue;
-//     @include rq.text-overflow-elipsis;
+//
+//     &__title {
+//       @include rq.text-overflow-ellipsis;
+//     }
 //   }
 //
-// The flex placeholders (`%flex`, `%flex--column`, …) in `_flex.scss` can be
-// extended too; they have no members, so there is nothing to forward.
+// The `%flex…` placeholders in `_flex.scss` can still be extended, but the
+// mixins of the same names also work inside `@media`.
 @forward "colors";
 @forward "variables";
 @forward "mixins";
+@forward "flex";
