@@ -1,23 +1,27 @@
-import { useRef, useEffect } from "react";
+import { useState } from "react";
 
 /**
  * Generic hook which provides the previous value which may be useful
  * for prop/state comparisons
  *
  * @param value The changing value of interest
- * @returns The previous value of the provided variable
+ * @returns The value before the most recent change, or undefined until
+ * the value first changes
  */
 const usePrevious = <T>(value: T): T | undefined => {
-  const ref = useRef<T>(undefined);
+  // Keep the values in state, not a ref, so render reads nothing mutable
+  // (React Compiler friendly). The function forms store a function value
+  // as-is instead of calling it.
+  const [current, setCurrent] = useState(() => value);
+  const [previous, setPrevious] = useState<T>();
 
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
+  if (!Object.is(value, current)) {
+    // React re-renders with the new state before committing this render.
+    setPrevious(() => current);
+    setCurrent(() => value);
+  }
 
-  // Reading a ref during render breaks React Compiler memoization. Keeping the
-  // current behaviour until Q7 (React 19) revisits this hook.
-  // eslint-disable-next-line react-hooks/refs
-  return ref.current;
+  return previous;
 };
 
 export default usePrevious;

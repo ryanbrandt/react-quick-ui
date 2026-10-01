@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState } from "react";
 
 /**
  * Generic hook which provides the initial value which may be useful
@@ -9,12 +9,10 @@ import { useRef } from "react";
  * is updated
  */
 const useInitial = <T>(value: T): T => {
-  const ref = useRef<T>(value);
+  // The initializer form stores a function value as-is instead of calling it.
+  const [initial] = useState(() => value);
 
-  // Reading a ref during render breaks React Compiler memoization. Keeping the
-  // current behaviour until Q7 (React 19) revisits this hook.
-  // eslint-disable-next-line react-hooks/refs
-  return ref.current;
+  return initial;
 };
 
 export default useInitial;

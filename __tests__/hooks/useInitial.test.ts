@@ -16,4 +16,13 @@ describe("useInitial", () => {
 
     expect(result.current).toBe("foo");
   });
+
+  it("stores a function value without calling it", () => {
+    const value = jest.fn();
+
+    const { result } = renderHook(() => useInitial(value));
+
+    expect(result.current).toBe(value);
+    expect(value).not.toHaveBeenCalled();
+  });
 });
