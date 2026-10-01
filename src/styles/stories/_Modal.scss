@@ -1,8 +1,8 @@
 @use "../sass/flex";
 
-// Durations match BASE_MODAL_TRANSITION_TIMEOUT (fast, 150ms) and
-// MODAL_ANIMATED_TRANSITION_TIMEOUT (slow, 450ms) in Modal.tsx. Under
-// prefers-reduced-motion both are 0ms, so the modal appears at once.
+// These durations alone set how long the modal enters and exits: Modal.tsx
+// ends the transition when these animations finish. Under
+// prefers-reduced-motion both are 0ms, so the modal appears and goes at once.
 $modal-base-duration: var(--rq-duration-fast);
 $modal-animated-duration: var(--rq-duration-slow);
 $modal-easing: var(--rq-easing-emphasized);
