@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 // @ts-check
 // `.mjs` because the package is CommonJS (no "type": "module"): jest.config.js
 // and .storybook/main.js rely on `module.exports`, like rollup.config.mjs does.

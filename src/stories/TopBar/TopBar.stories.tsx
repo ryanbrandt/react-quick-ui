@@ -1,4 +1,4 @@
-import type { StoryFn, Meta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react-webpack5";
 
 import TopBar from "@stories/TopBar/TopBar";
 import Button from "@stories/Button/Button";
