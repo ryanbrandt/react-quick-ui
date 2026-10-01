@@ -45,13 +45,20 @@ describe("Modal", () => {
       </Modal>
     );
 
+    const background = mockCSSTransition.mockRoot.firstChild
+      ?.firstChild as HTMLDivElement;
+
     mockCSSTransition.assertOnScreen();
     mockCSSTransition.assertLastCalledWith({
+      // A nodeRef to the animated node, so CSSTransition never needs
+      // findDOMNode (removed in React 19).
+      nodeRef: { current: background },
       unmountOnExit: true,
       in: false,
       timeout: BASE_MODAL_TRANSITION_TIMEOUT,
       classNames: mockcreateCompositeClassNameOutput,
     });
+    expect(background).toHaveClass("modal__background");
 
     expect(mockconditionalClasssNames).toHaveBeenCalledWith({
       modal__transition: true,
@@ -166,6 +173,8 @@ describe("Modal", () => {
         mockCSSTransition.mockRoot.firstChild?.firstChild
           ?.firstChild as HTMLDivElement
       );
+
+      expect(mockOnClose).not.toHaveBeenCalled();
     });
   });
 });
