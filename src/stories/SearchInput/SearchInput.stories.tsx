@@ -6,13 +6,7 @@ import SearchInput from "@stories/SearchInput/SearchInput";
 const meta = {
   title: "Core/Inputs/SearchInput",
   component: SearchInput,
-  args: {
-    value: "",
-    placeholder: "Placeholder Text",
-    disabled: false,
-    size: "xlg",
-    onChange: fn(),
-  },
+  args: { placeholder: "Placeholder Text", onChange: fn() },
 } satisfies Meta<typeof SearchInput>;
 
 export default meta;

@@ -6,14 +6,7 @@ import TextInput from "@stories/TextInput/TextInput";
 const meta = {
   title: "Core/Inputs/TextInput",
   component: TextInput,
-  args: {
-    value: "",
-    size: "md",
-    disabled: false,
-    placeholder: "",
-    label: "",
-    onChange: fn(),
-  },
+  args: { size: "md", onChange: fn() },
 } satisfies Meta<typeof TextInput>;
 
 export default meta;

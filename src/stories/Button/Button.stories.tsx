@@ -10,7 +10,7 @@ const meta = {
     iconLeft: { control: false },
     iconRight: { control: false },
   },
-  args: { size: "md", disabled: false, onClick: fn() },
+  args: { onClick: fn() },
 } satisfies Meta<typeof Button>;
 
 export default meta;

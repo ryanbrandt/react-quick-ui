@@ -5,7 +5,6 @@ import PencilSvg from "@svgs/PencilSvg/PencilSvg";
 const meta = {
   title: "SVG/PencilSvg",
   component: PencilSvg,
-  args: { width: 20, height: 20 },
 } satisfies Meta<typeof PencilSvg>;
 
 export default meta;

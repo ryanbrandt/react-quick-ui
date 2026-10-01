@@ -9,8 +9,6 @@ const meta = {
   args: {
     value: "",
     size: "xlg",
-    editDisabled: false,
-    confirmDisabled: false,
     label: "Edit and Confirm Your Email",
     inputType: "email",
     onChange: fn(),

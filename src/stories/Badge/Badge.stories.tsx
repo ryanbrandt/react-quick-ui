@@ -5,7 +5,6 @@ import Badge from "@stories/Badge/Badge";
 const meta = {
   title: "Core/Badge",
   component: Badge,
-  args: { size: "md" },
 } satisfies Meta<typeof Badge>;
 
 export default meta;
