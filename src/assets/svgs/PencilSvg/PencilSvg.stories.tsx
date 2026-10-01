@@ -11,5 +11,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Icon: Story = {
-  args: { fill: "#7ba4db" },
+  args: { style: { fill: "var(--rq-color-accent-text)" } },
 };

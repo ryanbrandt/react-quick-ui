@@ -6,7 +6,7 @@ import TextInput from "@stories/TextInput/TextInput";
 const meta = {
   title: "Core/Inputs/TextInput",
   component: TextInput,
-  args: { size: "md", onChange: fn() },
+  args: { size: "md", label: "Name", onChange: fn() },
 } satisfies Meta<typeof TextInput>;
 
 export default meta;

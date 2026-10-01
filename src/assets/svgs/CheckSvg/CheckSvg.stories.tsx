@@ -5,7 +5,11 @@ import CheckSvg from "@svgs/CheckSvg/CheckSvg";
 const meta = {
   title: "SVG/CheckSvg",
   component: CheckSvg,
-  args: { width: 33, height: 33 },
+  args: {
+    width: 33,
+    height: 33,
+    style: { fill: "var(--rq-color-accent-fill)" },
+  },
 } satisfies Meta<typeof CheckSvg>;
 
 export default meta;

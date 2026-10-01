@@ -6,7 +6,7 @@ import PasswordInput from "@stories/PasswordInput/PasswordInput";
 const meta = {
   title: "Core/Inputs/PasswordInput",
   component: PasswordInput,
-  args: { onChange: fn() },
+  args: { label: "Password", onChange: fn() },
 } satisfies Meta<typeof PasswordInput>;
 
 export default meta;
