@@ -75,7 +75,16 @@ document.documentElement.dataset.theme = "dark"; // or "light"
 delete document.documentElement.dataset.theme; // follow the OS again
 ```
 
-`data-theme` also works on any element, to theme just that subtree.
+`data-theme` also works on any element, to theme just that subtree. It switches the tokens there, but not the subtree's own text or background: give that element `color: var(--rq-color-text); background: var(--rq-color-bg)` if it contains your own content.
+
+**The whole page follows the theme.** The tokens also set `color-scheme` on `:root`, so when the OS prefers dark the browser's default page background, text and form controls turn dark too, not just this library's components. If your app has its own theme toggle, set `data-theme` on `<html>` from it (as above) so the two always agree, and paint the page from the tokens:
+
+```css
+body {
+  background: var(--rq-color-bg);
+  color: var(--rq-color-text);
+}
+```
 
 ### Sass API
 

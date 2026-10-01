@@ -37,6 +37,11 @@ restyle of every component. Visual changes are intended.
 
 ### Changed
 
+- **Breaking:** `index.css` and `tokens.css` set `color-scheme` on `:root`, so
+  when the OS prefers dark the whole page's default background, text and form
+  controls turn dark, not only this library's components. Apps with their own
+  theme toggle should set `data-theme` on `<html>` from it and paint `body`
+  with `--rq-color-bg` / `--rq-color-text` (see the README).
 - **Breaking:** `index.css` no longer declares any fonts. Import
   `stylesheets/fonts.css` as well to keep Work Sans (or provide your own
   `"Work Sans"` face). Text otherwise falls back to `system-ui`.
