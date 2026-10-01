@@ -1,8 +1,8 @@
 // Entry point for the compiled stylesheet (`dist/stylesheets/index.css`).
 // Modules are emitted in the order they are first loaded. The tokens come
-// first: every component reads them.
+// first: every component reads them. Fonts are not included: load
+// fonts.css as well (see fonts.scss).
 @use "tokens";
-@use "fonts";
 @use "flex-utilities";
 @use "base";
 

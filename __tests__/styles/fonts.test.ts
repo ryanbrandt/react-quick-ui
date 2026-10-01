@@ -1,53 +1,64 @@
 /**
  * @jest-environment node
  */
-import { readdirSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import { join } from "path";
 import { compile } from "sass";
 
-const FONTS_DIR = join(__dirname, "../../src/assets/fonts/worksans");
+const FONTS_DIR = join(__dirname, "../../src/assets/fonts/work-sans");
 
 interface FontFace {
   file: string;
+  family: string;
   style: string;
   weight: string;
+  display: string;
 }
 
+const property = (body: string, name: string): string =>
+  new RegExp(`${name}:\\s*([^;]+);`).exec(body)?.[1]?.trim() ?? "";
+
 const compileFontFaces = (): Array<FontFace> => {
-  const { css } = compile(join(__dirname, "../../src/styles/_fonts.scss"));
+  const { css } = compile(join(__dirname, "../../src/styles/fonts.scss"));
 
   return [...css.matchAll(/@font-face\s*{([^}]*)}/g)].map(([, body = ""]) => ({
-    file: /url\("[^"]*\/([^/"]+)\.woff2"\)/.exec(body)?.[1] ?? "",
-    style: /font-style:\s*([^;]+);/.exec(body)?.[1] ?? "",
-    weight: (/font-weight:\s*([^;]+);/.exec(body)?.[1] ?? "").replace(
-      "normal",
-      "400"
-    ),
+    file:
+      /url\("\.\.\/assets\/fonts\/work-sans\/([^"]+)"\)/.exec(body)?.[1] ?? "",
+    family: property(body, "font-family"),
+    style: property(body, "font-style"),
+    weight: property(body, "font-weight"),
+    display: property(body, "font-display"),
   }));
 };
 
-// work-sans-v16-latin-<weight?><"italic"?> ("regular" is 400 normal)
-const expectedFaceFor = (file: string): FontFace => {
-  const variant = file.replace("work-sans-v16-latin-", "");
-  const [, weight = "400", italic] = /^(\d+)?(italic)?/.exec(variant) ?? [];
-
-  return { file, style: italic ? "italic" : "normal", weight };
-};
-
-describe("@font-face declarations", () => {
+describe("fonts.css", () => {
   const faces = compileFontFaces();
+  const fontFiles = readdirSync(FONTS_DIR).filter((file) =>
+    file.endsWith(".woff2")
+  );
 
   it("declares one face per bundled font file", () => {
-    const fontFiles = [
-      ...new Set(
-        readdirSync(FONTS_DIR).map((file) => file.replace(/\.woff2?$/, ""))
-      ),
-    ];
-
     expect(faces.map(({ file }) => file).sort()).toEqual(fontFiles.sort());
   });
 
-  it("declares the style and weight that each font file contains", () => {
-    expect(faces).toEqual(faces.map(({ file }) => expectedFaceFor(file)));
+  it("declares each file as variable Work Sans of its style, swapping in", () => {
+    expect(faces).toEqual(
+      faces.map(({ file }) => ({
+        file,
+        family: '"Work Sans"',
+        style: file.includes("-italic") ? "italic" : "normal",
+        weight: "100 900",
+        display: "swap",
+      }))
+    );
+  });
+
+  it("ships the SIL Open Font License next to the fonts", () => {
+    const license = join(FONTS_DIR, "OFL.txt");
+
+    expect(existsSync(license)).toBe(true);
+    expect(readFileSync(license, "utf8")).toContain(
+      "SIL OPEN FONT LICENSE Version 1.1"
+    );
   });
 });
