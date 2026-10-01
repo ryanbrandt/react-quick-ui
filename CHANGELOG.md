@@ -7,11 +7,22 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- React 19 support. The peer ranges are now `react` and `react-dom`
+  `^18.0.0 || ^19.0.0` and `react-transition-group` `^4.4.5`, and the test
+  suite runs on both React 18 and 19.
 - `Input` accepts an optional `id` for its `<input>` (defaults to a `useId()`
   value).
 
+### Changed
+
+- `usePrevious` keeps its values in state instead of a ref. It now returns the
+  value before the most recent _change_: a re-render with the same value no
+  longer makes it return the current value.
+
 ### Fixed
 
+- `Modal` passes a `nodeRef` to `CSSTransition`, so it no longer relies on
+  `findDOMNode` (removed in React 19, deprecated in 18).
 - `createCompositeClassName` no longer always includes the first class name
   when its condition is false (e.g. `Modal` with `animated` also got
   `modal__transition`), and no longer adds stray spaces for empty class names.

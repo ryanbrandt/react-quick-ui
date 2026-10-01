@@ -1,4 +1,4 @@
-import type { FunctionComponent } from "react";
+import type { FunctionComponent, JSX } from "react";
 
 type BadgeVariant = "primary" | "warning" | "danger" | "success" | "neutral";
 type BadgeSize = "sm" | "md" | "lg" | "xlg" | "fit-content";

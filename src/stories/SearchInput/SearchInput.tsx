@@ -1,4 +1,4 @@
-import type { FunctionComponent } from "react";
+import type { FunctionComponent, JSX } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 import Input, { type InputSize } from "@utilities/Components/Input";

@@ -1,4 +1,9 @@
-import type { FunctionComponent, PropsWithChildren } from "react";
+import {
+  type FunctionComponent,
+  type JSX,
+  type PropsWithChildren,
+  useRef,
+} from "react";
 import { CSSTransition } from "react-transition-group";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
@@ -53,6 +58,10 @@ const Modal: FunctionComponent<Props> = (props: Props): JSX.Element => {
     className = "",
   } = props;
 
+  // CSSTransition animates this node. Passing it as nodeRef avoids findDOMNode,
+  // which React 19 removed.
+  const backgroundRef = useRef<HTMLDivElement>(null);
+
   const modalTransitionClassNames = createCompositeClassName({
     modal__transition: !animated,
     "modal__transition--animated": animated,
@@ -65,6 +74,7 @@ const Modal: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   return (
     <CSSTransition
+      nodeRef={backgroundRef}
       unmountOnExit
       in={open}
       timeout={
@@ -74,7 +84,11 @@ const Modal: FunctionComponent<Props> = (props: Props): JSX.Element => {
       }
       classNames={modalTransitionClassNames}
     >
-      <div onClick={() => onClose()} className="modal__background">
+      <div
+        ref={backgroundRef}
+        onClick={() => onClose()}
+        className="modal__background"
+      >
         <div
           onClick={(e) => e.stopPropagation()}
           className={modalContentClassNames}

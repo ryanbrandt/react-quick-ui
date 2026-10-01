@@ -1,4 +1,4 @@
-import type { FunctionComponent, ReactNode } from "react";
+import type { FunctionComponent, ReactNode, JSX } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 

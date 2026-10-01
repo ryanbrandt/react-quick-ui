@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { act as untypedAct, render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 
 import { MockFunctionComponentWrapper } from "@ryanbrandt/react-testing-utils";
 
@@ -20,11 +20,6 @@ const mockConditionalClassNames = jest.mocked(createCompositeClassName);
 
 jest.mock("@utilities/Components/Input");
 const mockBaseInput = new MockFunctionComponentWrapper(Input);
-
-// RTL types `act` through React's own `act` export, which @types/react 18.2
-// lacks, so typed linting sees an unresolved type. Drop this alias once the
-// React types are upgraded (Q7).
-const act = untypedAct as (callback: () => void) => void;
 mockBaseInput.mockImplementation(({ icon }) => (
   <div>{icon ? icon.icon : undefined}</div>
 ));

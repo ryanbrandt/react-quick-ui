@@ -1,4 +1,4 @@
-import type { FunctionComponent, ChangeEvent } from "react";
+import type { FunctionComponent, ChangeEvent, JSX } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 

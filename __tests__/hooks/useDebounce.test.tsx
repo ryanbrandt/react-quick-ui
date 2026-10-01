@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import useDebounce, { DEFAULT_VALUE_DEBOUNCE_TIME } from "@hooks/useDebounce";
@@ -42,11 +42,14 @@ describe("useDebounce", () => {
 
     await user.click(screen.getByRole("button"));
 
-    // No timer fires here, so no state update happens outside act().
-    jest.advanceTimersByTime(DEFAULT_VALUE_DEBOUNCE_TIME - 1);
+    act(() => {
+      jest.advanceTimersByTime(DEFAULT_VALUE_DEBOUNCE_TIME - 1);
+    });
     expect(screen.getByRole("button")).toHaveTextContent(mockInitialValue);
 
-    // findBy* advances the fake timers inside act() until the update renders.
-    expect(await screen.findByText(mockUpdateValue)).toBeInTheDocument();
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
+    expect(screen.getByRole("button")).toHaveTextContent(mockUpdateValue);
   });
 });

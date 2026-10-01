@@ -2,6 +2,7 @@ import {
   type FunctionComponent,
   type HTMLInputTypeAttribute,
   useState,
+  type JSX,
 } from "react";
 
 import createCompositeClassname from "@utilities/createCompositeClassName";

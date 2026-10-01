@@ -14,6 +14,8 @@ yarn add @ryanbrandt/react-quick-ui
 npm install @ryanbrandt/react-quick-ui
 ```
 
+It supports React 18 and 19 (peers `react`, `react-dom` and `react-transition-group` 4.4.5+).
+
 ### Stylesheets
 
 The package ships two stylesheet entry points under `@ryanbrandt/react-quick-ui/stylesheets/` (an alias for `dist/stylesheets/`).

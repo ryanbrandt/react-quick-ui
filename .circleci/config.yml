@@ -49,8 +49,13 @@ jobs:
     steps:
       - install
       - run:
-          name: Unit Test
+          name: Unit Test (React 19)
           command: yarn test:coverage --runInBand
+      - run:
+          name: Unit Test (React 18)
+          command: yarn test:react18 --runInBand
+          # Report the React 18 run even when the React 19 run fails.
+          when: always
 
   build:
     executor: node
