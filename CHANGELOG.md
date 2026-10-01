@@ -29,7 +29,12 @@ A prerelease (npm tag `next`) for testing in personal-page before 0.6.0.
   `README.md` are no longer reachable. Everything under `dist/` with an
   extension still works.
 - **Breaking:** TypeScript consumers need TypeScript 4.5 or later (the
-  declarations use `import type`).
+  declarations use inline `type` import modifiers).
+- **Breaking:** the peer ranges are now bounded to supported majors: `react` and
+  `react-dom` `^18.0.0 || ^19.0.0` (was `>=18.0.0`), `react-transition-group`
+  `^4.4.5` (was `>=4.4.5`).
+- **Breaking:** the package declares `engines.node` `>=20.19`, so installs on
+  older Node warn (npm) or fail (Yarn 1).
 - **Breaking:** TypeScript consumers need `@types/react` 18.2.6 or later. The
   type declarations now import `JSX` from `react` (React 19 removed the global
   `JSX` namespace).
@@ -40,8 +45,9 @@ A prerelease (npm tag `next`) for testing in personal-page before 0.6.0.
   `@import` but are deprecated in favour of `index.css` plus the Sass API.
 - The stylesheet is built with the Sass module system and is about 65%
   smaller (the old build repeated the flex utilities 13 times). Resolved
-  styles are unchanged.
-- Story and test type declarations are no longer shipped.
+  styles are unchanged apart from the fixes below.
+- The SVG stories' type declarations (`*.stories.d.ts`) are no longer shipped.
+- `sideEffects` marks the stylesheets, so bundlers can tree-shake the rest.
 
 ### Fixed
 
