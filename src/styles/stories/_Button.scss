@@ -72,7 +72,7 @@
   // The spec's secondary button.
   &--neutral {
     background-color: var(--rq-color-surface);
-    border-color: var(--rq-color-border);
+    border-color: var(--rq-color-control-border);
     color: var(--rq-color-text);
 
     &:hover {

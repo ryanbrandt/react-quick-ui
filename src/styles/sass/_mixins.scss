@@ -29,10 +29,12 @@
   pointer-events: none;
 }
 
-// A visible keyboard focus ring in the accent colour (AA in both themes).
-@mixin focus-ring($color: var(--rq-color-accent-text)) {
-  outline: 2px solid $color;
-  outline-offset: 2px;
+// A visible keyboard focus ring, from the --rq-focus-ring-* tokens (the
+// accent colour, 3:1 or more on bg and surface in both themes). CSS-only
+// consumers can write the same outline with those custom properties.
+@mixin focus-ring($color: var(--rq-focus-ring-color)) {
+  outline: var(--rq-focus-ring-width) solid $color;
+  outline-offset: var(--rq-focus-ring-offset);
 }
 
 @mixin input-container {
@@ -43,7 +45,7 @@
 
 @mixin input-base($padding: 0 var(--rq-space-3)) {
   box-sizing: border-box;
-  border: 1px solid var(--rq-color-border);
+  border: 1px solid var(--rq-color-control-border);
   border-radius: var(--rq-radius-control);
   padding: $padding;
   background-color: var(--rq-color-surface);

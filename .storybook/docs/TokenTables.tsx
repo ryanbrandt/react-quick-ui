@@ -4,63 +4,47 @@ import type { CSSProperties, ReactNode } from "react";
 
 import tokensCss from "@styles/tokens.scss?inline";
 
+import {
+  type ContrastPair,
+  contrastRatio,
+  NON_TEXT_MIN_RATIO,
+  NON_TEXT_PAIRS,
+  resolveColor,
+  TEXT_MIN_RATIO,
+  TEXT_PAIRS,
+} from "@styles/contrast";
+
 type Declarations = Map<string, string>;
 
-/** The declarations of the first rule whose selector list matches. */
-const declarationsOf = (selector: RegExp): Declarations => {
-  const block = new RegExp(`(?:^|})\\s*${selector.source}\\s*{([^}]*)}`).exec(
-    tokensCss
-  )?.[1];
+// Parsed by the browser, so the tables see what a page would.
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(tokensCss);
+
+/** The declarations of the top-level rule with exactly these selectors. */
+const declarationsOf = (...selectors: Array<string>): Declarations => {
+  const rule = [...sheet.cssRules]
+    .filter((candidate) => candidate instanceof CSSStyleRule)
+    .find(
+      ({ selectorText }) =>
+        selectorText.replaceAll('"', "") === selectors.join(", ")
+    );
 
   return new Map(
-    (block ?? "")
-      .split(";")
-      .filter((declaration) => declaration.includes(":"))
-      .map((declaration): [string, string] => {
-        const colon = declaration.indexOf(":");
-        return [
-          declaration.slice(0, colon).trim(),
-          declaration.slice(colon + 1).trim(),
-        ];
-      })
+    [...(rule?.style ?? [])].map((name): [string, string] => [
+      name,
+      rule?.style.getPropertyValue(name).trim() ?? "",
+    ])
   );
 };
 
-const root = declarationsOf(/:root/);
+const root = declarationsOf(":root");
 const themes = {
-  light: declarationsOf(/:root,\s*\[data-theme=["']?light["']?\]/),
-  dark: declarationsOf(/\[data-theme=["']?dark["']?\]/),
+  light: declarationsOf(":root", "[data-theme=light]"),
+  dark: declarationsOf("[data-theme=dark]"),
 };
 
 const tokensIn = (declarations: Declarations, prefix: string) =>
   [...declarations].filter(([name]) => name.startsWith(prefix));
-
-/** The red, green and blue channels of a #rgb(a) or #rrggbb(aa) colour. */
-const channels = (hex: string): Array<number> => {
-  // Vite minifies the CSS, so #ffffff arrives as #fff.
-  const digits =
-    hex.length <= 5
-      ? [...hex.slice(1)].map((digit) => digit + digit).join("")
-      : hex.slice(1);
-  return [0, 2, 4].map((start) => parseInt(digits.slice(start, start + 2), 16));
-};
-
-/** WCAG 2 relative luminance of a hex colour (alpha ignored). */
-const luminance = (hex: string): number => {
-  const [r = 0, g = 0, b = 0] = channels(hex)
-    .map((channel) => channel / 255)
-    .map((channel) =>
-      channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
-    );
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-
-const contrastRatio = (a: string, b: string): number => {
-  const [lighter = 0, darker = 0] = [luminance(a), luminance(b)].sort(
-    (x, y) => y - x
-  );
-  return (lighter + 0.05) / (darker + 0.05);
-};
 
 const cell: CSSProperties = {
   padding: "8px 12px",
@@ -108,7 +92,7 @@ const Swatch = ({ color }: { color: string }) => (
         height: 32,
         borderRadius: 8,
         background: color,
-        border: "1px solid #8888",
+        border: "1px solid var(--rq-color-border)",
       }}
     />
     <code>{color}</code>
@@ -126,145 +110,158 @@ export const ColorTokens = () => (
   />
 );
 
-// [text, background]: every text token on the backgrounds it's used on.
-const TEXT_PAIRS = [
-  ["text", "bg"],
-  ["text", "surface"],
-  ["text", "tint"],
-  ["muted", "bg"],
-  ["muted", "surface"],
-  ["muted", "tint"],
-  ["accent-text", "bg"],
-  ["accent-text", "surface"],
-  ["accent-text", "tint"],
-  ["on-accent", "accent-fill"],
-  ["success-text", "surface"],
-  ["success-text", "success-tint"],
-  ["on-accent", "success-fill"],
-  ["danger-text", "surface"],
-  ["danger-text", "danger-tint"],
-  ["on-accent", "danger-fill"],
-  ["warning-text", "surface"],
-  ["warning-text", "warning-tint"],
-] as const;
-
 const ContrastSample = ({
   theme,
-  text,
-  bg,
+  pair: [foreground, background],
+  minRatio,
 }: {
   theme: keyof typeof themes;
-  text: string;
-  bg: string;
+  pair: ContrastPair;
+  minRatio: number;
 }) => {
-  const foreground = themes[theme].get(`--rq-color-${text}`) ?? "";
-  const background = themes[theme].get(`--rq-color-${bg}`) ?? "";
-  const ratio = contrastRatio(foreground, background);
+  const color = resolveColor(themes[theme], foreground);
+  const backgroundColor = resolveColor(themes[theme], background);
+  const ratio = contrastRatio(color, backgroundColor);
+  const isText = minRatio === TEXT_MIN_RATIO;
 
   return (
     <span
       style={{
-        display: "inline-block",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 8,
         padding: "4px 10px",
         borderRadius: 6,
-        color: foreground,
-        background,
+        // Non-text samples label the edge in the theme's text colour.
+        color: isText ? color : themes[theme].get("--rq-color-text"),
+        background: backgroundColor,
       }}
     >
-      {ratio.toFixed(2)}:1 {ratio >= 4.5 ? "AA" : "fails AA"}
+      {!isText && (
+        <span
+          style={{
+            width: 16,
+            height: 16,
+            borderRadius: 4,
+            border: `2px solid ${color}`,
+          }}
+        />
+      )}
+      {ratio.toFixed(2)}:1 {ratio >= minRatio ? "passes" : "fails"}
     </span>
   );
 };
 
-export const ContrastTable = () => (
+const ContrastTable = ({
+  pairs,
+  minRatio,
+}: {
+  pairs: ReadonlyArray<ContrastPair>;
+  minRatio: number;
+}) => (
   <Table
-    head={["Text", "Background", "Light", "Dark"]}
-    rows={TEXT_PAIRS.map(([text, bg]) => [
-      <code key="text">{text}</code>,
-      <code key="bg">{bg}</code>,
-      <ContrastSample key="light" theme="light" text={text} bg={bg} />,
-      <ContrastSample key="dark" theme="dark" text={text} bg={bg} />,
+    head={["Foreground", "Background", "Light", "Dark"]}
+    rows={pairs.map((pair) => [
+      <code key="foreground">{pair[0]}</code>,
+      <code key="background">{pair[1]}</code>,
+      <ContrastSample
+        key="light"
+        theme="light"
+        pair={pair}
+        minRatio={minRatio}
+      />,
+      <ContrastSample
+        key="dark"
+        theme="dark"
+        pair={pair}
+        minRatio={minRatio}
+      />,
     ])}
   />
 );
 
-export const TypeScale = () => (
+export const TextContrast = () => (
+  <ContrastTable pairs={TEXT_PAIRS} minRatio={TEXT_MIN_RATIO} />
+);
+
+export const NonTextContrast = () => (
+  <ContrastTable pairs={NON_TEXT_PAIRS} minRatio={NON_TEXT_MIN_RATIO} />
+);
+
+/** One row per token with this prefix: name, value and a sample using it. */
+const ScaleTable = ({
+  prefix,
+  sample,
+}: {
+  prefix: string;
+  /** Renders a sample for the token, given as `var(--rq-…)`. */
+  sample: (token: string) => ReactNode;
+}) => (
   <Table
-    head={["Token", "Size", "Sample"]}
-    rows={tokensIn(root, "--rq-font-size-").map(([name, size]) => [
+    head={["Token", "Value", "Sample"]}
+    rows={tokensIn(root, prefix).map(([name, value]) => [
       <code key="name">{name}</code>,
-      size,
-      <span
-        key="sample"
-        style={{
-          fontFamily: "var(--rq-font-family)",
-          fontSize: `var(${name})`,
-          lineHeight: 1.2,
-        }}
-      >
-        Hello, World!
-      </span>,
+      value,
+      <span key="sample">{sample(`var(${name})`)}</span>,
     ])}
+  />
+);
+
+const font = "var(--rq-font-family)";
+
+export const TypeScale = () => (
+  <ScaleTable
+    prefix="--rq-font-size-"
+    sample={(size) => (
+      <span style={{ fontFamily: font, fontSize: size, lineHeight: 1.2 }}>
+        Hello, World!
+      </span>
+    )}
   />
 );
 
 export const FontWeights = () => (
-  <Table
-    head={["Token", "Weight", "Sample"]}
-    rows={tokensIn(root, "--rq-font-weight-").map(([name, weight]) => [
-      <code key="name">{name}</code>,
-      weight,
-      <span
-        key="sample"
-        style={{
-          fontFamily: "var(--rq-font-family)",
-          fontSize: 20,
-          fontWeight: `var(${name})`,
-        }}
-      >
+  <ScaleTable
+    prefix="--rq-font-weight-"
+    sample={(weight) => (
+      <span style={{ fontFamily: font, fontSize: 20, fontWeight: weight }}>
         Ryan Brandt
-      </span>,
-    ])}
+      </span>
+    )}
   />
 );
 
 export const Spacing = () => (
-  <Table
-    head={["Token", "Value", ""]}
-    rows={tokensIn(root, "--rq-space-").map(([name, value]) => [
-      <code key="name">{name}</code>,
-      value,
+  <ScaleTable
+    prefix="--rq-space-"
+    sample={(width) => (
       <span
-        key="bar"
         style={{
           display: "block",
-          width: `var(${name})`,
+          width,
           height: 12,
           background: "var(--rq-color-accent-fill)",
         }}
-      />,
-    ])}
+      />
+    )}
   />
 );
 
 export const Radii = () => (
-  <Table
-    head={["Token", "Value", ""]}
-    rows={tokensIn(root, "--rq-radius-").map(([name, value]) => [
-      <code key="name">{name}</code>,
-      value,
+  <ScaleTable
+    prefix="--rq-radius-"
+    sample={(radius) => (
       <span
-        key="box"
         style={{
           display: "block",
           width: 96,
           height: 48,
-          borderRadius: `var(${name})`,
+          borderRadius: radius,
           background: "var(--rq-color-tint)",
           border: "1px solid var(--rq-color-border)",
         }}
-      />,
-    ])}
+      />
+    )}
   />
 );
 
@@ -279,6 +276,8 @@ export const OtherTokens = () => (
         name,
         `${value} (dark: ${themes.dark.get(name)})`,
       ]),
+      ...tokensIn(root, "--rq-focus-ring-"),
+      ...tokensIn(themes.light, "--rq-focus-ring-"),
       ...tokensIn(root, "--rq-duration-"),
       ...tokensIn(root, "--rq-easing-"),
     ].map(([name, value]) => [<code key="name">{name}</code>, value])}

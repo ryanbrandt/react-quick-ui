@@ -8,14 +8,19 @@
 //
 // Theme-dependent groups have a light and a dark map with the same keys.
 
-// Text tokens meet WCAG AA (4.5:1) on bg, surface and their tint;
-// __tests__/styles/tokens.test.ts checks every pair in both themes.
+// Text tokens meet WCAG AA (4.5:1) on bg, surface and their tint, and the
+// edges of controls (control-border, accent-fill, the focus ring) reach 3:1
+// (WCAG 1.4.11). src/styles/contrast.ts lists the pairs, and
+// __tests__/styles/tokens.test.ts checks every one in both themes.
 $colors-light: (
   bg: #f6f7fb,
   surface: #ffffff,
   text: #1a1c24,
   muted: #585e6e,
+  // Decorative dividers and the edges of cards, the top bar and modals.
   border: #e2e5ee,
+  // The edge of an interactive control (inputs, the neutral button).
+  control-border: #7c8294,
   tint: #eaeffb,
   accent-text: #3d5fbf,
   accent-fill: #3d5fbf,
@@ -42,6 +47,7 @@ $colors-dark: (
   text: #eceef4,
   muted: #a3a9ba,
   border: #2c3140,
+  control-border: #737a8f,
   tint: #222a40,
   accent-text: #a5bcf1,
   accent-fill: #4a6cd0,
@@ -72,7 +78,8 @@ $shadows-dark: (
   lg: 0 12px 32px rgba(0, 0, 0, 0.5),
 );
 
-// A 4px scale (key × 4px), plus the layout values the spec names.
+// A 4px scale (key × 4px), plus the layout values the spec names (use those
+// for page layout rather than a raw step).
 $space: (
   1: 4px,
   2: 8px,
@@ -80,15 +87,10 @@ $space: (
   4: 16px,
   5: 20px,
   6: 24px,
-  7: 28px,
   8: 32px,
   10: 40px,
   12: 48px,
-  14: 56px,
   16: 64px,
-  24: 96px,
-  28: 112px,
-  30: 120px,
   gutter: 120px,
   gutter-mobile: 20px,
   section: 112px,
@@ -142,6 +144,13 @@ $line-heights: (
 
 $letter-spacings: (
   tight: -0.02em,
+);
+
+// The keyboard focus ring (the `focus-ring` mixin). Its colour follows the
+// theme: `--rq-focus-ring-color` is the accent text colour.
+$focus-ring: (
+  width: 2px,
+  offset: 2px,
 );
 
 // All durations become 0ms under `prefers-reduced-motion: reduce`.

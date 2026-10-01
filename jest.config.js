@@ -40,6 +40,8 @@ module.exports = {
     "src/**/*.{ts,tsx}",
     "!src/**/*.stories.tsx",
     "!src/stories/storyHelpers.tsx",
+    // Shared by the token tests and the Tokens docs page; not shipped.
+    "!src/styles/contrast.ts",
     "!src/**/index.ts",
   ],
   coverageThreshold: {

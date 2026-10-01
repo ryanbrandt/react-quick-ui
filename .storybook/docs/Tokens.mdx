@@ -2,11 +2,12 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 import {
   ColorTokens,
-  ContrastTable,
   FontWeights,
+  NonTextContrast,
   OtherTokens,
   Radii,
   Spacing,
+  TextContrast,
   TypeScale,
 } from "./TokenTables";
 
@@ -26,16 +27,22 @@ The same values are Sass maps in the Sass API (`rq.$colors-light`,
 ## Colour
 
 `brand` is for the logo mark and decoration only; on light backgrounds it is
-below AA, so text uses `accent-text`.
+below AA, so text uses `accent-text`. `border` is for decorative dividers and
+the edges of cards; `control-border` is the edge of an interactive control.
 
 <ColorTokens />
 
-## Text contrast
+## Contrast
 
-Every text token meets WCAG AA (4.5:1) on the backgrounds it's used on, in
-both themes. The unit tests enforce this.
+These are the pairs the unit tests enforce, in both themes (the list lives in
+`src/styles/contrast.ts`). Every text token meets WCAG AA (4.5:1) on the
+backgrounds it's used on:
 
-<ContrastTable />
+<TextContrast />
+
+The edges that identify a control or its state reach 3:1 (WCAG 1.4.11):
+
+<NonTextContrast />
 
 ## Type scale
 
@@ -59,7 +66,7 @@ gutter, section gap and card grid gap.
 
 <Radii />
 
-## Line height, shadows and motion
+## Line height, shadows, focus ring and motion
 
 Durations drop to `0ms` when the user prefers reduced motion.
 

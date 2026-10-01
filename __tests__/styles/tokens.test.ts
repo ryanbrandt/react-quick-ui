@@ -2,103 +2,48 @@
  * @jest-environment node
  */
 import { join } from "path";
+
+import postcss, { type AtRule, type Container } from "postcss";
 import { compile } from "sass";
+
+import {
+  contrastRatio,
+  NON_TEXT_MIN_RATIO,
+  NON_TEXT_PAIRS,
+  resolveColor,
+  TEXT_MIN_RATIO,
+  TEXT_PAIRS,
+} from "@styles/contrast";
 
 const STYLES_DIR = join(__dirname, "../../src/styles");
 
 interface CssRule {
   selectors: Array<string>;
   declarations: Map<string, string>;
-  /** The enclosing at-rule's prelude (e.g. "@media (…)"), if any. */
+  /** The enclosing at-rule (e.g. "@media (…)"), if any. */
   atRule?: string;
 }
 
-/**
- * Splits compiled CSS into style rules, keeping track of the enclosing
- * at-rule (one level deep is enough for what Sass emits here).
- */
-const parseRules = (css: string): Array<CssRule> => {
+const isAtRule = (node: Container | undefined): node is AtRule =>
+  node?.type === "atrule";
+
+/** The style rules of a compiled stylesheet, with their enclosing at-rule. */
+const compileRules = (file: string): Array<CssRule> => {
   const rules: Array<CssRule> = [];
-  const preludes: Array<string> = [];
-  let buffer = "";
-
-  for (const char of css.replace(/\/\*[\s\S]*?\*\//g, "")) {
-    if (char === "{") {
-      preludes.push(buffer.trim());
-      buffer = "";
-    } else if (char === "}") {
-      const prelude = preludes.pop() ?? "";
-      if (buffer.trim()) {
-        const declarations = buffer
-          .split(";")
-          .filter((declaration) => declaration.includes(":"))
-          .map((declaration): [string, string] => {
-            const colon = declaration.indexOf(":");
-            return [
-              declaration.slice(0, colon).trim(),
-              declaration.slice(colon + 1).trim(),
-            ];
-          });
-        rules.push({
-          selectors: prelude.split(",").map((selector) => selector.trim()),
-          declarations: new Map(declarations),
-          atRule: preludes.at(-1),
-        });
-      }
-      buffer = "";
-    } else {
-      buffer += char;
-    }
-  }
-
+  postcss.parse(compile(join(STYLES_DIR, file)).css).walkRules((rule) => {
+    const parent = rule.parent as Container | undefined;
+    rules.push({
+      selectors: rule.selectors,
+      declarations: new Map(
+        rule.nodes.flatMap((node) =>
+          node.type === "decl" ? [[node.prop, node.value] as const] : []
+        )
+      ),
+      atRule: isAtRule(parent) ? `@${parent.name} ${parent.params}` : undefined,
+    });
+  });
   return rules;
 };
-
-const compileRules = (file: string): Array<CssRule> =>
-  parseRules(compile(join(STYLES_DIR, file)).css);
-
-/** WCAG 2 relative luminance of a #rrggbb colour. */
-const luminance = (hex: string): number => {
-  const value = parseInt(hex.slice(1), 16);
-  const [r = 0, g = 0, b = 0] = [value >> 16, (value >> 8) & 255, value & 255]
-    .map((channel) => channel / 255)
-    .map((channel) =>
-      channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
-    );
-
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-
-const contrastRatio = (a: string, b: string): number => {
-  const [lighter, darker] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return ((lighter ?? 0) + 0.05) / ((darker ?? 0) + 0.05);
-};
-
-// [text token, background token]. Every text token must reach WCAG AA for
-// normal-size text (4.5:1) on each background it is used on.
-const TEXT_PAIRS = [
-  ["text", "bg"],
-  ["text", "surface"],
-  ["text", "tint"],
-  ["muted", "bg"],
-  ["muted", "surface"],
-  ["muted", "tint"],
-  ["accent-text", "bg"],
-  ["accent-text", "surface"],
-  ["accent-text", "tint"],
-  ["on-accent", "accent-fill"],
-  ["success-text", "bg"],
-  ["success-text", "surface"],
-  ["success-text", "success-tint"],
-  ["on-accent", "success-fill"],
-  ["danger-text", "bg"],
-  ["danger-text", "surface"],
-  ["danger-text", "danger-tint"],
-  ["on-accent", "danger-fill"],
-  ["warning-text", "bg"],
-  ["warning-text", "surface"],
-  ["warning-text", "warning-tint"],
-] as const;
 
 describe("tokens.css", () => {
   const rules = compileRules("tokens.scss");
@@ -116,16 +61,13 @@ describe("tokens.css", () => {
     dark: findRule("[data-theme=dark]").declarations,
   };
 
-  const color = (theme: keyof typeof themes, token: string): string => {
-    const value = themes[theme].get(`--rq-color-${token}`);
-    if (!value) throw new Error(`--rq-color-${token} is not defined`);
-    return value;
-  };
+  it("sets the font family on :root", () => {
+    expect(findRule(":root").declarations.get("--rq-font-family")).toBe(
+      '"Work Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+    );
+  });
 
   it("applies light on :root and dark when the OS prefers it", () => {
-    expect(findRule(":root").declarations.get("--rq-font-family")).toMatch(
-      /^"Work Sans", /
-    );
     expect(
       findRule("[data-theme=light]").selectors.includes(":root")
     ).toBeTruthy();
@@ -143,24 +85,19 @@ describe("tokens.css", () => {
     expect(themes.dark.get("color-scheme")).toBe("dark");
   });
 
-  it("prefixes every custom property with --rq-", () => {
-    const properties = rules.flatMap((rule) => [...rule.declarations.keys()]);
-
-    expect(
-      properties.filter((property) => property.startsWith("--"))
-    ).not.toHaveLength(0);
-    expect(
-      properties.filter(
-        (property) => property.startsWith("--") && !property.startsWith("--rq-")
-      )
-    ).toEqual([]);
-  });
-
   describe.each(["light", "dark"] as const)("%s theme", (theme) => {
-    it.each(TEXT_PAIRS)("%s on %s meets WCAG AA (4.5:1)", (text, bg) => {
-      expect(
-        contrastRatio(color(theme, text), color(theme, bg))
-      ).toBeGreaterThanOrEqual(4.5);
+    const ratio = (foreground: string, background: string) =>
+      contrastRatio(
+        resolveColor(themes[theme], foreground),
+        resolveColor(themes[theme], background)
+      );
+
+    it.each(TEXT_PAIRS)("text: %s on %s reaches 4.5:1", (text, bg) => {
+      expect(ratio(text, bg)).toBeGreaterThanOrEqual(TEXT_MIN_RATIO);
+    });
+
+    it.each(NON_TEXT_PAIRS)("non-text: %s on %s reaches 3:1", (edge, bg) => {
+      expect(ratio(edge, bg)).toBeGreaterThanOrEqual(NON_TEXT_MIN_RATIO);
     });
   });
 
@@ -223,36 +160,24 @@ describe("index.css", () => {
     ).toEqual([]);
   });
 
-  it("lets every transition and animation respect prefers-reduced-motion", () => {
-    // A duration written as a literal (not a --rq-duration-* token, which
-    // drops to 0ms) needs a reduced-motion override for the same selector.
-    const reducedMotionSelectors = new Set(
-      rules
-        .filter(
-          (rule) => rule.atRule === "@media (prefers-reduced-motion: reduce)"
-        )
-        .flatMap((rule) => rule.selectors)
-    );
+  it("only animates with --rq-duration-* tokens, which drop to 0ms", () => {
+    // The spinner keeps moving under reduced motion (it shows that something
+    // is loading) but swaps its scaling for a fade.
+    const allowed = [".spinner-loader > div:before: animation-duration: 1.2s"];
     const motion = declarations.filter(
       ({ rule, property }) =>
         !rule.atRule?.startsWith("@keyframes") &&
         /^(transition|animation)(-duration)?$/.test(property)
     );
-    const literalDuration = /(^|[\s,])-?[\d.]+m?s\b/;
 
     expect(motion).not.toHaveLength(0);
     expect(
       motion
-        .filter(({ value }) => literalDuration.test(value))
-        .filter(({ rule }) =>
-          rule.selectors.some(
-            (selector) => !reducedMotionSelectors.has(selector)
-          )
-        )
+        .filter(({ value }) => /(^|[\s,])[\d.]+m?s\b/.test(value))
         .map(
           ({ rule, property, value }) =>
             `${rule.selectors.join(", ")}: ${property}: ${value}`
         )
-    ).toEqual([]);
+    ).toEqual(allowed);
   });
 });

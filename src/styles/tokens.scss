@@ -13,16 +13,22 @@
   }
 }
 
+// Set with each theme (not once on :root), so a themed subtree resolves the
+// var() against its own colours.
+@mixin -theme($colors, $shadows) {
+  @include -custom-properties(color, $colors);
+  @include -custom-properties(shadow, $shadows);
+  --rq-focus-ring-color: var(--rq-color-accent-text);
+}
+
 @mixin -light-theme {
   color-scheme: light;
-  @include -custom-properties(color, tokens.$colors-light);
-  @include -custom-properties(shadow, tokens.$shadows-light);
+  @include -theme(tokens.$colors-light, tokens.$shadows-light);
 }
 
 @mixin -dark-theme {
   color-scheme: dark;
-  @include -custom-properties(color, tokens.$colors-dark);
-  @include -custom-properties(shadow, tokens.$shadows-dark);
+  @include -theme(tokens.$colors-dark, tokens.$shadows-dark);
 }
 
 :root {
@@ -33,6 +39,7 @@
   @include -custom-properties(letter-spacing, tokens.$letter-spacings);
   @include -custom-properties(space, tokens.$space);
   @include -custom-properties(radius, tokens.$radii);
+  @include -custom-properties(focus-ring, tokens.$focus-ring);
   @include -custom-properties(duration, tokens.$durations);
   @include -custom-properties(easing, tokens.$easings);
 }
