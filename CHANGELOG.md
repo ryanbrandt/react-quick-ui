@@ -5,6 +5,10 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+## 0.6.0-next.0 - 2026-10-01
+
+A prerelease (npm tag `next`) for testing in personal-page before 0.6.0.
+
 ### Added
 
 - React 19 support. The peer ranges are now `react` and `react-dom`
@@ -12,15 +16,38 @@ All notable changes to this project are documented here. The format follows
   suite runs on both React 18 and 19.
 - `Input` accepts an optional `id` for its `<input>` (defaults to a `useId()`
   value).
+- A Sass module API that emits no CSS:
+  `@use "@ryanbrandt/react-quick-ui/stylesheets/sass" as rq;` exposes the
+  colours, variables and mixins.
+- An `exports` map: the package entry (`types`, `module`, `default`),
+  `./stylesheets/*`, `./assets/*`, `./dist/*` and `./package.json`.
 
 ### Changed
 
+- **Breaking:** deep imports must include a file extension (e.g.
+  `.../dist/index` no longer resolves); the bare `.../dist` import and
+  `README.md` are no longer reachable. Everything under `dist/` with an
+  extension still works.
+- **Breaking:** TypeScript consumers need TypeScript 4.5 or later (the
+  declarations use inline `type` import modifiers).
+- **Breaking:** the peer ranges are now bounded to supported majors: `react` and
+  `react-dom` `^18.0.0 || ^19.0.0` (was `>=18.0.0`), `react-transition-group`
+  `^4.4.5` (was `>=4.4.5`).
+- **Breaking:** the package declares `engines.node` `>=20.19`, so installs on
+  older Node warn (npm) or fail (Yarn 1).
 - **Breaking:** TypeScript consumers need `@types/react` 18.2.6 or later. The
   type declarations now import `JSX` from `react` (React 19 removed the global
   `JSX` namespace).
 - **Breaking:** `usePrevious` keeps its values in state instead of a ref. It now
   returns the value before the most recent _change_: a re-render with the same
   value no longer makes it return the current value.
+- The legacy `dist/stylesheets/index.scss` and `colors.scss` still work with
+  `@import` but are deprecated in favour of `index.css` plus the Sass API.
+- The stylesheet is built with the Sass module system and is about 65%
+  smaller (the old build repeated the flex utilities 13 times). Resolved
+  styles are unchanged apart from the fixes below.
+- The SVG stories' type declarations (`*.stories.d.ts`) are no longer shipped.
+- `sideEffects` marks the stylesheets, so bundlers can tree-shake the rest.
 
 ### Fixed
 
