@@ -1,4 +1,4 @@
-import type { FunctionComponent, PropsWithChildren } from "react";
+import type { FunctionComponent, JSX, PropsWithChildren } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";

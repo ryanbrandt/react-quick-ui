@@ -1,4 +1,4 @@
-import type { FunctionComponent, PropsWithChildren } from "react";
+import type { FunctionComponent, PropsWithChildren, JSX } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 
