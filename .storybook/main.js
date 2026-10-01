@@ -10,6 +10,8 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
+    "@storybook/addon-webpack5-compiler-babel",
+    "@chromatic-com/storybook"
   ],
 
   framework: {
@@ -36,7 +38,9 @@ module.exports = {
     return config;
   },
 
-  docs: {
-    autodocs: true
+  docs: {},
+
+  typescript: {
+    reactDocgen: "react-docgen-typescript"
   }
 };
