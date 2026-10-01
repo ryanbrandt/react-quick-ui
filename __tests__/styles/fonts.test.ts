@@ -42,15 +42,22 @@ describe("fonts.css", () => {
   });
 
   it("declares each file as variable Work Sans of its style, swapping in", () => {
-    expect(faces).toEqual(
-      faces.map(({ file }) => ({
-        file,
+    expect(faces).toEqual([
+      {
+        file: "work-sans-latin-wght-normal.woff2",
         family: '"Work Sans"',
-        style: file.includes("-italic") ? "italic" : "normal",
+        style: "normal",
         weight: "100 900",
         display: "swap",
-      }))
-    );
+      },
+      {
+        file: "work-sans-latin-wght-italic.woff2",
+        family: '"Work Sans"',
+        style: "italic",
+        weight: "100 900",
+        display: "swap",
+      },
+    ]);
   });
 
   it("ships the SIL Open Font License next to the fonts", () => {

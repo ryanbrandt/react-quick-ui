@@ -1,3 +1,8 @@
-$work-sans-family: "Work Sans";
+@use "sass:list";
+@use "tokens";
+
+// The first family of the token font stack. Prefer `--rq-font-family`
+// (the whole stack) or `tokens.$font-family`.
+$work-sans-family: list.nth(tokens.$font-family, 1);
 
 $accordion-transition-time: 0.2s;
