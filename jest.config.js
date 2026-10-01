@@ -31,6 +31,8 @@ module.exports = {
     ...(process.env.REACT_VERSION === "18" && react18Mapper),
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  // e2e/ holds the Playwright suite (yarn test:visual).
+  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/e2e/"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   moduleDirectories: ["node_modules", "<rootDir>/src"],
   // Measure all of src, not just files some test happens to import.

@@ -41,7 +41,10 @@
     "storybook": "storybook dev -p 6006",
     "story:create": "bash ./scripts/create_story.sh",
     "svg:create": "bash ./scripts/create_svg.sh",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test:visual": "yarn build-storybook --quiet && playwright test",
+    "test:visual:update": "yarn build-storybook --quiet && playwright test --update-snapshots",
+    "test:visual:install": "playwright install chromium"
   },
   "browserslist": {
     "production": [
@@ -56,7 +59,9 @@
     ]
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "1.63.0",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
