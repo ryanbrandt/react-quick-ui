@@ -67,6 +67,8 @@ jobs:
 
   build_storybook:
     executor: node
+    environment:
+      STORYBOOK_DISABLE_TELEMETRY: "1"
     steps:
       - install
       - run:

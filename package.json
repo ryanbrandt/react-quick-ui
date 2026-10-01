@@ -59,7 +59,6 @@
     "@rollup/plugin-typescript": "^12.3.0",
     "@ryanbrandt/react-testing-utils": "^0.6.0",
     "@storybook/addon-docs": "10.6.1",
-    "@storybook/addon-links": "10.6.1",
     "@storybook/react-vite": "10.6.1",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",

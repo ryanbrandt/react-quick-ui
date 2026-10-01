@@ -6,9 +6,8 @@ const config: StorybookConfig = {
     "../src/stories/**/*.stories.tsx",
     "../src/assets/svgs/**/*.stories.tsx",
   ],
-  addons: ["@storybook/addon-links", "@storybook/addon-docs"],
+  addons: ["@storybook/addon-docs"],
   framework: "@storybook/react-vite",
-  staticDirs: ["../src/assets"],
   // The default (react-docgen) can't expand types such as Modal's
   // PropsWithChildren<BaseProps>, and lists unions as "union" instead of
   // their options, so the prop tables and select controls would regress.
