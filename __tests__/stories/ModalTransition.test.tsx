@@ -40,8 +40,15 @@ describe("Modal transition", () => {
         `${transitionClass}-enter-active`
       );
 
+      // Still entering 1ms before the timeout, so the two Modal timeouts
+      // (animated vs. not) can't be swapped unnoticed.
       act(() => {
-        jest.advanceTimersByTime(timeout);
+        jest.advanceTimersByTime(timeout - 1);
+      });
+      expect(getBackground()).toHaveClass(`${transitionClass}-enter-active`);
+
+      act(() => {
+        jest.advanceTimersByTime(1);
       });
       expect(getBackground()).toHaveClass(`${transitionClass}-enter-done`);
 
@@ -52,7 +59,12 @@ describe("Modal transition", () => {
       );
 
       act(() => {
-        jest.advanceTimersByTime(timeout);
+        jest.advanceTimersByTime(timeout - 1);
+      });
+      expect(screen.getByText("Content")).toBeInTheDocument();
+
+      act(() => {
+        jest.advanceTimersByTime(1);
       });
       expect(screen.queryByText("Content")).not.toBeInTheDocument();
     }
