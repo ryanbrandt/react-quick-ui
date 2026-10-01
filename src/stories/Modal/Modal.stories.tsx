@@ -1,149 +1,71 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useArgs } from "storybook/preview-api";
+import { expect, fn, waitFor } from "storybook/test";
 
-import Modal from "@stories/Modal/Modal";
+import Modal, { type Props as ModalProps } from "@stories/Modal/Modal";
+import Button from "@stories/Button/Button";
+import { FillerPage, fixedOverlayDocs } from "@stories/storyHelpers";
 
-export default {
+// Keeps the `open` arg in sync with the modal, so clicking the backdrop
+// closes it and the "Open modal" button opens it again. Storybook hooks such
+// as useArgs only work when this is the story's render function itself, not
+// a component it renders.
+const renderWithOpenArg = (args: ModalProps) => {
+  const [, updateArgs] = useArgs<ModalProps>();
+  const close = () => {
+    args.onClose();
+    updateArgs({ open: false });
+  };
+
+  return (
+    <FillerPage
+      before={
+        <Modal {...args} onClose={close}>
+          <div
+            style={{
+              padding: "25px",
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <p>This is where modal content would go</p>
+          </div>
+        </Modal>
+      }
+    >
+      <Button text="Open modal" onClick={() => updateArgs({ open: true })} />
+    </FillerPage>
+  );
+};
+
+const meta = {
   title: "Core/Layout/Modal",
-  text: Modal.name,
   component: Modal,
-  argTypes: {
-    open: {
-      defaultValue: true,
-    },
-    animated: {
-      defaultValue: false,
-    },
-    onClose: {
-      control: false,
-    },
-    modalHeading: {
-      defaultValue: undefined,
-    },
+  args: {
+    open: true,
+    onClose: fn(),
+    modalHeading: { text: "Its a Modal!", variant: "h1" },
   },
-} as ComponentMeta<typeof Modal>;
+  parameters: fixedOverlayDocs,
+  render: renderWithOpenArg,
+} satisfies Meta<typeof Modal>;
 
-const DefaultTemplate: ComponentStory<typeof Modal> = (args) => (
-  <div
-    style={{
-      height: "100%",
-      width: "90vw",
-      backgroundColor: "white",
-      display: "flex",
-    }}
-  >
-    <Modal {...args}>
-      <div
-        style={{
-          padding: "25px",
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <p>This is where modal content would go</p>
-      </div>
-    </Modal>
-    <div style={{ padding: "25px" }}>
-      <h3>Lorem ipsum</h3>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum at
-        nunc tempus bibendum. Etiam feugiat arcu eget eros vulputate, ac euismod
-        mi dignissim. Ut commodo, magna eget hendrerit condimentum, risus nisi
-        mollis ipsum, et malesuada diam eros non metus. Praesent id ligula
-        ullamcorper, vulputate felis sed, feugiat nulla. Quisque commodo rhoncus
-        massa sed imperdiet. Etiam rhoncus porttitor felis, ut porta nibh auctor
-        quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        eget mattis turpis.
-      </p>
-    </div>
-  </div>
-);
-export const Default = DefaultTemplate.bind({});
-Default.args = {
-  open: true,
-  modalHeading: {
-    text: "Its a Modal!",
-    variant: "h1",
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
+
+// Starts closed, opens through the button and waits for the scale-up
+// animation to finish (the panel starts at opacity 0).
+export const Animated: Story = {
+  args: { open: false, animated: true },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Open modal" }));
+    const content = await canvas.findByText(
+      "This is where modal content would go"
+    );
+    await waitFor(() => expect(content).toBeVisible());
   },
 };

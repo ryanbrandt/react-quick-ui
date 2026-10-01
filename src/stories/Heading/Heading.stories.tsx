@@ -1,27 +1,19 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import Heading from "@stories/Heading/Heading";
 
-export default {
+const meta = {
   title: "Core/Heading",
-  text: Heading.name,
   component: Heading,
-  argTypes: {
-    text: {
-      defaultValue: "Heading Text",
-    },
-    variant: {
-      defaultValue: "h1",
-    },
-    className: {
-      defaultValue: undefined,
-    },
-  },
-} as ComponentMeta<typeof Heading>;
+  args: { text: "Heading Text" },
+  render: (args) => (
+    <div style={{ width: "60vw", height: "50vh" }}>
+      <Heading {...args} />
+    </div>
+  ),
+} satisfies Meta<typeof Heading>;
 
-const DefaultTemplate: ComponentStory<typeof Heading> = (args) => (
-  <div style={{ width: "60vw", height: "50vh" }}>
-    <Heading {...args} />
-  </div>
-);
-export const Default = DefaultTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

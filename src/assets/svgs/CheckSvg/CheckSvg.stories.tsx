@@ -1,29 +1,14 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import CheckSvg from "@svgs/CheckSvg/CheckSvg";
 
-export default {
+const meta = {
   title: "SVG/CheckSvg",
-  text: CheckSvg.name,
   component: CheckSvg,
-  argTypes: {
-    fill: {
-      defaultValue: false,
-    },
-    width: {
-      defaultValue: 33,
-    },
-    height: {
-      defaultValue: 33,
-    },
-  },
-} as ComponentMeta<typeof CheckSvg>;
+  args: { width: 33, height: 33 },
+} satisfies Meta<typeof CheckSvg>;
 
-const IconTemplate: ComponentStory<typeof CheckSvg> = (args) => (
-  <CheckSvg {...args} />
-);
-export const Icon = IconTemplate.bind({});
-Icon.args = {
-  width: 33,
-  height: 33,
-};
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Icon: Story = {};

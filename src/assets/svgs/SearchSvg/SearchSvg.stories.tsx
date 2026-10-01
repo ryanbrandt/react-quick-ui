@@ -1,16 +1,13 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import SearchSvg from "@svgs/SearchSvg/SearchSvg";
 
-export default {
+const meta = {
   title: "SVG/SearchSvg",
-  text: SearchSvg.name,
   component: SearchSvg,
-  argTypes: {},
-} as ComponentMeta<typeof SearchSvg>;
+} satisfies Meta<typeof SearchSvg>;
 
-const IconTemplate: ComponentStory<typeof SearchSvg> = (args) => (
-  <SearchSvg {...args} />
-);
-export const Icon = IconTemplate.bind({});
-Icon.args = {};
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Icon: Story = {};

@@ -1,41 +1,15 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import TextInput from "@stories/TextInput/TextInput";
 
-export default {
+const meta = {
   title: "Core/Inputs/TextInput",
-  text: TextInput.name,
   component: TextInput,
-  argTypes: {
-    value: {
-      defaultValue: "",
-    },
-    size: {
-      defaultValue: "md",
-    },
-    disabled: {
-      defaultValue: false,
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    error: {
-      defaultValue: undefined,
-    },
-    placeholder: {
-      defaultValue: "",
-    },
-    label: {
-      defaultValue: "",
-    },
-    required: {
-      defaultValue: false,
-    },
-  },
-} as ComponentMeta<typeof TextInput>;
+  args: { size: "md", onChange: fn() },
+} satisfies Meta<typeof TextInput>;
 
-const DefaultTemplate: ComponentStory<typeof TextInput> = (args) => (
-  <TextInput {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

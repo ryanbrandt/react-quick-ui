@@ -1,32 +1,15 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
-import Search from "@stories/SearchInput/SearchInput";
+import SearchInput from "@stories/SearchInput/SearchInput";
 
-export default {
+const meta = {
   title: "Core/Inputs/SearchInput",
-  text: Search.name,
-  component: Search,
-  argTypes: {
-    value: {
-      defaultValue: "",
-    },
-    placeholder: {
-      defaultValue: "Placeholder Text",
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    disabled: {
-      defaultValue: false,
-    },
-    size: {
-      defaultValue: "xlg",
-    },
-  },
-} as ComponentMeta<typeof Search>;
+  component: SearchInput,
+  args: { placeholder: "Placeholder Text", onChange: fn() },
+} satisfies Meta<typeof SearchInput>;
 
-const DefaultTemplate: ComponentStory<typeof Search> = (args) => (
-  <Search {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

@@ -1,64 +1,33 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import Button from "@stories/Button/Button";
 
-export default {
+const meta = {
   title: "Core/Button",
-  text: Button.name,
   component: Button,
   argTypes: {
-    disabled: {
-      defaultValue: false,
-    },
-    iconLeft: {
-      control: false,
-    },
-    iconRight: {
-      control: false,
-    },
-    onClick: {
-      control: false,
-      action: "onClick",
-    },
+    iconLeft: { control: false },
+    iconRight: { control: false },
   },
-} as ComponentMeta<typeof Button>;
+  args: { onClick: fn() },
+} satisfies Meta<typeof Button>;
 
-const PrimaryTemplate: ComponentStory<typeof Button> = (args) => (
-  <Button {...args} />
-);
-export const Primary = PrimaryTemplate.bind({});
-Primary.args = {
-  size: "md",
-  text: "Primary",
-  variant: "primary",
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: { text: "Primary", variant: "primary" },
 };
 
-const SuccessTemplate: ComponentStory<typeof Button> = (args) => (
-  <Button {...args} />
-);
-export const Success = SuccessTemplate.bind({});
-Success.args = {
-  size: "md",
-  text: "Success",
-  variant: "success",
+export const Success: Story = {
+  args: { text: "Success", variant: "success" },
 };
 
-const DangerTemplate: ComponentStory<typeof Button> = (args) => (
-  <Button {...args} />
-);
-export const Danger = DangerTemplate.bind({});
-Danger.args = {
-  size: "md",
-  text: "Danger",
-  variant: "danger",
+export const Danger: Story = {
+  args: { text: "Danger", variant: "danger" },
 };
 
-const NeutralTemplate: ComponentStory<typeof Button> = (args) => (
-  <Button {...args} />
-);
-export const Neutral = NeutralTemplate.bind({});
-Neutral.args = {
-  size: "md",
-  text: "Neutral",
-  variant: "neutral",
+export const Neutral: Story = {
+  args: { text: "Neutral", variant: "neutral" },
 };

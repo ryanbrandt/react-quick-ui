@@ -1,30 +1,15 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import PencilSvg from "@svgs/PencilSvg/PencilSvg";
 
-export default {
+const meta = {
   title: "SVG/PencilSvg",
-  text: PencilSvg.name,
   component: PencilSvg,
-  argTypes: {
-    fill: {
-      defaultValue: false,
-    },
-    width: {
-      defaultValue: 20,
-    },
-    height: {
-      defaultValue: 20,
-    },
-  },
-} as ComponentMeta<typeof PencilSvg>;
+} satisfies Meta<typeof PencilSvg>;
 
-const IconTemplate: ComponentStory<typeof PencilSvg> = (args) => (
-  <PencilSvg {...args} />
-);
-export const Icon = IconTemplate.bind({});
-Icon.args = {
-  fill: "#7ba4db",
-  width: 20,
-  height: 20,
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Icon: Story = {
+  args: { fill: "#7ba4db" },
 };

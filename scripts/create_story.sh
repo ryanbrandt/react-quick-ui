@@ -1,55 +1,64 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Scaffolds a component, its story and its stylesheet.
+# Usage: yarn story:create <ComponentName>
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+RESET='\033[0m'
 
-if [ "$#" -ne 1 ]; then
-    printf "\n${RED}A component name is required\n"
-    exit 1
-else
+fail() {
+  printf "\n${RED}%s${RESET}\n" "$1" >&2
+  exit 1
+}
 
-    if [ -d "src/stories/$1" ]; then
-        printf "\n${RED}A $1 story already exists!\n"
-        exit 1
-    fi
+[ "$#" -eq 1 ] || fail "A component name is required"
+name="$1"
+[[ "$name" =~ ^[A-Z][A-Za-z0-9]*$ ]] || fail "Use a PascalCase name, e.g. MyComponent"
 
-    mkdir src/stories/$1
+dir="src/stories/$name"
+scss="src/styles/stories/_$name.scss"
+# Check every target before writing anything, so a failure can't half-write.
+[ ! -e "$dir" ] || fail "A $name story already exists!"
+[ ! -e "$scss" ] || fail "$scss already exists!"
 
-    echo "
-import { FunctionComponent } from "\""react"\"";
+# Lowercase without bash 4's ${1,,} (macOS ships bash 3.2).
+class_name="$(printf %s "$name" | tr '[:upper:]' '[:lower:]')"
 
-interface Props {}
+mkdir "$dir"
 
-const $1: FunctionComponent<Props> = (props: Props): JSX.Element => (
-    <div>$1</div>
-);
+cat >"$dir/$name.tsx" <<EOF
+import type { FunctionComponent } from "react";
 
-export default $1;
-" >src/stories/$1/$1.tsx
+const $name: FunctionComponent = () => <div className="$class_name">$name</div>;
 
-    echo "export { default as $1 } from "\""@stories/$1/$1"\"";" >>src/stories/index.ts
+export default $name;
+EOF
 
-    echo "
-import { ComponentStory, ComponentMeta } from "\""@storybook/react"\"";
+cat >"$dir/$name.stories.tsx" <<EOF
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import $1 from "\""@stories/$1/$1"\"";
+import $name from "@stories/$name/$name";
 
-export default {
-    text: $1.name,
-    component: $1,
-} as ComponentMeta<typeof $1>;
+const meta = {
+  title: "Core/$name",
+  component: $name,
+} satisfies Meta<typeof $name>;
 
-const DefaultTemplate: ComponentStory<typeof $1> = (args) => (
-    <$1 {...args} />
-);
-export const Default = DefaultTemplate.bind({});
-" >src/stories/$1/$1.stories.tsx
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-    echo ".${1,,} {}" >src/styles/stories/_$1.scss
+export const Default: Story = {};
+EOF
 
-    echo "@use "\""stories/$1"\"";" >>src/styles/index.scss
+printf '.%s {\n}\n' "$class_name" >"$scss"
 
-    printf "\n${GREEN} $1 story created!\n"
-fi
+printf 'export { default as %s } from "@stories/%s/%s";\n' "$name" "$name" "$name" >>src/stories/index.ts
+printf '@use "stories/%s";\n' "$name" >>src/styles/index.scss
 
-exit 0
+# Line lengths depend on the name, so let Prettier lay the files out.
+yarn prettier --log-level warn --write "$dir" "$scss" src/stories/index.ts src/styles/index.scss
+
+printf "\n${GREEN}%s story created!${RESET}\n" "$name"

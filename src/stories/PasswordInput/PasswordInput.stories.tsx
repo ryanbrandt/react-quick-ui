@@ -1,41 +1,15 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import PasswordInput from "@stories/PasswordInput/PasswordInput";
 
-export default {
+const meta = {
   title: "Core/Inputs/PasswordInput",
-  text: PasswordInput.name,
   component: PasswordInput,
-  argTypes: {
-    value: {
-      defaultValue: undefined,
-    },
-    size: {
-      defaultValue: "md",
-    },
-    label: {
-      defaultValue: undefined,
-    },
-    required: {
-      defaultValue: false,
-    },
-    disabled: {
-      defaultValue: false,
-    },
-    error: {
-      defaultValue: { error: false, text: "" },
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    className: {
-      defaultValue: undefined,
-    },
-  },
-} as ComponentMeta<typeof PasswordInput>;
+  args: { onChange: fn() },
+} satisfies Meta<typeof PasswordInput>;
 
-const DefaultTemplate: ComponentStory<typeof PasswordInput> = (args) => (
-  <PasswordInput {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

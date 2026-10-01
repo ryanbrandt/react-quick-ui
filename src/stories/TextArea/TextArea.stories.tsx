@@ -1,38 +1,15 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import TextArea from "@stories/TextArea/TextArea";
 
-export default {
+const meta = {
   title: "Core/Inputs/TextArea",
-  text: TextArea.name,
   component: TextArea,
-  argTypes: {
-    value: {
-      defaultValue: "",
-    },
-    label: {
-      defaultValue: "This is a Label",
-    },
-    required: {
-      defaultValue: false,
-    },
-    disabled: {
-      defaultValue: false,
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    placeholder: {
-      defaultValue: "",
-    },
-    error: {
-      defaultValue: "",
-    },
-  },
-} as ComponentMeta<typeof TextArea>;
+  args: { label: "This is a Label", onChange: fn() },
+} satisfies Meta<typeof TextArea>;
 
-const DefaultTemplate: ComponentStory<typeof TextArea> = (args) => (
-  <TextArea {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

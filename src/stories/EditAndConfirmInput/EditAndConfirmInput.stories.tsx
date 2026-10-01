@@ -1,49 +1,23 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import EditAndConfirmInput from "@stories/EditAndConfirmInput/EditAndConfirmInput";
 
-export default {
+const meta = {
   title: "Core/Inputs/EditAndConfirmInput",
-  text: EditAndConfirmInput.name,
   component: EditAndConfirmInput,
-  argTypes: {
-    value: {
-      defaultValue: "",
-    },
-    size: {
-      defaultValue: "xlg",
-    },
-    editDisabled: {
-      defaultValue: false,
-    },
-    confirmDisabled: {
-      defaultValue: false,
-    },
-    onChange: {
-      control: false,
-      action: "onChange",
-    },
-    onEditClick: {
-      control: false,
-      action: "onEditClick",
-    },
-    onConfirmClick: {
-      control: false,
-      action: "onConfirmClick",
-    },
-    error: {
-      defaultValue: undefined,
-    },
-    label: {
-      defaultValue: "Edit and Confirm Your Email",
-    },
-    inputType: {
-      defaultValue: "email",
-    },
+  args: {
+    value: "",
+    size: "xlg",
+    label: "Edit and Confirm Your Email",
+    inputType: "email",
+    onChange: fn(),
+    onEditClick: fn(),
+    onConfirmClick: fn(),
   },
-} as ComponentMeta<typeof EditAndConfirmInput>;
+} satisfies Meta<typeof EditAndConfirmInput>;
 
-const DefaultTemplate: ComponentStory<typeof EditAndConfirmInput> = (args) => (
-  <EditAndConfirmInput {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

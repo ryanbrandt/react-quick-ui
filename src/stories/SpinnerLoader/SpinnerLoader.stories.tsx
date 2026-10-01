@@ -1,14 +1,13 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import SpinnerLoader from "@stories/SpinnerLoader/SpinnerLoader";
 
-export default {
+const meta = {
   title: "Core/Loaders/SpinnerLoader",
-  text: SpinnerLoader.name,
   component: SpinnerLoader,
-} as ComponentMeta<typeof SpinnerLoader>;
+} satisfies Meta<typeof SpinnerLoader>;
 
-const DefaultTemplate: ComponentStory<typeof SpinnerLoader> = (args) => (
-  <SpinnerLoader {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

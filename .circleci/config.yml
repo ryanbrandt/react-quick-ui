@@ -65,6 +65,16 @@ jobs:
           name: Build
           command: yarn build
 
+  build_storybook:
+    executor: node
+    environment:
+      STORYBOOK_DISABLE_TELEMETRY: "1"
+    steps:
+      - install
+      - run:
+          name: Build Storybook
+          command: yarn build-storybook
+
 workflows:
   ci:
     jobs:
@@ -79,6 +89,11 @@ workflows:
             - Typecheck
       - build:
           name: Build
+          requires:
+            - Lint
+            - Typecheck
+      - build_storybook:
+          name: Build Storybook
           requires:
             - Lint
             - Typecheck

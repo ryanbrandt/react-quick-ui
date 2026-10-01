@@ -37,6 +37,7 @@ module.exports = {
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
     "!src/**/*.stories.tsx",
+    "!src/stories/storyHelpers.tsx",
     "!src/**/index.ts",
   ],
   coverageThreshold: {
