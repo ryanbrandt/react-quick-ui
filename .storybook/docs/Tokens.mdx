@@ -17,9 +17,10 @@ import {
 
 The library's design tokens (D0 spec, direction A "Evolved") are CSS custom
 properties prefixed `--rq-`, shipped in `stylesheets/tokens.css` and included
-in `stylesheets/index.css`. Light is the default; dark applies under
-`data-theme="dark"`, or when the OS prefers dark and the root doesn't set
-`data-theme="light"`. Use the **Theme** toolbar button to switch the stories.
+in `stylesheets/index.css`. Theming is opt-in: with no `data-theme` the light
+tokens apply and the page's `color-scheme` is left alone. `data-theme="light"`,
+`"dark"` or `"system"` (follows the OS) on any element themes that subtree.
+Use the **Theme** toolbar button to switch the stories.
 
 The same values are Sass maps in the Sass API (`rq.$colors-light`,
 `rq.$space`, …). These tables are generated from the compiled `tokens.css`.
