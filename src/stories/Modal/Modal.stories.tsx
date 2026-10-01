@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import Modal from "@stories/Modal/Modal";
 
@@ -20,9 +20,9 @@ export default {
       defaultValue: undefined,
     },
   },
-} as ComponentMeta<typeof Modal>;
+} as Meta<typeof Modal>;
 
-const DefaultTemplate: ComponentStory<typeof Modal> = (args) => (
+const DefaultTemplate: StoryFn<typeof Modal> = (args) => (
   <div
     style={{
       height: "100%",
@@ -139,11 +139,15 @@ const DefaultTemplate: ComponentStory<typeof Modal> = (args) => (
     </div>
   </div>
 );
-export const Default = DefaultTemplate.bind({});
-Default.args = {
-  open: true,
-  modalHeading: {
-    text: "Its a Modal!",
-    variant: "h1",
+
+export const Default = {
+  render: DefaultTemplate,
+
+  args: {
+    open: true,
+    modalHeading: {
+      text: "Its a Modal!",
+      variant: "h1",
+    },
   },
 };

@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import LoadingOverlay from "@stories/LoadingOverlay/LoadingOverlay";
 
@@ -14,9 +14,9 @@ export default {
       defaultValue: "",
     },
   },
-} as ComponentMeta<typeof LoadingOverlay>;
+} as Meta<typeof LoadingOverlay>;
 
-const DefaultTemplate: ComponentStory<typeof LoadingOverlay> = (args) => (
+const DefaultTemplate: StoryFn<typeof LoadingOverlay> = (args) => (
   <div
     style={{
       height: "100%",
@@ -121,8 +121,12 @@ const DefaultTemplate: ComponentStory<typeof LoadingOverlay> = (args) => (
     <LoadingOverlay {...args} />
   </div>
 );
-export const Default = DefaultTemplate.bind({});
-Default.args = {
-  show: true,
-  message: "Loading some content...",
+
+export const Default = {
+  render: DefaultTemplate,
+
+  args: {
+    show: true,
+    message: "Loading some content...",
+  },
 };

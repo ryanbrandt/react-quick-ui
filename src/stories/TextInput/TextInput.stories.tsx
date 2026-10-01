@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import TextInput from "@stories/TextInput/TextInput";
 
@@ -33,9 +33,6 @@ export default {
       defaultValue: false,
     },
   },
-} as ComponentMeta<typeof TextInput>;
+} as Meta<typeof TextInput>;
 
-const DefaultTemplate: ComponentStory<typeof TextInput> = (args) => (
-  <TextInput {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export const Default = {};

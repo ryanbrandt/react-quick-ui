@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import PasswordInput from "@stories/PasswordInput/PasswordInput";
 
@@ -33,9 +33,6 @@ export default {
       defaultValue: undefined,
     },
   },
-} as ComponentMeta<typeof PasswordInput>;
+} as Meta<typeof PasswordInput>;
 
-const DefaultTemplate: ComponentStory<typeof PasswordInput> = (args) => (
-  <PasswordInput {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export const Default = {};

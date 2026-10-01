@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import TextArea from "@stories/TextArea/TextArea";
 
@@ -30,9 +30,6 @@ export default {
       defaultValue: "",
     },
   },
-} as ComponentMeta<typeof TextArea>;
+} as Meta<typeof TextArea>;
 
-const DefaultTemplate: ComponentStory<typeof TextArea> = (args) => (
-  <TextArea {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export const Default = {};

@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import Search from "@stories/SearchInput/SearchInput";
 
@@ -24,9 +24,6 @@ export default {
       defaultValue: "xlg",
     },
   },
-} as ComponentMeta<typeof Search>;
+} as Meta<typeof Search>;
 
-const DefaultTemplate: ComponentStory<typeof Search> = (args) => (
-  <Search {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export const Default = {};

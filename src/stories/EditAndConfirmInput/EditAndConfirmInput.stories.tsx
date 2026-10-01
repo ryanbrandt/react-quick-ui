@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import EditAndConfirmInput from "@stories/EditAndConfirmInput/EditAndConfirmInput";
 
@@ -41,9 +41,6 @@ export default {
       defaultValue: "email",
     },
   },
-} as ComponentMeta<typeof EditAndConfirmInput>;
+} as Meta<typeof EditAndConfirmInput>;
 
-const DefaultTemplate: ComponentStory<typeof EditAndConfirmInput> = (args) => (
-  <EditAndConfirmInput {...args} />
-);
-export const Default = DefaultTemplate.bind({});
+export const Default = {};

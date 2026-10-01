@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import Heading from "@stories/Heading/Heading";
 
@@ -17,11 +17,13 @@ export default {
       defaultValue: undefined,
     },
   },
-} as ComponentMeta<typeof Heading>;
+} as Meta<typeof Heading>;
 
-const DefaultTemplate: ComponentStory<typeof Heading> = (args) => (
+const DefaultTemplate: StoryFn<typeof Heading> = (args) => (
   <div style={{ width: "60vw", height: "50vh" }}>
     <Heading {...args} />
   </div>
 );
-export const Default = DefaultTemplate.bind({});
+export const Default = {
+  render: DefaultTemplate,
+};

@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import TopBar from "@stories/TopBar/TopBar";
 import Button from "@stories/Button/Button";
@@ -10,9 +10,9 @@ export default {
   argTypes: {
     sticky: { defaultValue: false },
   },
-} as ComponentMeta<typeof TopBar>;
+} as Meta<typeof TopBar>;
 
-const DefaultTemplate: ComponentStory<typeof TopBar> = (args) => (
+const DefaultTemplate: StoryFn<typeof TopBar> = (args) => (
   <div
     style={{
       height: "100%",
@@ -128,4 +128,6 @@ const DefaultTemplate: ComponentStory<typeof TopBar> = (args) => (
     </div>
   </div>
 );
-export const Default = DefaultTemplate.bind({});
+export const Default = {
+  render: DefaultTemplate,
+};

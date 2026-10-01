@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { StoryFn, Meta } from "@storybook/react";
 
 import SearchSvg from "@svgs/SearchSvg/SearchSvg";
 
@@ -7,10 +7,8 @@ export default {
   text: SearchSvg.name,
   component: SearchSvg,
   argTypes: {},
-} as ComponentMeta<typeof SearchSvg>;
+} as Meta<typeof SearchSvg>;
 
-const IconTemplate: ComponentStory<typeof SearchSvg> = (args) => (
-  <SearchSvg {...args} />
-);
-export const Icon = IconTemplate.bind({});
-Icon.args = {};
+export const Icon = {
+  args: {},
+};
