@@ -26,6 +26,17 @@ const reactVersion = createRequire(import.meta.url)(
 // tsconfig "paths" aliases, grouped after packages by import-x/order.
 const aliases = ["@utilities", "@hooks", "@stories", "@svgs", "@styles"];
 
+// Type-aware rules, for the files tsconfig.json includes.
+const typeChecked = {
+  extends: [tseslint.configs.recommendedTypeChecked],
+  languageOptions: {
+    parserOptions: {
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+};
+
 export default defineConfig(
   globalIgnores(["dist/", "coverage/", "storybook-static/", ".yarn/"]),
 
@@ -74,34 +85,22 @@ export default defineConfig(
     rules: { "@typescript-eslint/no-require-imports": "off" },
   },
 
-  // Storybook config: type-aware rules; relative imports are fine here.
-  {
-    files: [".storybook/**/*.ts"],
-    extends: [tseslint.configs.recommendedTypeChecked],
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
+  // Storybook config.
+  { files: [".storybook/**/*.{ts,tsx}"], ...typeChecked },
 
   // Library source and tests: browser, React, type-aware rules.
   {
     files: ["src/**/*.{ts,tsx}", "__tests__/**/*.{ts,tsx}", "jest.setup.ts"],
     extends: [
-      tseslint.configs.recommendedTypeChecked,
+      ...typeChecked.extends,
       react.configs.flat.recommended,
       react.configs.flat["jsx-runtime"],
       reactHooks.configs.flat.recommended,
       jsxA11y.configs.recommended,
     ],
     languageOptions: {
+      ...typeChecked.languageOptions,
       globals: globals.browser,
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
     },
     settings: {
       react: { version: reactVersion },
