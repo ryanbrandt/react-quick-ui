@@ -19,6 +19,11 @@ name="$1"
 [[ "$name" =~ ^[A-Z][A-Za-z0-9]*$ ]] || fail "Use a PascalCase name, e.g. ArrowSvg"
 
 dir="src/assets/svgs/$name"
+# A name the package already exports would be exported twice (TS2300).
+if yarn node scripts/exported-names.mjs | grep -qx "$name"; then
+  fail "$name is already exported from the package (src/index.ts)"
+fi
+
 # Check the target before writing anything, so a failure can't half-write.
 [ ! -e "$dir" ] || fail "A $name svg already exists!"
 
@@ -57,3 +62,4 @@ printf 'export { default as %s } from "@svgs/%s/%s";\n' "$name" "$name" "$name" 
 yarn prettier --log-level warn --write "$dir" src/assets/svgs/index.ts
 
 printf "\n${GREEN}%s SVG created!${RESET}\n" "$name"
+printf 'Next: add %s to %s (the 100%% coverage gate fails without a test).\n' "$name" "__tests__/assets/svgs.test.tsx"
