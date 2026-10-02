@@ -65,6 +65,12 @@ const whenAnimationsEnd = (
   ).then(done);
 };
 
+/**
+ * @deprecated Use `Dialog`, which is built on the native `<dialog>`: it
+ * traps focus, closes on Esc, locks page scrolling and is labelled for
+ * screen readers. See "Migrating from Modal to Dialog" in the README.
+ * `Modal` will be removed in a future major release.
+ */
 const Modal: FunctionComponent<Props> = (props: Props): JSX.Element => {
   const {
     children,
@@ -97,11 +103,14 @@ const Modal: FunctionComponent<Props> = (props: Props): JSX.Element => {
       addEndListener={(done) => whenAnimationsEnd(backgroundRef.current, done)}
       classNames={modalTransitionClassNames}
     >
+      {/* Deprecated: no keyboard close. Dialog closes on Esc. */}
+      {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-static-element-interactions */}
       <div
         ref={backgroundRef}
         onClick={() => onClose()}
         className="modal__background"
       >
+        {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-static-element-interactions */}
         <div
           onClick={(e) => e.stopPropagation()}
           className={modalContentClassNames}
