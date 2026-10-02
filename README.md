@@ -91,6 +91,47 @@ body {
 
 Values are case-sensitive, and any other value (e.g. `"Dark"` or `"foo"`) is ignored: on `<html>` it behaves like no attribute, and on a nested element it keeps the nearest themed ancestor's theme.
 
+### Dialog, NavBar and ThemeToggle
+
+**`Dialog`** is a modal dialog on the native `<dialog>` element. It is controlled: pass `open` and set it to `false` in `onClose`, which it calls on Esc, on its close button and (unless `closeOnBackdropClick={false}`) on a backdrop click. While it is open the rest of the page is inert, focus stays in the dialog and the page doesn't scroll; closing returns focus to the element that opened it. A `title` labels it (or pass `aria-labelledby`), and `aria-describedby` names its description. It fades and rises in and out with the `--rq-duration-base` token, so it appears at once under reduced motion. Needs a browser with `<dialog>` and `:has()` (all current browsers); the exit animation needs `@starting-style` and `transition-behavior` support and is skipped elsewhere.
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Button text="Delete" onClick={() => setOpen(true)} />
+<Dialog open={open} onClose={() => setOpen(false)} title="Delete this post?">
+  <p>This can't be undone.</p>
+</Dialog>
+```
+
+**Migrating from Modal to Dialog.** `Modal` is deprecated and will be removed in a future major release. `open`, `onClose`, `className` and `children` work the same. `modalHeading={{ text }}` becomes `title` (rendered as an `<h2>`). `animated` goes away: Dialog always animates, from the tokens. Dialog adds Esc, focus handling, scroll locking, a close button (`closeLabel`, default `"Close"`) and screen reader labelling. Dialog keeps its children mounted while closed, so their state survives closing; Modal unmounted them. Dialog doesn't need `react-transition-group`.
+
+**`NavBar`** is the site header: `brand`, the navigation links as `children` and `actions` (e.g. a ThemeToggle) on a sticky, translucent bar with a bottom border. Give the current page's link `aria-current="page"` (React Router's `NavLink` does) to underline it. When the bar is narrower than 768px, the links move into a menu behind a menu button (`aria-expanded`, `aria-controls`): opening it focuses the first link, and Esc, choosing a link or clicking outside closes it. `navLabel` (default `"Primary"`), `menuLabel` (default `"Menu"`), `sticky` (default `true`) and `className` are optional. It replaces `TopBar`, which is deprecated (an empty bar you lay out yourself) and will be removed in a future major release.
+
+```tsx
+<NavBar
+  brand={<Link to="/">Ryan Brandt</Link>}
+  actions={<ThemeToggle value={theme} onChange={setTheme} />}
+>
+  <NavLink to="/">Home</NavLink>
+  <NavLink to="/resume">Résumé</NavLink>
+</NavBar>
+```
+
+**`ThemeToggle`** picks `"light"`, `"dark"` or `"system"` (the `ThemePreference` type, the same values `data-theme` takes). It is a group of three radio buttons drawn as a segmented control, so screen readers announce the choice and the arrow keys move between options. It only reports the choice; your app sets `data-theme`:
+
+```tsx
+const [theme, setTheme] = useState<ThemePreference>("system");
+useEffect(() => {
+  document.documentElement.dataset.theme = theme;
+}, [theme]);
+return <ThemeToggle value={theme} onChange={setTheme} />;
+```
+
+Storing the choice (e.g. in `localStorage`) is up to the app too. To avoid a flash of the wrong theme on load, set `data-theme` from the stored value in a small inline script before the page renders.
+
+`TextInput`, `PasswordInput`, `SearchInput` and `EditAndConfirmInput` accept an optional `id` for their `<input>`, like `Input` and `TextArea`.
+
 ### Sass API
 
 `stylesheets/sass` holds the token values, colour variables and mixins as Sass modules. Loading it emits no CSS, so any number of your stylesheets can `@use` it:
@@ -137,7 +178,9 @@ That path goes through the package's `exports` map, which Vite and Sass's `pkg:`
 
 - `yarn storybook`: the component explorer, with a light/dark **Theme** toolbar button and the a11y panel.
 - `yarn test:coverage` (100% coverage required) and `yarn test:react18`.
-- `yarn test:visual`: builds Storybook, then screenshots every story in both themes (exact-pixel comparison) and checks each for console errors and axe violations. Run `yarn test:visual:install` once to install Chromium, `yarn test:visual:run` to rerun against the existing build, and `yarn test:visual:update` to accept intended visual changes. The baseline is recorded on macOS; other platforms need their own.
+- `yarn test:stories`: builds Storybook and runs every story's play function in Chromium (the stories tagged `play-fn`).
+- `yarn test:visual`: builds Storybook, then screenshots every story in both themes (exact-pixel comparison) and checks each for console errors and axe violations. Run `yarn test:visual:install` once to install Chromium, `yarn test:visual:run` to rerun against the existing build, and `yarn test:visual:update` to accept intended visual changes. The baseline is recorded on macOS; other platforms need their own. `e2e/interactions.spec.ts` checks Dialog and NavBar keyboard behaviour with real key presses, and the `"system"` theme under an OS dark preference.
+- Stories of controlled inputs set `parameters: { syncArgs: { value: "onChange" } }`, so the value arg follows the change handler and the story accepts typing.
 
 **Warning: Peer Dependencies Required**
 

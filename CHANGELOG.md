@@ -41,6 +41,26 @@ restyle of every component. Visual changes are intended.
 - Storybook: a light/dark/system theme toolbar, the a11y addon and a
   Foundations/Tokens page. `yarn test:visual` screenshots every story in
   both themes and checks each for console errors and axe violations.
+- `Dialog`: a modal dialog on the native `<dialog>` element (controlled
+  `open`/`onClose`, `title`, `aria-labelledby`/`aria-describedby`,
+  `closeOnBackdropClick`, `closeLabel`). Focus moves in and returns to the
+  trigger, Esc and the backdrop close it, the page can't scroll while it is
+  open, and it animates with the duration tokens.
+- `NavBar`: the D0 site header, with `brand`, links (`children`) and
+  `actions` on a sticky, translucent (backdrop blur) bar with a bottom
+  border and an underlined `aria-current` link. Below 768px of its own
+  width the links move into a disclosure menu (`aria-expanded`, Esc and
+  focus handling).
+- `ThemeToggle` and the `ThemePreference` type: a controlled radio group
+  for `"light"`, `"dark"` and `"system"`. The app sets `data-theme` and
+  stores the choice (see the README).
+- `TextInput`, `PasswordInput`, `SearchInput` and `EditAndConfirmInput`
+  accept an optional `id` for their `<input>`.
+- Storybook: `parameters.syncArgs` keeps a controlled story's value arg in
+  step with its change handler, so the input stories accept typing.
+  `yarn test:stories` runs every play function in the built Storybook, and
+  the Playwright suite checks Dialog and NavBar keyboard behaviour and the
+  `"system"` theme under an OS dark preference.
 
 ### Changed
 
@@ -98,6 +118,15 @@ restyle of every component. Visual changes are intended.
 - The `text-overflow-elipsis` mixin (misspelled). Use
   `text-overflow-ellipsis`; the old name warns and will be removed in a
   future major release.
+- `Modal`. Use `Dialog`; the README describes the migration. It will be
+  removed in a future major release.
+- `TopBar`. Use `NavBar`. It will be removed in a future major release.
+
+### Fixed
+
+- `EditAndConfirmInput`'s confirm (check) icon was 33px wide in the 20px
+  Input leaves for an icon, so it spilled past the input's edge. It is now
+  20px, like the edit (pencil) icon.
 
 ## 0.6.0-next.0 - 2026-10-01
 
