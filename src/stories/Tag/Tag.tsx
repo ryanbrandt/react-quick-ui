@@ -38,13 +38,13 @@ export interface TagProps {
 
 /** A pill-shaped label: a tinted background with matching text. */
 const Tag: FunctionComponent<TagProps> = (props: TagProps): JSX.Element => {
-  const { text, variant = "primary", size = "md", className } = props;
+  const { text, variant = "primary", size = "md", className = "" } = props;
 
   const classNames = createCompositeClassName({
     tag: true,
     [`tag--${variant}`]: true,
     [`tag--${size}`]: true,
-    [className ?? ""]: true,
+    [className]: true,
   });
 
   return <span className={classNames}>{text}</span>;

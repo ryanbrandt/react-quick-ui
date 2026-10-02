@@ -26,22 +26,26 @@ interface Props {
    * @default md
    */
   size?: BadgeSize;
+
+  /**
+   * Optional additional CSS class to apply (passed to the `Tag`)
+   */
+  className?: string;
 }
 
 /**
- * @deprecated Use `Tag`. `Badge` renders a `Tag` (with the extra class
- * `badge`, for existing stylesheets) and will be removed in a future major
- * release.
+ * @deprecated Use `Tag`. `Badge` maps its props onto a `Tag` and will be
+ * removed in a future major release.
  */
 const Badge: FunctionComponent<Props> = (props: Props): JSX.Element => {
-  const { text, variant, size = "md" } = props;
+  const { text, variant, size = "md", className } = props;
 
   return (
     <Tag
       text={text}
       variant={variant}
       size={size === "lg" || size === "xlg" ? "lg" : "md"}
-      className="badge"
+      className={className}
     />
   );
 };

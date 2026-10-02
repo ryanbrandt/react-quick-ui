@@ -19,6 +19,8 @@ export const Large: Story = {
   args: { text: "Senior Software Engineer at Biomeme", size: "lg" },
 };
 
+// The render ignores `args`; `text` is only set because the story type
+// requires it.
 export const Variants: Story = {
   args: { text: "Primary" },
   render: () => (

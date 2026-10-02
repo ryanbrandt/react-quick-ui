@@ -150,7 +150,7 @@ The redesign's 48px calls to action are `size="xlg" width="auto"`:
 <IconButton aria-label="Open menu" icon={<MenuSvg />} variant="ghost" />
 ```
 
-**Tag.** A pill label: `text`, `variant` (`primary` tint by default, `success`, `danger`, `warning`, or outlined `neutral`) and `size` (`md`, 13px, for tags on cards; `lg`, 14px, for an eyebrow). **`Badge` is deprecated:** it now renders a `Tag` (with the extra class `badge`, so existing `.badge` rules still match). Its sizes map to `lg` (`lg`, `xlg`) or `md` (the rest), and it fits its text instead of a set width.
+**Tag.** A pill label: `text`, `variant` (`primary` tint by default, `success`, `danger`, `warning`, or outlined `neutral`; unlike on `Button`, `neutral` is not deprecated here), `size` (`md`, 13px, for tags on cards; `lg`, 14px, for an eyebrow) and `className`. **`Badge` is deprecated:** it now renders a `Tag`, mapping its sizes to `lg` (`lg`, `xlg`) or `md` (the rest), so it fits its text instead of a set width. It no longer adds a `badge` class: pass `className` (e.g. `className="badge"`) if your stylesheet targets it.
 
 **Card.** The project card: `title`, optional `href`, `media`, body (`children`), `tags` (strings, shown as a list of `Tag`s), `footer`, `headingLevel` (default `h3`) and `className`. With `href`, the title is a link whose hit area covers the whole card. Links and buttons inside the card (e.g. in the footer) stay separately clickable, the keyboard focus ring outlines the card, and the card lifts on hover (shadow only under reduced motion). The media renders after the text in the markup, so screen readers reach the title first, but it is shown at the top. Mark decorative media `aria-hidden` (or give an image `alt=""`).
 
