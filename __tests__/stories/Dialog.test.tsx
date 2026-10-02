@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { StrictMode } from "react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Dialog, { type DialogProps } from "@stories/Dialog/Dialog";
 
 // jsdom has HTMLDialogElement but no showModal()/close(). These stand-ins
-// only toggle `open` and fire `close` like the browser does; the real
+// only toggle `open` and fire `close` later, like the browser does; the real
 // behaviour (inert page, focus, Esc, scroll lock) is covered by the
 // Playwright suite (e2e/interactions.spec.ts).
 const { prototype } = HTMLDialogElement;
@@ -14,7 +15,7 @@ const showModal = jest.fn(function (this: HTMLDialogElement) {
 const close = jest.fn(function (this: HTMLDialogElement) {
   if (!this.open) return;
   this.removeAttribute("open");
-  this.dispatchEvent(new Event("close"));
+  queueMicrotask(() => this.dispatchEvent(new Event("close")));
 });
 
 beforeAll(() => {
@@ -71,12 +72,25 @@ describe("Dialog", () => {
     );
   });
 
-  it("has no label or heading without a title", () => {
-    renderDialog({ title: undefined });
+  it("takes an aria-label instead of a title", () => {
+    renderDialog({ title: undefined, "aria-label": "Settings" });
 
-    const dialog = screen.getByRole("dialog");
+    const dialog = screen.getByRole("dialog", { name: "Settings" });
     expect(dialog).not.toHaveAttribute("aria-labelledby");
     expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+  });
+
+  it("stays open through StrictMode's effect replay", async () => {
+    render(
+      <StrictMode>
+        <Dialog open onClose={onClose} title="Title" />
+      </StrictMode>
+    );
+    // Let the replay's queued close event arrive.
+    await act(async () => {});
+
+    expect(screen.getByRole("dialog")).toHaveAttribute("open");
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("applies a className", () => {
@@ -131,11 +145,14 @@ describe("Dialog", () => {
       expect(dialog).toHaveAttribute("open");
     });
 
-    it("reports a close the browser made itself", () => {
+    it("reports a close the browser made itself", async () => {
       renderDialog();
 
       // e.g. a <form method="dialog"> inside it was submitted
-      screen.getByRole<HTMLDialogElement>("dialog").close();
+      const dialog = screen.getByRole<HTMLDialogElement>("dialog");
+      dialog.close();
+      // Let its queued close event arrive.
+      await act(async () => {});
 
       expect(onClose).toHaveBeenCalledTimes(1);
     });

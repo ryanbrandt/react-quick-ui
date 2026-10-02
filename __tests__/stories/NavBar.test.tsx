@@ -128,20 +128,27 @@ describe("NavBar", () => {
       expect(menuButton()).toHaveFocus();
     });
 
-    it("ignores an Esc something else has already handled", async () => {
-      renderNavBar();
+    it("ignores an Esc from outside the bar or from a dialog in it", async () => {
+      renderNavBar({
+        actions: (
+          <dialog open>
+            <button type="button">In dialog</button>
+          </dialog>
+        ),
+      });
       await userEvent.click(menuButton());
 
-      // e.g. an open Dialog cancelling its own Esc
-      const handled = new KeyboardEvent("keydown", {
+      fireEvent.keyDown(screen.getByRole("button", { name: "Outside" }), {
         key: "Escape",
-        cancelable: true,
       });
-      handled.preventDefault();
-      fireEvent(document, handled);
+      fireEvent.keyDown(screen.getByRole("button", { name: "In dialog" }), {
+        key: "Escape",
+      });
       expect(menuButton()).toHaveAttribute("aria-expanded", "true");
 
-      fireEvent.keyDown(document, { key: "Escape" });
+      fireEvent.keyDown(screen.getByRole("link", { name: "Home" }), {
+        key: "Escape",
+      });
       expect(menuButton()).toHaveAttribute("aria-expanded", "false");
     });
 
@@ -167,6 +174,15 @@ describe("NavBar", () => {
 
       await userEvent.click(screen.getByRole("link", { name: "About" }));
       expect(menuButton()).toHaveAttribute("aria-expanded", "false");
+      expect(menuButton()).toHaveFocus();
+    });
+
+    it("leaves focus alone on a link click while the menu is closed", async () => {
+      renderNavBar();
+
+      await userEvent.click(screen.getByRole("link", { name: "About" }));
+
+      expect(screen.getByRole("link", { name: "About" })).toHaveFocus();
     });
 
     it("closes on a pointer down outside the bar, not inside it", async () => {

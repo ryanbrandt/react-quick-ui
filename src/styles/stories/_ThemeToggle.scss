@@ -58,4 +58,18 @@ $option-size: 36px;
   &__input:checked + &__icon {
     color: var(--rq-color-on-accent);
   }
+
+  // Forced colours drop the accent fill, so mark the checked option with
+  // the system highlight.
+  @media (forced-colors: active) {
+    &__input:checked {
+      forced-color-adjust: none;
+      background-color: Highlight;
+    }
+
+    &__input:checked + &__icon {
+      forced-color-adjust: none;
+      color: HighlightText;
+    }
+  }
 }

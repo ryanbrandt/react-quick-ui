@@ -176,6 +176,16 @@ describe("index.css", () => {
     expect(used.filter((name) => !defined.has(name))).toEqual([]);
   });
 
+  // Media query range syntax needs Safari 16.4; the browserslist goes lower.
+  it("writes media queries without range syntax", () => {
+    const mediaQueries = rules
+      .map(({ atRule }) => atRule)
+      .filter((atRule) => atRule?.startsWith("@media"));
+
+    expect(mediaQueries).not.toHaveLength(0);
+    expect(mediaQueries.filter((query) => /[<>]/.test(query!))).toEqual([]);
+  });
+
   it("has no hard-coded colours outside the tokens", () => {
     const tokenSelectors = new Set(
       compileRules("tokens.scss").flatMap((rule) => rule.selectors)

@@ -185,7 +185,8 @@ $navbar-control-size: 44px;
 
   // Browsers without container queries (e.g. iOS 15) go by the viewport.
   @supports not (container-type: inline-size) {
-    @media (width < $navbar-narrow) {
+    // Range syntax needs Safari 16.4, so not here: this is for iOS 15.
+    @media (max-width: #{$navbar-narrow - 0.02px}) {
       @include navbar-narrow-rules;
     }
   }

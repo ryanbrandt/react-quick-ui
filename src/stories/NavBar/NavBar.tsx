@@ -66,8 +66,9 @@ const NARROW_WIDTH = 768;
  * The site header: brand, navigation links and actions on a sticky,
  * translucent bar. When the bar is narrower than 768px, the links move into
  * a disclosure menu: a menu button opens it and moves focus to the first
- * link; Esc closes it and returns focus to the button. Choosing a link,
- * clicking outside the bar or the bar growing wide closes it too.
+ * link; Esc in the bar closes it and returns focus to the button, as does
+ * choosing a link. Clicking outside the bar or the bar growing wide closes
+ * it too.
  */
 const NavBar: FunctionComponent<NavBarProps> = (
   props: NavBarProps
@@ -94,9 +95,17 @@ const NavBar: FunctionComponent<NavBarProps> = (
     navRef.current!.querySelector<HTMLElement>("a[href], button")?.focus();
 
     const header = headerRef.current!;
-    // Skip an Esc something else (e.g. an open Dialog) has already handled.
+    // Only an Esc from inside the bar, and not one in a dialog opened from
+    // it (a dialog's Esc only becomes cancellable after keydown).
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || event.defaultPrevented) return;
+      const target = event.target as Element;
+      if (
+        event.key !== "Escape" ||
+        !header.contains(target) ||
+        target.closest("dialog")
+      ) {
+        return;
+      }
       setMenuOpen(false);
       menuButtonRef.current!.focus();
     };
@@ -118,9 +127,12 @@ const NavBar: FunctionComponent<NavBarProps> = (
     };
   }, [menuOpen]);
 
-  // Following a link closes the menu (the page may not reload).
+  // Following a link closes the menu (the page may not reload). Focus goes
+  // to the menu button, since the link it was on is hidden.
   const handleNavClick = (event: MouseEvent<HTMLElement>) => {
-    if ((event.target as Element).closest("a")) setMenuOpen(false);
+    if (!menuOpen || !(event.target as Element).closest("a")) return;
+    setMenuOpen(false);
+    menuButtonRef.current!.focus();
   };
 
   const classNames = createCompositeClassName({

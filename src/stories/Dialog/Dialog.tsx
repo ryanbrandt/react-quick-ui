@@ -41,6 +41,11 @@ export interface DialogProps {
   "aria-labelledby"?: string;
 
   /**
+   * The dialog's accessible name, for a dialog without a {@link title}
+   */
+  "aria-label"?: string;
+
+  /**
    * The id of the element that describes the dialog
    */
   "aria-describedby"?: string;
@@ -90,7 +95,7 @@ const Dialog: FunctionComponent<DialogProps> = (
     closeLabel = "Close",
     className = "",
     children,
-    // aria-labelledby and aria-describedby
+    // aria-label, aria-labelledby and aria-describedby
     ...aria
   } = props;
 
@@ -115,9 +120,11 @@ const Dialog: FunctionComponent<DialogProps> = (
   };
 
   // The browser closed the dialog itself (a `<form method="dialog">`, or an
-  // Esc it wouldn't let us cancel): tell the owner.
+  // Esc it wouldn't let us cancel): tell the owner. The close event arrives
+  // as a task, so check the element is still closed: StrictMode's effect
+  // replay (close, then showModal again) fires one at an open dialog.
   const handleClose = () => {
-    if (open) onClose();
+    if (open && !dialogRef.current!.open) onClose();
   };
 
   // The panel fills the <dialog>, so a click that targets the <dialog>
