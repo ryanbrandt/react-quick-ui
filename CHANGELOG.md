@@ -3,8 +3,9 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Unreleased
+## 1.0.0-next.0 - 2026-10-02
 
+A prerelease (npm tag `next`) of 1.0.0, for the personal-page redesign.
 The visual redesign starts here (ticket L1, D0 spec direction A
 "Evolved"): design tokens, light and dark themes, a variable font and a
 restyle of every component. Visual changes are intended.
