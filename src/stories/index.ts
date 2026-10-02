@@ -10,3 +10,4 @@ export { default as LoadingOverlay } from "@stories/LoadingOverlay/LoadingOverla
 export { default as SearchInput } from "@stories/SearchInput/SearchInput";
 export { default as PasswordInput } from "@stories/PasswordInput/PasswordInput";
 export { default as EditAndConfirmInput } from "@stories/EditAndConfirmInput/EditAndConfirmInput";
+export { default as Dialog } from "@stories/Dialog/Dialog";

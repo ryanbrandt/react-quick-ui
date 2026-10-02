@@ -1,0 +1,101 @@
+@use "../sass/flex";
+@use "../sass/mixins";
+
+// Enter and exit are CSS transitions: `@starting-style` gives the opening
+// frame, and `allow-discrete` on `display` and `overlay` keeps the dialog
+// painted (in the top layer) until the exit has finished. The duration
+// token is 0ms under prefers-reduced-motion, so the dialog appears and goes
+// at once. Browsers without these features open and close without motion.
+$dialog-duration: var(--rq-duration-base);
+$dialog-easing: var(--rq-easing-emphasized);
+$dialog-hidden-transform: translateY(var(--rq-space-4)) scale(0.98);
+
+// Page scroll stays locked while any dialog is open.
+:root:has(.dialog[open]) {
+  overflow: hidden;
+}
+
+.dialog {
+  box-sizing: border-box;
+  width: min(100% - 2 * var(--rq-space-5), 560px);
+  // No padding: the panel fills the dialog, so a click on the <dialog>
+  // itself is a click on its backdrop (see Dialog.tsx).
+  padding: 0;
+  border: 1px solid var(--rq-color-border);
+  border-radius: var(--rq-radius-card);
+  background-color: var(--rq-color-surface);
+  color: var(--rq-color-text);
+  box-shadow: var(--rq-shadow-lg);
+  opacity: 0;
+  transform: $dialog-hidden-transform;
+  transition:
+    opacity $dialog-duration $dialog-easing,
+    transform $dialog-duration $dialog-easing,
+    overlay $dialog-duration allow-discrete,
+    display $dialog-duration allow-discrete;
+
+  &[open] {
+    opacity: 1;
+    transform: none;
+
+    @starting-style {
+      opacity: 0;
+      transform: $dialog-hidden-transform;
+    }
+  }
+
+  &::backdrop {
+    background-color: transparent;
+    transition:
+      background-color $dialog-duration $dialog-easing,
+      overlay $dialog-duration allow-discrete,
+      display $dialog-duration allow-discrete;
+  }
+
+  &[open]::backdrop {
+    background-color: var(--rq-color-scrim);
+
+    @starting-style {
+      background-color: transparent;
+    }
+  }
+
+  &__panel {
+    padding: var(--rq-space-6);
+    // Room for the close button in the top right corner.
+    padding-right: calc(var(--rq-space-6) + 44px);
+  }
+
+  &__title {
+    margin: 0 0 var(--rq-space-3);
+    font-size: var(--rq-font-size-2xl);
+    font-weight: var(--rq-font-weight-semibold);
+  }
+
+  &__close {
+    @include flex.flex--align-center--justify-center;
+    position: absolute;
+    top: var(--rq-space-3);
+    right: var(--rq-space-3);
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    border-radius: var(--rq-radius-control);
+    background: transparent;
+    color: var(--rq-color-muted);
+    cursor: pointer;
+    transition:
+      background-color var(--rq-duration-fast) var(--rq-easing-standard),
+      color var(--rq-duration-fast) var(--rq-easing-standard);
+
+    &:hover {
+      background-color: var(--rq-color-tint);
+      color: var(--rq-color-text);
+    }
+
+    &:focus-visible {
+      @include mixins.focus-ring;
+    }
+  }
+}
