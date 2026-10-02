@@ -19,7 +19,7 @@ export interface IInputIcon {
   icon: JSX.Element;
 }
 
-interface Props {
+export interface InputProps {
   /**
    * String representing the input value.
    * Value, should be controlled (e.g. on parent component state).
@@ -114,7 +114,9 @@ interface Props {
   id?: string;
 }
 
-const Input: FunctionComponent<Props> = (props: Props): JSX.Element => {
+const Input: FunctionComponent<InputProps> = (
+  props: InputProps
+): JSX.Element => {
   const {
     inputType,
     label,
