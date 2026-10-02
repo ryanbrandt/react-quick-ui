@@ -1,7 +1,7 @@
 import type { FunctionComponent, ReactNode, JSX } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
-import Heading from "@stories/Heading/Heading";
+import Heading, { type HeadingLevel } from "@stories/Heading/Heading";
 import Tag from "@stories/Tag/Tag";
 
 export interface CardProps {
@@ -22,7 +22,7 @@ export interface CardProps {
    *
    * @default h3
    */
-  headingLevel?: "h2" | "h3" | "h4" | "h5" | "h6";
+  headingLevel?: Exclude<HeadingLevel, "h1">;
 
   /**
    * Optional media (an image or a monogram), shown above the title on a

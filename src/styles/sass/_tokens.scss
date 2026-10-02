@@ -113,8 +113,8 @@ $font-family: (
   sans-serif
 );
 
-// Spec roles: hero 6xl (5xl on mobile), h2 4xl (3xl on mobile), card title
-// 2xl, body lg–2xl, nav and buttons md, eyebrow and meta xs, tags 2xs.
+// Spec roles: hero 6xl (5xl on mobile; `hero` scales between them), h2 4xl
+// (3xl on mobile; `section`), card title 2xl, body lg–2xl, nav and buttons md, eyebrow and meta xs, tags 2xs.
 $font-sizes: (
   2xs: 13px,
   xs: 14px,
@@ -127,6 +127,11 @@ $font-sizes: (
   4xl: 32px,
   5xl: 44px,
   6xl: 72px,
+  // Fluid role sizes: the hero (5xl on mobile, 6xl on desktop) and section
+  // headings (3xl to 4xl). The rem part follows the reader's font size; the
+  // vw part scales them between about 400px and 960px of viewport.
+  hero: clamp(44px, calc(1.5rem + 5vw), 72px),
+  section: clamp(26px, calc(1.25rem + 1.25vw), 32px),
 );
 
 $font-weights: (
@@ -139,6 +144,10 @@ $font-weights: (
 
 $line-heights: (
   tight: 1.05,
+  // Section headings.
+  snug: 1.25,
+  // Card and list-item titles.
+  title: 1.3,
   body: 1.6,
 );
 

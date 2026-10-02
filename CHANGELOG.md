@@ -18,6 +18,10 @@ restyle of every component. Visual changes are intended.
   themes, and control edges (`control-border`, `accent-fill`, the focus
   ring) reach 3:1. `--rq-focus-ring-color`/`-width`/`-offset` let plain CSS
   draw the same focus ring.
+- Fluid type tokens for the heading roles: `--rq-font-size-hero`
+  (44–72px) and `--rq-font-size-section` (26–32px), a `clamp()` of a
+  `rem + vw` value so they follow the reader's font size; and the line
+  heights `--rq-line-height-snug` (1.25) and `--rq-line-height-title` (1.3).
 - Opt-in light and dark themes. Loading the CSS gives the light tokens and
   sets no `color-scheme`, so the page's canvas, default text and form
   controls are unchanged. `data-theme="light"`, `"dark"` or `"system"`

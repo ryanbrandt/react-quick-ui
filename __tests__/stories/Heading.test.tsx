@@ -15,7 +15,8 @@ describe("Heading", () => {
 
     expect(container.querySelector(MOCK_DEFAULT_VARIANT)).toBeInTheDocument();
     expect(container.querySelector(MOCK_DEFAULT_VARIANT)).toHaveClass(
-      `${MOCK_BASE_CLASS_NAME}--${MOCK_DEFAULT_VARIANT} ${MOCK_BASE_CLASS_NAME}`
+      `${MOCK_BASE_CLASS_NAME} ${MOCK_BASE_CLASS_NAME}--${MOCK_DEFAULT_VARIANT}`,
+      { exact: true }
     );
 
     expect(screen.getByText(MOCK_TEXT)).toBeInTheDocument();
@@ -36,7 +37,11 @@ describe("Heading", () => {
 
       expect(container.querySelector(MOCK_VARIANT)).toBeInTheDocument();
       expect(container.querySelector(MOCK_VARIANT)).toHaveClass(
-        `${MOCK_ADDITIONAL_CLASS_NAMES} ${MOCK_BASE_CLASS_NAME}--${MOCK_VARIANT} ${MOCK_BASE_CLASS_NAME}`
+        `${MOCK_BASE_CLASS_NAME} ${MOCK_BASE_CLASS_NAME}--${MOCK_VARIANT} ${MOCK_ADDITIONAL_CLASS_NAMES}`,
+        { exact: true }
+      );
+      expect(container.querySelector(MOCK_VARIANT)?.className).toBe(
+        `${MOCK_BASE_CLASS_NAME} ${MOCK_BASE_CLASS_NAME}--${MOCK_VARIANT} ${MOCK_ADDITIONAL_CLASS_NAMES}`
       );
       expect(screen.getByText(MOCK_TEXT)).toBeInTheDocument();
     });
@@ -53,7 +58,7 @@ describe("Heading", () => {
       );
 
       expect(container.querySelector(element)).toHaveClass(
-        `heading--${variant} heading`,
+        `heading heading--${variant}`,
         { exact: true }
       );
     });

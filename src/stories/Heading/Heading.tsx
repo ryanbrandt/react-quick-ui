@@ -2,14 +2,14 @@ import type { FunctionComponent, ReactNode, JSX } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
 
-type HeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+export type HeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
 /**
  * `hero`, `section` and `title` are the spec's type scale (72/44px light,
  * 32/26px regular, 20px semibold, in the text colour). `h1`, `h2` and `h3`
  * are the original compact, centred headings in the accent colour.
  */
-declare type HeadingVariant = "hero" | "section" | "title" | "h1" | "h2" | "h3";
+type HeadingVariant = "hero" | "section" | "title" | "h1" | "h2" | "h3";
 
 /** The element each variant renders unless `as` says otherwise. */
 const DEFAULT_LEVEL: Record<HeadingVariant, HeadingLevel> = {
@@ -46,6 +46,8 @@ interface BaseProps {
   className?: string;
 }
 
+// TODO(L2b follow-up): merge HeadingProps and HeadingWithChildrenProps into
+// one union once Modal/Dialog no longer depend on HeadingProps.
 /** Modal's `modalHeading` prop uses this shape, so it keeps its name. */
 export interface HeadingProps extends BaseProps {
   /**
@@ -72,9 +74,9 @@ const Heading: FunctionComponent<HeadingProps | HeadingWithChildrenProps> = (
   const HeadingTag = as ?? DEFAULT_LEVEL[variant];
 
   const classNames = createCompositeClassName({
-    [className]: true,
-    [`heading--${variant}`]: true,
     heading: true,
+    [`heading--${variant}`]: true,
+    [className]: true,
   });
 
   return <HeadingTag className={classNames}>{children ?? text}</HeadingTag>;
