@@ -23,8 +23,10 @@ const withTheme: Decorator = (Story, { globals }) => {
 // its handler, e.g. `{ value: "onChange" }`: calling the handler still logs
 // the action, and also sets the arg to the handler's first argument.
 const withSyncedArgs: Decorator = (Story, { args, parameters }) => {
+  const syncArgs = parameters.syncArgs as Record<string, string> | undefined;
+  if (!syncArgs) return Story();
+
   const [, updateArgs] = useArgs();
-  const syncArgs = (parameters.syncArgs ?? {}) as Record<string, string>;
 
   const handlers = Object.fromEntries(
     Object.entries(syncArgs).map(([valueArg, handlerArg]) => {

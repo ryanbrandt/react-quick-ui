@@ -66,29 +66,30 @@ test.describe("Dialog", () => {
 
     expect(await overflow()).toBe("hidden");
     await page.mouse.wheel(0, 600);
-    await page.waitForTimeout(100);
-    expect(await scrollTop()).toBe(0);
 
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog")).toBeHidden();
+    // The wheel while it was open hasn't scrolled the page, though it has had
+    // the whole exit transition to.
+    expect(await scrollTop()).toBe(0);
     expect(await overflow()).toBe("visible");
     await page.mouse.wheel(0, 600);
     await expect.poll(scrollTop).toBeGreaterThan(0);
   });
 });
 
+const menuButton = (page: Page) => page.getByRole("button", { name: "Menu" });
+
 test.describe("NavBar narrow menu", () => {
   test.beforeEach(async ({ page }) => {
     await gotoStory(page, "core-menus-navbar--narrow", "light");
   });
 
-  const menuButton = (page: Page) => page.getByRole("button", { name: "Menu" });
-
   test("is hidden behind the menu button until opened", async ({ page }) => {
     await expect(page.getByRole("link", { name: "Home" })).toBeHidden();
     await expect(menuButton(page)).toHaveAttribute("aria-expanded", "false");
 
-    // Keyboard only: Tab to the button and press Enter.
+    // Keyboard only: focus the button and press Enter.
     await menuButton(page).focus();
     await page.keyboard.press("Enter");
 
@@ -115,23 +116,20 @@ test.describe("NavBar narrow menu", () => {
 
     await expect(menuButton(page)).toHaveAttribute("aria-expanded", "false");
   });
+});
 
-  test("shows the links in the bar when it is wide", async ({ page }) => {
-    await gotoStory(page, "core-menus-navbar--default", "light");
+test("NavBar shows the links in the bar when it is wide", async ({ page }) => {
+  await gotoStory(page, "core-menus-navbar--default", "light");
 
-    await expect(page.getByRole("link", { name: "Home" })).toBeVisible();
-    await expect(menuButton(page)).toBeHidden();
-  });
+  await expect(page.getByRole("link", { name: "Home" })).toBeVisible();
+  await expect(menuButton(page)).toBeHidden();
 });
 
 // The PR #17 review: "system" follows the OS. Under an emulated dark OS, the
 // story root takes the dark tokens and colour scheme.
 test("theme system follows an OS dark preference", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
-  await page.goto(
-    "/iframe.html?id=core-inputs-themetoggle--default&viewMode=story&globals=theme:system;a11y.manual:!true"
-  );
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "system");
+  await gotoStory(page, "core-inputs-themetoggle--default", "system");
   await expect(page.getByRole("radiogroup")).toBeVisible();
 
   const root = await page.evaluate(() => {

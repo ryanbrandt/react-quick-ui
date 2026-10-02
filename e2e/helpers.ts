@@ -33,26 +33,36 @@ export const loadStoryIds = (tag?: string): Array<string> => {
     .map(({ id }) => id);
 };
 
-type PhaseWindow = Window & {
+interface StoryState {
+  /** Play functions started and not yet ended. */
+  playsRunning: number;
+  /** The latest render phase. */
+  last?: string;
+  /** Why the story failed, once it has. */
+  errored?: string;
+}
+
+type StoryWindow = Window & {
   __STORYBOOK_ADDONS_CHANNEL__?: StoryChannel;
-  __rqRenderPhases?: Array<string>;
+  __rqStory?: StoryState;
 };
 
 interface StoryChannel {
-  on: (
-    event: string,
-    listener: (payload: { newPhase: string }) => void
-  ) => void;
+  on: (event: string, listener: (payload: never) => void) => void;
 }
 
 /**
- * Runs in the page before Storybook: records every render phase the preview
- * reports on its channel, as soon as the preview creates the channel.
+ * Runs in the page before Storybook: follows the render phases and errors
+ * the preview reports on its channel, as soon as the preview creates it.
  */
-const recordRenderPhases = () => {
-  const phases: Array<string> = [];
-  const win = window as PhaseWindow;
-  win.__rqRenderPhases = phases;
+const recordStoryState = () => {
+  const state: StoryState = { playsRunning: 0 };
+  const win = window as StoryWindow;
+  win.__rqStory = state;
+
+  const fail = ({ message }: { message?: string }) => {
+    state.errored = message ?? "The story errored";
+  };
 
   let channel: StoryChannel | undefined;
   Object.defineProperty(win, "__STORYBOOK_ADDONS_CHANNEL__", {
@@ -60,42 +70,77 @@ const recordRenderPhases = () => {
     get: () => channel,
     set: (value: StoryChannel) => {
       channel = value;
-      value.on("storyRenderPhaseChanged", ({ newPhase }) =>
-        phases.push(newPhase)
+      value.on(
+        "storyRenderPhaseChanged",
+        ({ newPhase }: { newPhase: string }) => {
+          if (newPhase === "playing") state.playsRunning++;
+          // A play function ends played, errored or aborted.
+          if (["played", "errored", "aborted"].includes(newPhase)) {
+            state.playsRunning = Math.max(0, state.playsRunning - 1);
+          }
+          if (newPhase === "errored") state.errored ??= "The story errored";
+          state.last = newPhase;
+        }
+      );
+      value.on("playFunctionThrewException", fail);
+      value.on("storyThrewException", fail);
+      value.on("storyErrored", ({ title }: { title?: string }) =>
+        fail({ message: title })
       );
     },
   });
 };
 
+// addInitScript runs on every later navigation too, so add it once per page.
+const pagesRecording = new WeakSet<Page>();
+
+/**
+ * Collects the page's console errors and uncaught exceptions from now on.
+ * Check the returned array (still filling) at the end of the test.
+ */
+export const collectPageErrors = (page: Page): Array<string> => {
+  const errors: Array<string> = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  return errors;
+};
+
 /**
  * Opens a story on its own (no Storybook UI) in the given theme and waits
  * until Storybook has finished with it (rendered, played, and run its
- * afterEach hooks) and the page is visually settled. Fails if the story or
- * its play function threw.
+ * afterEach hooks) and the page is visually settled. Fails, with the
+ * story's error, if the story or its play function threw.
  *
  * The current render's phase isn't enough: a play function that updates
  * args re-renders the story, and that re-render reaches "finished" while
- * the play function is still running. So wait until every "playing" phase
- * has ended ("played" or "errored") and the last phase is "finished".
+ * the play function is still running. So wait until no play function is
+ * running and the last phase is an end ("finished", "errored" or
+ * "aborted").
  */
 export async function gotoStory(
   page: Page,
   id: string,
-  theme: Theme
+  theme: Theme | "system"
 ): Promise<void> {
-  await page.addInitScript(recordRenderPhases);
+  if (!pagesRecording.has(page)) {
+    await page.addInitScript(recordStoryState);
+    pagesRecording.add(page);
+  }
   // a11y.manual: the addon's own axe pass is skipped; a11y.spec.ts runs axe.
   await page.goto(
     `/iframe.html?id=${id}&viewMode=story&globals=theme:${theme};a11y.manual:!true`
   );
-  const phases = await page.waitForFunction(() => {
-    const recorded = (window as PhaseWindow).__rqRenderPhases ?? [];
-    const count = (phase: string) =>
-      recorded.filter((recordedPhase) => recordedPhase === phase).length;
-    const playsEnded = count("playing") === count("played") + count("errored");
-    return recorded.at(-1) === "finished" && playsEnded && recorded;
+  const state = await page.waitForFunction(() => {
+    const story = (window as StoryWindow).__rqStory;
+    const ended = ["finished", "errored", "aborted"].includes(
+      story?.last ?? ""
+    );
+    return ended && story!.playsRunning === 0 && story;
   });
-  expect(await phases.jsonValue()).not.toContain("errored");
+  const { errored } = (await state.jsonValue()) as StoryState;
+  expect(errored, `story ${id} errored`).toBeUndefined();
   await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
   await waitForStableRender(page);
 }
