@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
+import { useArgs } from "storybook/preview-api";
 
 import "@styles/fonts.scss";
 import "@styles/index.scss";
@@ -15,6 +16,31 @@ const withTheme: Decorator = (Story, { globals }) => {
   document.documentElement.dataset.theme =
     typeof theme === "string" && THEMES.includes(theme) ? theme : "light";
   return Story();
+};
+
+// Controlled components need their value arg to follow their change handler,
+// or the story ignores typing. `parameters.syncArgs` maps each value arg to
+// its handler, e.g. `{ value: "onChange" }`: calling the handler still logs
+// the action, and also sets the arg to the handler's first argument.
+const withSyncedArgs: Decorator = (Story, { args, parameters }) => {
+  const [, updateArgs] = useArgs();
+  const syncArgs = (parameters.syncArgs ?? {}) as Record<string, string>;
+
+  const handlers = Object.fromEntries(
+    Object.entries(syncArgs).map(([valueArg, handlerArg]) => {
+      const handler = args[handlerArg] as
+        ((...handlerArgs: Array<unknown>) => void) | undefined;
+      return [
+        handlerArg,
+        (value: unknown, ...rest: Array<unknown>) => {
+          handler?.(value, ...rest);
+          updateArgs({ [valueArg]: value });
+        },
+      ];
+    })
+  );
+
+  return Story({ args: { ...args, ...handlers } });
 };
 
 const preview: Preview = {
@@ -34,7 +60,7 @@ const preview: Preview = {
     },
   },
   initialGlobals: { theme: "light" },
-  decorators: [withTheme],
+  decorators: [withSyncedArgs, withTheme],
   parameters: {
     layout: "centered",
     a11y: {
