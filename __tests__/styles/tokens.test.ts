@@ -47,19 +47,25 @@ const compileRules = (file: string): Array<CssRule> => {
 
 describe("tokens.css", () => {
   const rules = compileRules("tokens.scss");
-  const findRule = (selector: string, atRule?: string): CssRule => {
+  /** The rule with exactly these selectors (in this order) in `atRule`. */
+  const findRule = (selectors: string, atRule?: string): CssRule => {
     const rule = rules.find(
       (candidate) =>
-        candidate.selectors.includes(selector) && candidate.atRule === atRule
+        candidate.selectors.join(", ") === selectors &&
+        candidate.atRule === atRule
     );
-    if (!rule) throw new Error(`No ${selector} rule in ${atRule ?? "root"}`);
+    if (!rule) throw new Error(`No ${selectors} rule in ${atRule ?? "root"}`);
     return rule;
   };
+  const OS_DARK = "@media (prefers-color-scheme: dark)";
 
   const themes = {
-    light: findRule("[data-theme=light]").declarations,
+    light: findRule(":root, [data-theme=light], [data-theme=system]")
+      .declarations,
     dark: findRule("[data-theme=dark]").declarations,
   };
+  const withoutColorScheme = (declarations: Map<string, string>) =>
+    new Map([...declarations].filter(([name]) => name !== "color-scheme"));
 
   it("sets the font family on :root", () => {
     expect(findRule(":root").declarations.get("--rq-font-family")).toBe(
@@ -67,22 +73,44 @@ describe("tokens.css", () => {
     );
   });
 
-  it("applies light on :root and dark when the OS prefers it", () => {
-    expect(
-      findRule("[data-theme=light]").selectors.includes(":root")
-    ).toBeTruthy();
-    expect(
-      findRule(
-        ":root:not([data-theme=light])",
-        "@media (prefers-color-scheme: dark)"
-      ).declarations
-    ).toEqual(themes.dark);
+  it("defines the same theme tokens in light and dark", () => {
+    expect([...withoutColorScheme(themes.dark).keys()]).toEqual([
+      ...themes.light.keys(),
+    ]);
   });
 
-  it("defines the same theme tokens in light and dark", () => {
-    expect([...themes.dark.keys()]).toEqual([...themes.light.keys()]);
-    expect(themes.light.get("color-scheme")).toBe("light");
-    expect(themes.dark.get("color-scheme")).toBe("dark");
+  it("only sets color-scheme under an explicit data-theme", () => {
+    const withColorScheme = rules
+      .filter((rule) => rule.declarations.has("color-scheme"))
+      .map(({ selectors, atRule, declarations }) => [
+        atRule,
+        selectors.join(", "),
+        declarations.get("color-scheme"),
+      ]);
+
+    expect(withColorScheme).toEqual([
+      [undefined, "[data-theme=light], [data-theme=system]", "light"],
+      [undefined, "[data-theme=dark]", "dark"],
+      [OS_DARK, "[data-theme=system]", "dark"],
+    ]);
+  });
+
+  it('switches data-theme="system" to dark when the OS prefers it', () => {
+    expect(findRule("[data-theme=system]", OS_DARK).declarations).toEqual(
+      themes.dark
+    );
+  });
+
+  it("orders the theme rules so the explicit and OS-dark ones win", () => {
+    // All have the specificity of :root, so the later rule wins on <html>.
+    const order = [
+      findRule(":root, [data-theme=light], [data-theme=system]"),
+      findRule("[data-theme=light], [data-theme=system]"),
+      findRule("[data-theme=dark]"),
+      findRule("[data-theme=system]", OS_DARK),
+    ].map((rule) => rules.indexOf(rule));
+
+    expect(order).toEqual([...order].sort((a, b) => a - b));
   });
 
   describe.each(["light", "dark"] as const)("%s theme", (theme) => {

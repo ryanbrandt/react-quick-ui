@@ -6,11 +6,14 @@ import "./preview.scss";
 
 import { A11Y_TAGS } from "./a11yTags";
 
+const THEMES = ["light", "dark", "system"];
+
 // The toolbar's theme sets data-theme on the preview's <html>; the --rq-*
 // tokens follow it. Set while rendering, so the first paint is themed.
 const withTheme: Decorator = (Story, { globals }) => {
+  const theme: unknown = globals.theme;
   document.documentElement.dataset.theme =
-    globals.theme === "dark" ? "dark" : "light";
+    typeof theme === "string" && THEMES.includes(theme) ? theme : "light";
   return Story();
 };
 
@@ -24,6 +27,7 @@ const preview: Preview = {
         items: [
           { value: "light", title: "Light", icon: "sun" },
           { value: "dark", title: "Dark", icon: "moon" },
+          { value: "system", title: "System", icon: "browser" },
         ],
         dynamicTitle: true,
       },

@@ -63,21 +63,22 @@ Components are styled with design tokens: CSS custom properties prefixed `--rq-`
 
 Every text colour meets WCAG AA (4.5:1) on its backgrounds in both themes, and the edges of controls (`control-border`, `accent-fill`, the focus ring) reach 3:1 (WCAG 1.4.11). Use `border` for decorative dividers and the edges of cards, and `control-border` for the edge of anything interactive. `brand` (`#7599e6`) is for logos and decoration only. Storybook's "Foundations/Tokens" page lists every value.
 
-**Light and dark.** Light is the default. The dark theme applies when:
+**Light and dark.** Theming is opt-in. Loading `index.css` or `tokens.css` on its own gives you the light tokens and sets no `color-scheme`, so the browser's default background, text colour and form controls stay as your app has them. (`index.css` does set the Work Sans `font-family` on the page.) To theme, set `data-theme` on an element:
 
-- an element has `data-theme="dark"` (usually `<html>`), or
-- the OS prefers dark and the root does not have `data-theme="light"`.
+| `data-theme` | Tokens                                  | `color-scheme`             |
+| ------------ | --------------------------------------- | -------------------------- |
+| (none)       | light                                   | not set (the page decides) |
+| `"light"`    | light                                   | `light`                    |
+| `"dark"`     | dark                                    | `dark`                     |
+| `"system"`   | follows the OS (`prefers-color-scheme`) | `light` or `dark` to match |
 
-So with no attribute the page follows the OS. To let users choose, set the attribute; the explicit choice wins over the OS setting in both directions:
+Usually you set it on `<html>`, from your app's theme toggle, so the whole page agrees with the library:
 
 ```ts
-document.documentElement.dataset.theme = "dark"; // or "light"
-delete document.documentElement.dataset.theme; // follow the OS again
+document.documentElement.dataset.theme = "dark"; // or "light" or "system"
 ```
 
-`data-theme` also works on any element, to theme just that subtree. It switches the tokens there, but not the subtree's own text or background: give that element `color: var(--rq-color-text); background: var(--rq-color-bg)` if it contains your own content.
-
-**The whole page follows the theme.** The tokens also set `color-scheme` on `:root`, so when the OS prefers dark the browser's default page background, text and form controls turn dark too, not just this library's components. If your app has its own theme toggle, set `data-theme` on `<html>` from it (as above) so the two always agree, and paint the page from the tokens:
+Then paint the page from the tokens, since an explicit `color-scheme` changes the browser's default canvas and text:
 
 ```css
 body {
@@ -85,6 +86,10 @@ body {
   color: var(--rq-color-text);
 }
 ```
+
+`data-theme` also works on any element, to theme just that subtree; nested themes resolve to the nearest ancestor's choice (e.g. a `"light"` panel inside a `"dark"` page, or a `"system"` region inside either). It switches the tokens and `color-scheme` there, but not the subtree's own text or background: give that element `color: var(--rq-color-text); background: var(--rq-color-bg)` if it contains your own content.
+
+Values are case-sensitive, and any other value (e.g. `"Dark"` or `"foo"`) is ignored: on `<html>` it behaves like no attribute, and on a nested element it keeps the nearest themed ancestor's theme.
 
 ### Sass API
 

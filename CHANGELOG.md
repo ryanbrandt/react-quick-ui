@@ -18,9 +18,16 @@ restyle of every component. Visual changes are intended.
   themes, and control edges (`control-border`, `accent-fill`, the focus
   ring) reach 3:1. `--rq-focus-ring-color`/`-width`/`-offset` let plain CSS
   draw the same focus ring.
-- Light and dark themes. Light is the default; dark applies under
-  `data-theme="dark"`, or when the OS prefers dark and the root does not
-  set `data-theme="light"`. `data-theme` also works on any element.
+- Opt-in light and dark themes. Loading the CSS gives the light tokens and
+  sets no `color-scheme`, so the page's canvas, default text and form
+  controls are unchanged. `data-theme="light"`, `"dark"` or `"system"`
+  (follows the OS) on `<html>` or any other element themes that subtree and
+  sets its `color-scheme`; nested themes resolve to the nearest ancestor.
+  Apps with a theme toggle should set `data-theme` on `<html>` from it and
+  paint `body` with `--rq-color-bg` / `--rq-color-text` (see the README).
+  As in 0.6.0-next.0, loading the CSS does not restyle the page itself:
+  nothing follows the OS's dark setting until you opt in with
+  `data-theme="system"`.
 - `stylesheets/fonts.css`: Work Sans as one variable font (weights
   100–900, latin, `font-display: swap`), with its SIL OFL 1.1 license in
   `assets/fonts/work-sans/OFL.txt`.
@@ -31,17 +38,12 @@ restyle of every component. Visual changes are intended.
   `text-overflow-ellipsis` and `focus-ring` mixins; `flex--justify-space-evenly`
   and `flex--column--justify-center` (also as `.flex…` classes).
 - `TextArea` accepts an optional `id` and links its label to the textarea.
-- Storybook: a light/dark theme toolbar, the a11y addon and a
+- Storybook: a light/dark/system theme toolbar, the a11y addon and a
   Foundations/Tokens page. `yarn test:visual` screenshots every story in
   both themes and checks each for console errors and axe violations.
 
 ### Changed
 
-- **Breaking:** `index.css` and `tokens.css` set `color-scheme` on `:root`, so
-  when the OS prefers dark the whole page's default background, text and form
-  controls turn dark, not only this library's components. Apps with their own
-  theme toggle should set `data-theme` on `<html>` from it and paint `body`
-  with `--rq-color-bg` / `--rq-color-text` (see the README).
 - **Breaking:** `index.css` no longer declares any fonts. Import
   `stylesheets/fonts.css` as well to keep Work Sans (or provide your own
   `"Work Sans"` face). Text otherwise falls back to `system-ui`.

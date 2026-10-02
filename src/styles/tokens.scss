@@ -1,9 +1,11 @@
 // Entry point for `dist/stylesheets/tokens.css`: the design tokens as
 // `--rq-*` custom properties. `index.css` includes it too.
 //
-// Light is the default. Dark applies under `[data-theme="dark"]`, or when the
-// OS prefers dark and no `data-theme="light"` is set on the root. Either
-// `data-theme` value also works on any element, to theme a subtree.
+// Theming is opt-in. With no `data-theme` anywhere the light tokens apply and
+// no `color-scheme` is set, so loading the CSS leaves the page's canvas and
+// form controls alone. `data-theme` on any element themes that subtree:
+// "light", "dark", or "system" (follows the OS). Each themed element sets its
+// own tokens, so nested themes resolve to the nearest ancestor's choice.
 @use "sass:meta";
 @use "sass/tokens";
 
@@ -21,16 +23,6 @@
   --rq-focus-ring-color: var(--rq-color-accent-text);
 }
 
-@mixin -light-theme {
-  color-scheme: light;
-  @include -theme(tokens.$colors-light, tokens.$shadows-light);
-}
-
-@mixin -dark-theme {
-  color-scheme: dark;
-  @include -theme(tokens.$colors-dark, tokens.$shadows-dark);
-}
-
 :root {
   --rq-font-family: #{meta.inspect(tokens.$font-family)};
   @include -custom-properties(font-size, tokens.$font-sizes);
@@ -44,20 +36,32 @@
   @include -custom-properties(easing, tokens.$easings);
 }
 
+// Every rule below has the specificity of :root (0,1,0), so source order
+// decides on <html>: an explicit theme comes after the :root default, and the
+// OS-dark rule for "system" comes after its light rule. An element only has
+// one data-theme value, so no two theme rules compete on the same element.
 :root,
-[data-theme="light"] {
-  @include -light-theme;
+[data-theme="light"],
+[data-theme="system"] {
+  @include -theme(tokens.$colors-light, tokens.$shadows-light);
+}
+
+// Only an explicit theme claims the browser's colour scheme.
+[data-theme="light"],
+[data-theme="system"] {
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  @include -theme(tokens.$colors-dark, tokens.$shadows-dark);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    @include -dark-theme;
+  [data-theme="system"] {
+    color-scheme: dark;
+    @include -theme(tokens.$colors-dark, tokens.$shadows-dark);
   }
-}
-
-// After the light rule, so an explicit dark choice on the root wins.
-[data-theme="dark"] {
-  @include -dark-theme;
 }
 
 @media (prefers-reduced-motion: reduce) {

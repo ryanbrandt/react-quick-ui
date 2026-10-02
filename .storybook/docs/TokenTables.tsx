@@ -39,7 +39,7 @@ const declarationsOf = (...selectors: Array<string>): Declarations => {
 
 const root = declarationsOf(":root");
 const themes = {
-  light: declarationsOf(":root", "[data-theme=light]"),
+  light: declarationsOf(":root", "[data-theme=light]", "[data-theme=system]"),
   dark: declarationsOf("[data-theme=dark]"),
 };
 
