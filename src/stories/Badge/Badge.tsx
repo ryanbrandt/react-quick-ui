@@ -1,6 +1,7 @@
 import type { FunctionComponent, JSX } from "react";
 
-type BadgeVariant = "primary" | "warning" | "danger" | "success" | "neutral";
+import Tag, { type TagVariant } from "@stories/Tag/Tag";
+
 type BadgeSize = "sm" | "md" | "lg" | "xlg" | "fit-content";
 
 interface Props {
@@ -12,27 +13,36 @@ interface Props {
   /**
    * The optional badge variant
    *
-   * @see BadgeVariant
+   * @see TagVariant
    * @default primary
    */
-  variant?: BadgeVariant;
+  variant?: TagVariant;
 
   /**
-   * The optional badge size
+   * The optional badge size. Badges fit their text now: `lg` and `xlg`
+   * render the large tag, the others the medium one.
    *
-   * @see ButtonSize
+   * @see BadgeSize
    * @default md
    */
   size?: BadgeSize;
 }
 
+/**
+ * @deprecated Use `Tag`. `Badge` renders a `Tag` (with the extra class
+ * `badge`, for existing stylesheets) and will be removed in a future major
+ * release.
+ */
 const Badge: FunctionComponent<Props> = (props: Props): JSX.Element => {
-  const { text, variant = "primary", size = "md" } = props;
+  const { text, variant, size = "md" } = props;
 
   return (
-    <div className={`badge badge--${variant} badge--${size}`}>
-      <span className="badge__text">{text}</span>
-    </div>
+    <Tag
+      text={text}
+      variant={variant}
+      size={size === "lg" || size === "xlg" ? "lg" : "md"}
+      className="badge"
+    />
   );
 };
 

@@ -2,38 +2,33 @@ import { render, screen } from "@testing-library/react";
 
 import Badge from "@stories/Badge/Badge";
 
-describe("Badge", () => {
+describe("Badge (deprecated alias of Tag)", () => {
   const MOCK_TEXT = "Badge";
 
-  it("renders the provided text", () => {
+  it("renders a primary/md Tag with the badge class by default", () => {
     render(<Badge text={MOCK_TEXT} />);
 
-    expect(screen.getByText(MOCK_TEXT)).toBeInTheDocument();
+    expect(screen.getByText(MOCK_TEXT)).toHaveClass(
+      "tag tag--primary tag--md badge",
+      { exact: true }
+    );
   });
 
-  describe("when no style props are provided", () => {
-    it("defaults to the primary/md styling", () => {
-      const { container } = render(<Badge text={MOCK_TEXT} />);
+  it("passes the variant through", () => {
+    render(<Badge text={MOCK_TEXT} variant="danger" />);
 
-      expect(screen.getByText(MOCK_TEXT)).toBeInTheDocument();
-      expect(container.querySelector("div")?.className).toBe(
-        "badge badge--primary badge--md"
-      );
-    });
+    expect(screen.getByText(MOCK_TEXT)).toHaveClass("tag--danger");
   });
 
-  describe("when style props are provided", () => {
-    it("applies the provided styles", () => {
-      const MOCK_SIZE = "xlg";
-      const MOCK_VARIANT = "warning";
-      const { container } = render(
-        <Badge text={MOCK_TEXT} variant={MOCK_VARIANT} size={MOCK_SIZE} />
-      );
+  it.each([
+    ["sm", "md"],
+    ["md", "md"],
+    ["fit-content", "md"],
+    ["lg", "lg"],
+    ["xlg", "lg"],
+  ] as const)("maps size %s to the %s tag", (size, tagSize) => {
+    render(<Badge text={MOCK_TEXT} size={size} />);
 
-      expect(screen.getByText(MOCK_TEXT)).toBeInTheDocument();
-      expect(container.querySelector("div")?.className).toBe(
-        `badge badge--${MOCK_VARIANT} badge--${MOCK_SIZE}`
-      );
-    });
+    expect(screen.getByText(MOCK_TEXT)).toHaveClass(`tag--${tagSize}`);
   });
 });
