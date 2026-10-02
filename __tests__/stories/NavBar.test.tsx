@@ -1,13 +1,39 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import NavBar from "@stories/NavBar/NavBar";
+import NavBar, { type NavBarProps } from "@stories/NavBar/NavBar";
+
+// jsdom has no ResizeObserver. This stand-in lets a test report the bar's
+// width to the observer that is currently watching it.
+let reportWidth: ((width: number) => void) | undefined;
+class FakeResizeObserver {
+  constructor(callback: ResizeObserverCallback) {
+    reportWidth = (width) =>
+      callback(
+        [{ contentRect: { width } } as ResizeObserverEntry],
+        this as unknown as ResizeObserver
+      );
+  }
+  observe() {}
+  disconnect() {
+    reportWidth = undefined;
+  }
+}
+
+beforeAll(() => {
+  globalThis.ResizeObserver =
+    FakeResizeObserver as unknown as typeof ResizeObserver;
+});
+
+afterAll(() => {
+  Reflect.deleteProperty(globalThis, "ResizeObserver");
+});
 
 // jsdom applies no CSS, so the links are always visible here; whether they
 // sit in the bar or in the narrow menu is checked in a real browser
 // (e2e/interactions.spec.ts).
 describe("NavBar", () => {
-  const renderNavBar = (props: Parameters<typeof NavBar>[0] = {}) =>
+  const renderNavBar = (props: NavBarProps = {}) =>
     render(
       <>
         <NavBar
@@ -100,6 +126,35 @@ describe("NavBar", () => {
       await userEvent.keyboard("{Escape}");
       expect(menuButton()).toHaveAttribute("aria-expanded", "false");
       expect(menuButton()).toHaveFocus();
+    });
+
+    it("ignores an Esc something else has already handled", async () => {
+      renderNavBar();
+      await userEvent.click(menuButton());
+
+      // e.g. an open Dialog cancelling its own Esc
+      const handled = new KeyboardEvent("keydown", {
+        key: "Escape",
+        cancelable: true,
+      });
+      handled.preventDefault();
+      fireEvent(document, handled);
+      expect(menuButton()).toHaveAttribute("aria-expanded", "true");
+
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(menuButton()).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("closes when the bar grows wide", async () => {
+      renderNavBar();
+      await userEvent.click(menuButton());
+
+      act(() => reportWidth!(767));
+      expect(menuButton()).toHaveAttribute("aria-expanded", "true");
+
+      act(() => reportWidth!(768));
+      expect(menuButton()).toHaveAttribute("aria-expanded", "false");
+      expect(reportWidth).toBeUndefined();
     });
 
     it("closes when a link is chosen", async () => {

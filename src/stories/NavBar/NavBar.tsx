@@ -1,8 +1,8 @@
 import {
   type FunctionComponent,
   type JSX,
+  type MouseEvent,
   type ReactNode,
-  type Ref,
   useEffect,
   useId,
   useRef,
@@ -10,6 +10,8 @@ import {
 } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
+import CloseSvg from "@svgs/CloseSvg/CloseSvg";
+import MenuSvg from "@svgs/MenuSvg/MenuSvg";
 
 export interface NavBarProps {
   /**
@@ -56,53 +58,16 @@ export interface NavBarProps {
   className?: string;
 }
 
-interface MenuButtonProps {
-  // Not `ref`: React 18 doesn't pass `ref` to function components.
-  buttonRef: Ref<HTMLButtonElement>;
-  label: string;
-  controls: string;
-  expanded: boolean;
-  onClick: () => void;
-}
-
-// A hamburger that turns into a cross while the menu is open.
-const MenuButton = ({
-  buttonRef,
-  label,
-  controls,
-  expanded,
-  onClick,
-}: MenuButtonProps) => (
-  <button
-    ref={buttonRef}
-    type="button"
-    className="navbar__menu-button"
-    aria-label={label}
-    aria-expanded={expanded}
-    aria-controls={controls}
-    onClick={onClick}
-  >
-    <svg
-      aria-hidden="true"
-      width={22}
-      height={22}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-    >
-      <path d={expanded ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"} />
-    </svg>
-  </button>
-);
+// The bar's width below which the links move into the menu: $navbar-narrow
+// in _NavBar.scss.
+const NARROW_WIDTH = 768;
 
 /**
  * The site header: brand, navigation links and actions on a sticky,
  * translucent bar. When the bar is narrower than 768px, the links move into
  * a disclosure menu: a menu button opens it and moves focus to the first
- * link; Esc closes it and returns focus to the button. Choosing a link or
- * clicking outside the bar closes it too.
+ * link; Esc closes it and returns focus to the button. Choosing a link,
+ * clicking outside the bar or the bar growing wide closes it too.
  */
 const NavBar: FunctionComponent<NavBarProps> = (
   props: NavBarProps
@@ -128,31 +93,35 @@ const NavBar: FunctionComponent<NavBarProps> = (
 
     navRef.current!.querySelector<HTMLElement>("a[href], button")?.focus();
 
+    const header = headerRef.current!;
+    // Skip an Esc something else (e.g. an open Dialog) has already handled.
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
+      if (event.key !== "Escape" || event.defaultPrevented) return;
       setMenuOpen(false);
       menuButtonRef.current!.focus();
     };
     const onPointerDown = (event: PointerEvent) => {
-      if (!headerRef.current!.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
+      if (!header.contains(event.target as Node)) setMenuOpen(false);
     };
-    // Following a link closes the menu (the page may not reload).
-    const onClick = (event: MouseEvent) => {
-      if ((event.target as Element).closest("a")) setMenuOpen(false);
-    };
-    const nav = navRef.current!;
+    // Once the bar is wide, the links are back in it and the menu is gone.
+    const resizeObserver = new ResizeObserver(([entry]) => {
+      if (entry!.contentRect.width >= NARROW_WIDTH) setMenuOpen(false);
+    });
 
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("pointerdown", onPointerDown);
-    nav.addEventListener("click", onClick);
+    resizeObserver.observe(header);
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("pointerdown", onPointerDown);
-      nav.removeEventListener("click", onClick);
+      resizeObserver.disconnect();
     };
   }, [menuOpen]);
+
+  // Following a link closes the menu (the page may not reload).
+  const handleNavClick = (event: MouseEvent<HTMLElement>) => {
+    if ((event.target as Element).closest("a")) setMenuOpen(false);
+  };
 
   const classNames = createCompositeClassName({
     navbar: true,
@@ -164,6 +133,9 @@ const NavBar: FunctionComponent<NavBarProps> = (
     <header ref={headerRef} className={classNames}>
       <div className="navbar__bar">
         {brand && <div className="navbar__brand">{brand}</div>}
+        {/* The click handler only watches link clicks bubbling up, which
+            the keyboard makes too. */}
+        {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-noninteractive-element-interactions */}
         <nav
           ref={navRef}
           id={navId}
@@ -172,18 +144,28 @@ const NavBar: FunctionComponent<NavBarProps> = (
             navbar__nav: true,
             "navbar__nav--open": menuOpen,
           })}
+          onClick={handleNavClick}
         >
           {children}
         </nav>
         <div className="navbar__actions">
           {actions}
-          <MenuButton
-            buttonRef={menuButtonRef}
-            label={menuLabel}
-            controls={navId}
-            expanded={menuOpen}
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className="navbar__menu-button"
+            aria-label={menuLabel}
+            aria-expanded={menuOpen}
+            aria-controls={navId}
             onClick={() => setMenuOpen((open) => !open)}
-          />
+          >
+            {/* A hamburger that turns into a cross while the menu is open */}
+            {menuOpen ? (
+              <CloseSvg aria-hidden="true" width={22} height={22} />
+            ) : (
+              <MenuSvg aria-hidden="true" width={22} height={22} />
+            )}
+          </button>
         </div>
       </div>
     </header>

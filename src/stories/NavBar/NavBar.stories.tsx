@@ -80,7 +80,7 @@ export const Default: Story = {};
 
 // The bar adapts to its own width, so a 390px column shows the phone
 // layout at any viewport.
-const narrow: Story = {
+export const Narrow: Story = {
   render: (args) => (
     <div style={{ width: 390 }}>
       <NavBar {...args} />
@@ -93,13 +93,11 @@ const narrow: Story = {
   ),
 };
 
-export const Narrow: Story = { ...narrow };
-
 // Opens the menu: the button reports it expanded and focus moves to the
 // first link. (Esc needs a trusted key press: see
 // e2e/interactions.spec.ts.)
 export const NarrowMenuOpen: Story = {
-  ...narrow,
+  ...Narrow,
   play: async ({ canvas, userEvent }) => {
     const button = canvas.getByRole("button", { name: "Menu" });
     await expect(button).toHaveAttribute("aria-expanded", "false");
