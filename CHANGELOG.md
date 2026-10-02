@@ -6,7 +6,8 @@ All notable changes to this project are documented here. The format follows
 ## 1.0.0-next.0 - 2026-10-02
 
 A prerelease (npm tag `next`) of 1.0.0, for the personal-page redesign.
-The visual redesign starts here (ticket L1, D0 spec direction A
+0.6.0 will not be released: 1.0.0 includes the 0.6.0-next.0 changes
+below, so read both sections when upgrading from 0.5.1. The visual redesign starts here (ticket L1, D0 spec direction A
 "Evolved"): design tokens, light and dark themes, a variable font and a
 restyle of every component. Visual changes are intended.
 
@@ -30,7 +31,7 @@ restyle of every component. Visual changes are intended.
   sets its `color-scheme`; nested themes resolve to the nearest ancestor.
   Apps with a theme toggle should set `data-theme` on `<html>` from it and
   paint `body` with `--rq-color-bg` / `--rq-color-text` (see the README).
-  As in 0.6.0-next.0, loading the CSS does not restyle the page itself:
+  Loading the CSS still does not restyle the page itself:
   nothing follows the OS's dark setting until you opt in with
   `data-theme="system"`.
 - `stylesheets/fonts.css`: Work Sans as one variable font (weights
