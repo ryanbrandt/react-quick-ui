@@ -1,25 +1,16 @@
 import type { FunctionComponent, JSX } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
-import Input, { type InputSize } from "@utilities/Components/Input";
+import Input, {
+  type InputProps,
+  type InputSize,
+} from "@utilities/Components/Input";
 import SearchSvg from "@svgs/SearchSvg/SearchSvg";
 
-interface Props {
-  /**
-   * Value to display within the Search input
-   */
-  value?: string;
-
-  /**
-   * An change handler which will be invoked when the input is changed
-   */
-  onChange?: (text: string) => void;
-
-  /**
-   * Placeholder text to display within the Search input
-   */
-  placeholder?: string;
-
+interface Props extends Pick<
+  InputProps,
+  "id" | "value" | "onChange" | "placeholder" | "disabled"
+> {
   /**
    * Optional size for the search input
    *
@@ -27,11 +18,6 @@ interface Props {
    * @default xlg
    */
   size?: InputSize;
-
-  /**
-   * An optional flag, which, when true, will style the search input as disabled
-   */
-  disabled?: boolean;
 
   /**
    * An optional CSS classname to apply to the search input
@@ -47,6 +33,7 @@ const SearchInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
     disabled,
     size = "xlg",
     className = "",
+    id,
   } = props;
 
   const classNames = createCompositeClassName({
@@ -60,6 +47,7 @@ const SearchInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
         <SearchSvg />
       </span>
       <Input
+        id={id}
         value={value}
         onChange={onChange}
         inputType="search"

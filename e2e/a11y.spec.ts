@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 import { A11Y_TAGS } from "../.storybook/a11yTags";
 
-import { gotoStory, loadStoryIds, THEMES } from "./helpers";
+import { collectPageErrors, gotoStory, loadStoryIds, THEMES } from "./helpers";
 
 // Every story renders in both themes without console errors or axe
 // violations (colour contrast included).
@@ -11,11 +11,7 @@ for (const theme of THEMES) {
   test.describe(theme, () => {
     for (const id of loadStoryIds()) {
       test(id, async ({ page }) => {
-        const errors: Array<string> = [];
-        page.on("console", (message) => {
-          if (message.type() === "error") errors.push(message.text());
-        });
-        page.on("pageerror", (error) => errors.push(error.message));
+        const errors = collectPageErrors(page);
 
         await gotoStory(page, id, theme);
         const { violations } = await new AxeBuilder({ page })

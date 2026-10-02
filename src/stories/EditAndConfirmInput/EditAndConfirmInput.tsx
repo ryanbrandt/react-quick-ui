@@ -1,29 +1,17 @@
-import {
-  type FunctionComponent,
-  type HTMLInputTypeAttribute,
-  useState,
-  type JSX,
-} from "react";
+import { type FunctionComponent, useState, type JSX } from "react";
 
 import createCompositeClassname from "@utilities/createCompositeClassName";
 import Input, {
-  type IInputError,
+  type InputProps,
   type InputSize,
 } from "@utilities/Components/Input";
 import PencilSvg from "@svgs/PencilSvg/PencilSvg";
 import CheckSvg from "@svgs/CheckSvg/CheckSvg";
 
-export interface Props {
-  /**
-   * Value to display within the input
-   */
-  value?: string;
-
-  /**
-   * Function to be executed on value change
-   */
-  onChange?: (date: string) => void;
-
+export interface Props extends Pick<
+  InputProps,
+  "id" | "value" | "onChange" | "label" | "error" | "inputType"
+> {
   /**
    * An optional handler to invoke when the editing has been initiated
    */
@@ -49,27 +37,11 @@ export interface Props {
   confirmDisabled?: boolean;
 
   /**
-   * An optional label to display
-   */
-  label?: string;
-
-  /**
-   * An optional error to apply
-   */
-  error?: string | IInputError;
-
-  /**
    * An optional CSS classname to apply
    *
    *  @default ""
    */
   className?: string;
-
-  /**
-   * The semantic type of the input
-   *
-   */
-  inputType: HTMLInputTypeAttribute;
 
   /**
    * The optional input element size
@@ -94,6 +66,7 @@ const BaseEditAndConfirmInput: FunctionComponent<Props> = (
     className = "",
     editDisabled = false,
     confirmDisabled = false,
+    id,
   } = props;
 
   const confirmIconClassNames = createCompositeClassname({
@@ -126,6 +99,7 @@ const BaseEditAndConfirmInput: FunctionComponent<Props> = (
 
   return (
     <Input
+      id={id}
       className={className}
       value={value}
       onChange={onChange}

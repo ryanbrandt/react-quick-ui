@@ -1,55 +1,19 @@
 import type { FunctionComponent, JSX } from "react";
 
-import Input, {
-  type IInputError,
-  type InputSize,
-} from "@utilities/Components/Input";
+import Input, { type InputProps } from "@utilities/Components/Input";
 
-interface Props {
-  /**
-   * String value prop - Value should be controlled on parent component state
-   */
-  value?: string;
-
-  /**
-   * Function to be executed on value change
-   */
-  onChange?: (value: string) => void;
-
-  /**
-   * The optional input size
-   * @see InputSize
-   */
-  size?: InputSize;
-
-  /**
-   * An optional label to display above the input
-   */
-  label?: string;
-
-  /**
-   * Optional error object containing a flag and an optional message
-   * @see IInputError
-   */
-  error?: string | IInputError;
-
-  /**
-   * An optional flag controlling if the input is in a disabled state
-
-   */
-  disabled?: boolean;
-
-  /**
-   * An optional placeholder string to be displayed in the input
-   * before a password is entered
-   */
-  placeholder?: string;
-
-  /**
-   * An optional CSS classname to apply to the input for custom styling
-   */
-  className?: string;
-}
+type Props = Pick<
+  InputProps,
+  | "id"
+  | "value"
+  | "onChange"
+  | "size"
+  | "label"
+  | "error"
+  | "disabled"
+  | "placeholder"
+  | "className"
+>;
 
 const PasswordInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
   const {
@@ -61,10 +25,12 @@ const PasswordInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
     disabled,
     placeholder,
     className,
+    id,
   } = props;
 
   return (
     <Input
+      id={id}
       value={value}
       onChange={onChange}
       inputType="password"

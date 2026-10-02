@@ -7,6 +7,8 @@ const meta = {
   title: "Core/Inputs/SearchInput",
   component: SearchInput,
   args: { placeholder: "Placeholder Text", onChange: fn() },
+  // Typing updates the value arg (see syncArgs in .storybook/preview.ts).
+  parameters: { syncArgs: { value: "onChange" } },
 } satisfies Meta<typeof SearchInput>;
 
 export default meta;

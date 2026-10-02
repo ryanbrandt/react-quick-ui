@@ -189,4 +189,10 @@ describe("BaseEditAndConfirmInput", () => {
       });
     });
   });
+
+  it("passes an id through to the input", () => {
+    render(<EditAndConfirmInput id="field-id" inputType="email" />);
+
+    mockBaseInput.assertCalledWith({ id: "field-id" });
+  });
 });

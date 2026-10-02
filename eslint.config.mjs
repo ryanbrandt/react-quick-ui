@@ -162,18 +162,6 @@ export default defineConfig(
   // Storybook's CSF and main.ts rules (stories and .storybook/main.ts).
   storybook.configs["flat/recommended"],
 
-  // Known a11y debt: the Modal backdrop and panel are clickable divs with no
-  // keyboard support (Escape to close). Changing them changes the published
-  // markup, so fix it in L2 (Dialog), then drop this block and lower
-  // `--max-warnings` in package.json.
-  {
-    files: ["src/stories/Modal/Modal.tsx"],
-    rules: {
-      "jsx-a11y-x/click-events-have-key-events": "warn",
-      "jsx-a11y-x/no-static-element-interactions": "warn",
-    },
-  },
-
   // Turns off rules that conflict with Prettier; keep it after the rule sets.
   prettier,
 

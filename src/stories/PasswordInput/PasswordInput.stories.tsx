@@ -7,6 +7,8 @@ const meta = {
   title: "Core/Inputs/PasswordInput",
   component: PasswordInput,
   args: { label: "Password", onChange: fn() },
+  // Typing updates the value arg (see syncArgs in .storybook/preview.ts).
+  parameters: { syncArgs: { value: "onChange" } },
 } satisfies Meta<typeof PasswordInput>;
 
 export default meta;

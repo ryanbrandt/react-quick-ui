@@ -145,4 +145,10 @@ describe("TextInput", () => {
       });
     });
   });
+
+  it("passes an id through to the input", () => {
+    render(<TextInput id="field-id" />);
+
+    mockBaseInput.assertCalledWith({ id: "field-id" });
+  });
 });

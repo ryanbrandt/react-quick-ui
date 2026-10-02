@@ -14,3 +14,7 @@ export { default as Tag } from "@stories/Tag/Tag";
 export { default as IconButton } from "@stories/IconButton/IconButton";
 export { default as Card } from "@stories/Card/Card";
 export { default as Heading } from "@stories/Heading/Heading";
+export { default as Dialog } from "@stories/Dialog/Dialog";
+export { default as ThemeToggle } from "@stories/ThemeToggle/ThemeToggle";
+export type { ThemePreference } from "@stories/ThemeToggle/ThemeToggle";
+export { default as NavBar } from "@stories/NavBar/NavBar";

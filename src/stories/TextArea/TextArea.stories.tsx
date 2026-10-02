@@ -7,6 +7,8 @@ const meta = {
   title: "Core/Inputs/TextArea",
   component: TextArea,
   args: { label: "This is a Label", onChange: fn() },
+  // Typing updates the value arg (see syncArgs in .storybook/preview.ts).
+  parameters: { syncArgs: { value: "onChange" } },
 } satisfies Meta<typeof TextArea>;
 
 export default meta;
