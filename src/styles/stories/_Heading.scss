@@ -1,8 +1,46 @@
 .heading {
-  color: var(--rq-color-accent-text);
-  text-align: center;
-  line-height: 34px;
   margin: 0;
+
+  // The spec's type scale. Sizes scale with the viewport between the mobile
+  // and desktop values (hero 44–72px, section 26–32px).
+  &--hero,
+  &--section,
+  &--title {
+    color: var(--rq-color-text);
+
+    strong {
+      font-weight: var(--rq-font-weight-semibold);
+      color: var(--rq-color-accent-text);
+    }
+  }
+
+  &--hero {
+    font-size: clamp(var(--rq-font-size-5xl), 8vw, var(--rq-font-size-6xl));
+    font-weight: var(--rq-font-weight-light);
+    line-height: var(--rq-line-height-tight);
+    letter-spacing: var(--rq-letter-spacing-tight);
+  }
+
+  &--section {
+    font-size: clamp(var(--rq-font-size-3xl), 3.5vw, var(--rq-font-size-4xl));
+    font-weight: var(--rq-font-weight-regular);
+    line-height: 1.25;
+  }
+
+  &--title {
+    font-size: var(--rq-font-size-2xl);
+    font-weight: var(--rq-font-weight-semibold);
+    line-height: 1.3;
+  }
+
+  // The original compact headings.
+  &--h1,
+  &--h2,
+  &--h3 {
+    color: var(--rq-color-accent-text);
+    text-align: center;
+    line-height: 34px;
+  }
 
   &--h1 {
     font-size: var(--rq-font-size-md);

@@ -41,4 +41,35 @@ describe("Heading", () => {
       expect(screen.getByText(MOCK_TEXT)).toBeInTheDocument();
     });
   });
+
+  describe.each([
+    ["hero", "h1"],
+    ["section", "h2"],
+    ["title", "h3"],
+  ] as const)("with the %s variant", (variant, element) => {
+    it(`renders an ${element} by default`, () => {
+      const { container } = render(
+        <Heading text={MOCK_TEXT} variant={variant} />
+      );
+
+      expect(container.querySelector(element)).toHaveClass(
+        `heading--${variant} heading`,
+        { exact: true }
+      );
+    });
+  });
+
+  describe("when as and children are provided", () => {
+    it("renders the children in the given element", () => {
+      const { container } = render(
+        <Heading variant="hero" as="h2">
+          Hello, <strong>Ryan</strong>
+        </Heading>
+      );
+
+      expect(container.querySelector("h2")).toHaveClass("heading--hero");
+      expect(screen.getByText("Ryan").tagName).toBe("STRONG");
+      expect(container.querySelector("h1")).not.toBeInTheDocument();
+    });
+  });
 });
