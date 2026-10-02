@@ -5,20 +5,20 @@ import Badge from "@stories/Badge/Badge";
 describe("Badge (deprecated alias of Tag)", () => {
   const MOCK_TEXT = "Badge";
 
-  it("renders a primary/md Tag by default", () => {
+  it("renders a primary/md Tag with the badge class by default", () => {
     render(<Badge text={MOCK_TEXT} />);
 
     expect(screen.getByText(MOCK_TEXT)).toHaveClass(
-      "tag tag--primary tag--md",
+      "tag tag--primary tag--md badge",
       { exact: true }
     );
   });
 
   it("passes the variant and class name through", () => {
-    render(<Badge text={MOCK_TEXT} variant="danger" className="badge" />);
+    render(<Badge text={MOCK_TEXT} variant="danger" className="extra" />);
 
     expect(screen.getByText(MOCK_TEXT)).toHaveClass(
-      "tag tag--danger tag--md badge",
+      "tag tag--danger tag--md badge extra",
       { exact: true }
     );
   });

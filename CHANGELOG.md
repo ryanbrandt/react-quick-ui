@@ -117,12 +117,11 @@ restyle of every component. Visual changes are intended.
 - `_common.scss` is renamed `_flex-utilities.scss` (internal).
 - `$work-sans-family` is now the first family of the token font stack
   (still `"Work Sans"`).
-- **Breaking (visual):** `Badge` renders a `Tag`: a pill that fits its
-  text instead of a set width per size (`lg`/`xlg` give the 14px tag, the
-  others the 13px one). The element is a `<span>` (was a `<div>`) with the
-  `tag` classes only: the `badge` and `badge--*` classes and their styles
-  are gone. To keep styling it from your own stylesheet, pass a class with
-  the new `className` prop (e.g. `className="badge"`).
+- **Visual:** `Badge` renders a `Tag`: a pill that fits its text instead
+  of a set width per size (`lg`/`xlg` give the 14px tag, the others the
+  13px one). The element is a `<span>` (was a `<div>`) and keeps the class
+  `badge`; the `.badge--*` styles are gone. A new `className` prop adds
+  classes after `badge`.
 - `Button` wraps its content in `<span>`s instead of `<div>`s (a `<div>`
   isn't allowed inside a `<button>`). It looks the same.
 
