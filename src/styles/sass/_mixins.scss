@@ -32,9 +32,45 @@
 // A visible keyboard focus ring, from the --rq-focus-ring-* tokens (the
 // accent colour, 3:1 or more on bg and surface in both themes). CSS-only
 // consumers can write the same outline with those custom properties.
-@mixin focus-ring($color: var(--rq-focus-ring-color)) {
+@mixin focus-ring(
+  $color: var(--rq-focus-ring-color),
+  $offset: var(--rq-focus-ring-offset)
+) {
   outline: var(--rq-focus-ring-width) solid $color;
-  outline-offset: var(--rq-focus-ring-offset);
+  outline-offset: $offset;
+}
+
+// The shared base of the button controls (Button, IconButton): a border
+// that variants can colour, the control radius, a pointer, a hover
+// transition, the focus ring and the disabled state.
+@mixin control-base {
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: var(--rq-radius-control);
+  cursor: pointer;
+  transition:
+    filter var(--rq-duration-base) var(--rq-easing-standard),
+    background-color var(--rq-duration-base) var(--rq-easing-standard);
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    @include user-control-disabled;
+  }
+}
+
+// The outlined secondary control: the surface colour with a 3:1
+// control-border edge, tinted on hover.
+@mixin control-secondary {
+  background-color: var(--rq-color-surface);
+  border-color: var(--rq-color-control-border);
+  color: var(--rq-color-text);
+
+  &:hover {
+    background-color: var(--rq-color-tint);
+  }
 }
 
 @mixin input-container {

@@ -3,33 +3,20 @@
 
 .icon-button {
   @include flex.flex--align-center--justify-center;
-  box-sizing: border-box;
   // The minimum touch target.
   width: 44px;
   height: 44px;
   padding: 0;
-  border: 1px solid transparent;
-  border-radius: var(--rq-radius-control);
   background-color: transparent;
   color: var(--rq-color-text);
-  cursor: pointer;
-  transition: background-color var(--rq-duration-base) var(--rq-easing-standard);
-
-  &:hover {
-    background-color: var(--rq-color-tint);
-  }
-
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
-
-  &:disabled {
-    @include mixins.user-control-disabled();
-  }
+  @include mixins.control-base;
 
   &--secondary {
-    background-color: var(--rq-color-surface);
-    border-color: var(--rq-color-control-border);
+    @include mixins.control-secondary;
+  }
+
+  &--ghost:hover {
+    background-color: var(--rq-color-tint);
   }
 
   &__icon {

@@ -35,7 +35,9 @@ restyle of every component. Visual changes are intended.
   `$space`, `$radii`, `$focus-ring`, `$font-sizes`, …); every flex helper
   as a mixin, listed in `$flex-names`
   (`@include rq.flex--column;`, usable inside `@media`); the
-  `text-overflow-ellipsis` and `focus-ring` mixins; `flex--justify-space-evenly`
+  `text-overflow-ellipsis` and `focus-ring` (optional `$color` and
+  `$offset`) mixins; the `control-base` and `control-secondary` mixins
+  that Button and IconButton share; `flex--justify-space-evenly`
   and `flex--column--justify-center` (also as `.flex…` classes).
 - `TextArea` accepts an optional `id` and links its label to the textarea.
 - Storybook: a light/dark/system theme toolbar, the a11y addon and a
@@ -56,8 +58,9 @@ restyle of every component. Visual changes are intended.
   `text`. `Heading` is now exported from the package entry (it was only
   used by `Modal`).
 - `Button`: `variant="secondary"` (the outlined button); `width="auto"`
-  to fit the text; `as="a"` with `href`/`target`/`rel` to render a real
-  link styled as a button. The redesign's 48px calls to action are
+  to fit the text; `href` (with optional `target`/`rel`) renders a real
+  link styled as a button. Each size sets `--rq-button-width` and
+  `--rq-button-padding-x`. The redesign's 48px calls to action are
   `size="xlg"` with `width="auto"`.
 - `yarn story:create` and `yarn svg:create` refuse a name the package
   already exports, and remind you to add a test.
@@ -127,6 +130,8 @@ restyle of every component. Visual changes are intended.
 - `Badge`: use `Tag`. `Badge` is an alias that renders a `Tag` (no runtime
   warning) and will be removed in a future major release.
 - `Button`'s `variant="neutral"`: use `"secondary"` (the same style).
+- `Button`'s default `width="fixed"`: the default becomes `"auto"` in the
+  next major release. Pass `width="fixed"` to keep the set widths.
 
 ## 0.6.0-next.0 - 2026-10-01
 

@@ -155,14 +155,20 @@ describe("index.css", () => {
     }))
   );
 
+  // Components may set their own custom properties (e.g. each Button size
+  // sets --rq-button-width) or read an optional one with a fallback (e.g.
+  // var(--rq-card-media-height, 168px)); every other var() must be a token.
   it("only uses --rq-* tokens that tokens.css defines", () => {
-    const defined = new Set(
-      compileRules("tokens.scss").flatMap((rule) => [
+    const defined = new Set([
+      ...compileRules("tokens.scss").flatMap((rule) => [
         ...rule.declarations.keys(),
-      ])
-    );
+      ]),
+      ...declarations
+        .map(({ property }) => property)
+        .filter((property) => property.startsWith("--")),
+    ]);
     const used = declarations.flatMap(({ value }) =>
-      [...value.matchAll(/var\((--[\w-]+)/g)].map(([, name = ""]) => name)
+      [...value.matchAll(/var\((--[\w-]+)\s*\)/g)].map(([, name = ""]) => name)
     );
 
     expect(used).not.toHaveLength(0);

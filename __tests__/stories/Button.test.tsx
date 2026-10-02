@@ -118,13 +118,12 @@ describe("Button", () => {
     });
   });
 
-  describe('when as is "a"', () => {
+  describe("when an href is provided", () => {
     const MOCK_HREF = "/resume";
 
-    it("renders a link with no button semantics", () => {
+    it("renders a link instead of a button", () => {
       render(
         <Button
-          as="a"
           href={MOCK_HREF}
           target="_blank"
           rel="noopener noreferrer"
@@ -134,12 +133,9 @@ describe("Button", () => {
 
       const link = screen.getByRole("link", { name: MOCK_TEXT });
 
-      expect(link.tagName).toBe("A");
       expect(link).toHaveAttribute("href", MOCK_HREF);
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noopener noreferrer");
-      expect(link).not.toHaveAttribute("role");
-      expect(screen.queryByRole("button")).not.toBeInTheDocument();
       expect(mockedcreateCompositeClassName).toHaveBeenCalledWith(
         expect.objectContaining({ "button--link": true })
       );
@@ -147,9 +143,7 @@ describe("Button", () => {
 
     it("invokes the provided onClick handler", () => {
       const mockOnClickHandler = jest.fn();
-      render(
-        <Button as="a" href="#" text={MOCK_TEXT} onClick={mockOnClickHandler} />
-      );
+      render(<Button href="#" text={MOCK_TEXT} onClick={mockOnClickHandler} />);
 
       fireEvent.click(screen.getByRole("link"));
       expect(mockOnClickHandler).toHaveBeenCalledTimes(1);

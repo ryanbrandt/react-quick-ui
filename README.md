@@ -121,7 +121,7 @@ It provides:
 - **deprecated** legacy colours: `$primary-blue`, `$light-blue`, `$extra-light-blue`, `$black`, `$dark-gray`, `$gray`, `$light-gray`, `$white`, `$green`, `$dark-green`, `$red` and `$yellow`. They are plain colour values, so Sass colour functions keep working, but they don't follow the theme, and they will be removed in a future major release. Use the tokens instead: `$primary-blue` → `--rq-color-brand` (decoration) or `--rq-color-accent-text`/`-fill`; `$white` → `--rq-color-surface`; `$dark-gray`/`$gray` → `--rq-color-muted`/`-border`; `$light-gray` → `--rq-color-bg`; `$green`, `$red`, `$yellow` → the `success-`, `danger-` and `warning-` tokens.
 - variables: `$work-sans-family` (the first family of `$font-family`) and `$accordion-transition-time`
 - flex mixins: `flex`, `flex--align-center`, `flex--column`, `flex--column--align-center--justify-center` and the rest of the `flex[--column][--align-…][--justify-…]` set, listed in `$flex-names` (the same names as the `.flex…` classes and the `%flex…` placeholders, which can still be extended)
-- other mixins: `hr-divider`, `text-overflow-ellipsis`, `user-control-disabled`, `focus-ring` (from the `--rq-focus-ring-*` tokens), `input-container`, `input-base`, `input-label`, `input-error` and `scroll-bar`. These style with the `--rq-*` tokens, so the page needs `tokens.css` or `index.css`. `text-overflow-elipsis` (misspelled) still works but is deprecated.
+- other mixins: `hr-divider`, `text-overflow-ellipsis`, `user-control-disabled`, `focus-ring` (from the `--rq-focus-ring-*` tokens; optional `$color` and `$offset`), `control-base` and `control-secondary` (the shared button styles: border, radius, cursor, transition, focus ring and disabled state; the outlined secondary look), `input-container`, `input-base`, `input-label`, `input-error` and `scroll-bar`. These style with the `--rq-*` tokens, so the page needs `tokens.css` or `index.css`. `text-overflow-elipsis` (misspelled) still works but is deprecated.
 
 That path goes through the package's `exports` map, which Vite and Sass's `pkg:` importer (`@use "pkg:@ryanbrandt/react-quick-ui/stylesheets/sass"`) both follow. With a plain `node_modules` load path, use `@ryanbrandt/react-quick-ui/dist/stylesheets/sass` instead.
 
@@ -135,13 +135,13 @@ That path goes through the package's `exports` map, which Vite and Sass's `pkg:`
 
 ### Content components
 
-**Button.** `variant` is `primary` (filled with `accent-fill`), `secondary` (outlined on the surface colour), `success` or `danger`; `neutral` is the deprecated name of `secondary`. `size` sets the height: `sm` 20px, `md` 30px (default), `lg` 40px, `xlg` 48px. By default each size also has a set width that truncates long text; `width="auto"` fits the text instead (and stretches to fill a column flex layout). Pass `as="a"` with `href` (and optionally `target`, `rel`) to render a real link that looks like a button, with no button role.
+**Button.** `variant` is `primary` (filled with `accent-fill`), `secondary` (outlined on the surface colour), `success` or `danger`; `neutral` is the deprecated name of `secondary` on `Button` (on `Tag`, `neutral` is a current variant). `size` sets the height: `sm` 20px, `md` 30px (default), `lg` 40px, `xlg` 48px. By default each size also has a set width that truncates long text; `width="auto"` fits the text instead (and stretches to fill a column flex layout). Each size sets `--rq-button-width` and `--rq-button-padding-x` (the `width="auto"` side padding), so a stylesheet can override them. Pass `href` (and optionally `target`, `rel`) to render a real link that looks like a button, with no button role; without `href` it is a `<button>` and accepts `disabled`.
 
 The redesign's 48px calls to action are `size="xlg" width="auto"`:
 
 ```tsx
-<Button as="a" href="/resume" size="xlg" width="auto" text="View résumé" />
-<Button as="a" href="/work" size="xlg" width="auto" variant="secondary" text="Personal projects" />
+<Button href="/resume" size="xlg" width="auto" text="View résumé" />
+<Button href="/work" size="xlg" width="auto" variant="secondary" text="Personal projects" />
 ```
 
 **IconButton.** A 44px square, icon-only button. `aria-label` is required (TypeScript enforces it) and names the button; the `icon` is hidden from assistive technology. `variant` is `secondary` (outlined, default) or `ghost` (no background until hovered). Other `<button>` attributes (`onClick`, `aria-expanded`, …) pass through, and `type` defaults to `"button"`.

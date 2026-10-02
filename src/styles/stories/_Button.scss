@@ -11,40 +11,24 @@
   }
 }
 
+// Each size sets its width and the padding that `width="auto"` uses.
 @mixin button-size($fontSize, $width, $height, $padding) {
+  --rq-button-width: #{$width};
+  --rq-button-padding-x: #{$padding};
   font-size: $fontSize;
-  width: $width;
   height: $height;
-
-  svg {
-    width: $fontSize;
-    height: $fontSize;
-  }
-
-  // width="auto": fit the text instead of the size's set width.
-  &.button--width-auto {
-    width: auto;
-    padding: 0 $padding;
-  }
 }
 
 .button {
-  box-sizing: border-box;
-  border: 1px solid transparent;
+  width: var(--rq-button-width);
   font-weight: var(--rq-font-weight-medium);
-  border-radius: var(--rq-radius-control);
   fill: currentColor;
-  cursor: pointer;
-  transition:
-    filter var(--rq-duration-base) var(--rq-easing-standard),
-    background-color var(--rq-duration-base) var(--rq-easing-standard);
+  @include mixins.control-base;
 
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
-
-  &:disabled {
-    @include mixins.user-control-disabled();
+  // Icons follow the size's font size.
+  svg {
+    width: 1em;
+    height: 1em;
   }
 
   &--xlg {
@@ -83,6 +67,12 @@
     );
   }
 
+  // width="auto": fit the text instead of the size's set width.
+  &--width-auto {
+    width: auto;
+    padding-inline: var(--rq-button-padding-x);
+  }
+
   &--primary {
     @include button-filled(var(--rq-color-accent-fill));
   }
@@ -98,20 +88,13 @@
   // The spec's secondary button (`neutral` is its deprecated name).
   &--secondary,
   &--neutral {
-    background-color: var(--rq-color-surface);
-    border-color: var(--rq-color-control-border);
-    color: var(--rq-color-text);
-
-    &:hover {
-      background-color: var(--rq-color-tint);
-    }
+    @include mixins.control-secondary;
   }
 
-  // as="a": a link laid out like a button.
+  // With `href`: a link laid out like a button.
   &--link {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     // A <button> centres its text by default; a link doesn't.
     text-align: center;
 

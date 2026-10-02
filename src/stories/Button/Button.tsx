@@ -65,13 +65,7 @@ interface BaseProps {
 }
 
 interface ButtonElementProps extends BaseProps {
-  /**
-   * The element to render: a `<button>` (default) or, with `href`, a link
-   * styled as a button.
-   *
-   * @default button
-   */
-  as?: "button";
+  href?: never;
 
   /**
    * An optional flag, which, when true, will style the button as disabled
@@ -81,12 +75,10 @@ interface ButtonElementProps extends BaseProps {
   disabled?: boolean;
 }
 
-/** A link that looks like a button: a real `<a>`, with no button role. */
+/** With `href`: a link that looks like a button (a real `<a>`, no button role). */
 interface LinkElementProps extends BaseProps {
-  as: "a";
-
   /**
-   * Where the link goes
+   * Where the link goes. Setting it renders an `<a>` instead of a `<button>`.
    */
   href: string;
 
@@ -116,12 +108,12 @@ const Button: FunctionComponent<ButtonProps> = (
     onClick,
   } = props;
 
-  const className = createCompositeClassName({
+  const classNames = createCompositeClassName({
     button: true,
     [`button--${size}`]: true,
     [`button--${variant}`]: true,
     "button--width-auto": width === "auto",
-    "button--link": props.as === "a",
+    "button--link": props.href !== undefined,
   });
 
   const content = (
@@ -132,7 +124,7 @@ const Button: FunctionComponent<ButtonProps> = (
     </span>
   );
 
-  if (props.as === "a") {
+  if (props.href !== undefined) {
     const { href, target, rel } = props;
 
     return (
@@ -141,7 +133,7 @@ const Button: FunctionComponent<ButtonProps> = (
         target={target}
         rel={rel}
         onClick={onClick}
-        className={className}
+        className={classNames}
       >
         {content}
       </a>
@@ -149,7 +141,7 @@ const Button: FunctionComponent<ButtonProps> = (
   }
 
   return (
-    <button disabled={props.disabled} onClick={onClick} className={className}>
+    <button disabled={props.disabled} onClick={onClick} className={classNames}>
       {content}
     </button>
   );

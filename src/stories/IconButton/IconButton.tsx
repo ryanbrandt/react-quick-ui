@@ -45,7 +45,7 @@ const IconButton: FunctionComponent<IconButtonProps> = (
   const {
     icon,
     variant = "secondary",
-    className,
+    className = "",
     type = "button",
     ...buttonProps
   } = props;
@@ -53,7 +53,7 @@ const IconButton: FunctionComponent<IconButtonProps> = (
   const classNames = createCompositeClassName({
     "icon-button": true,
     [`icon-button--${variant}`]: true,
-    [className ?? ""]: true,
+    [className]: true,
   });
 
   return (
