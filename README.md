@@ -14,6 +14,8 @@ yarn add @ryanbrandt/react-quick-ui
 npm install @ryanbrandt/react-quick-ui
 ```
 
+Prereleases are published under the `next` tag (`npm install @ryanbrandt/react-quick-ui@next`). The [CHANGELOG](https://github.com/ryanbrandt/react-quick-ui/blob/master/CHANGELOG.md) lists every change, including what is deprecated and how to migrate.
+
 It supports React 18 and 19 (peers `react`, `react-dom` and `react-transition-group` 4.4.5+). TypeScript projects need `@types/react` 18.2.6 or later.
 
 ### Stylesheets
