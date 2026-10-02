@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import Badge from "@stories/Badge/Badge";
 
+// Deprecated: Badge renders a Tag (see Core/Tag).
 const meta = {
   title: "Core/Badge",
   component: Badge,

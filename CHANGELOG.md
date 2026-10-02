@@ -18,6 +18,10 @@ restyle of every component. Visual changes are intended.
   themes, and control edges (`control-border`, `accent-fill`, the focus
   ring) reach 3:1. `--rq-focus-ring-color`/`-width`/`-offset` let plain CSS
   draw the same focus ring.
+- Fluid type tokens for the heading roles: `--rq-font-size-hero`
+  (44–72px) and `--rq-font-size-section` (26–32px), a `clamp()` of a
+  `rem + vw` value so they follow the reader's font size; and the line
+  heights `--rq-line-height-snug` (1.25) and `--rq-line-height-title` (1.3).
 - Opt-in light and dark themes. Loading the CSS gives the light tokens and
   sets no `color-scheme`, so the page's canvas, default text and form
   controls are unchanged. `data-theme="light"`, `"dark"` or `"system"`
@@ -35,12 +39,37 @@ restyle of every component. Visual changes are intended.
   `$space`, `$radii`, `$focus-ring`, `$font-sizes`, …); every flex helper
   as a mixin, listed in `$flex-names`
   (`@include rq.flex--column;`, usable inside `@media`); the
-  `text-overflow-ellipsis` and `focus-ring` mixins; `flex--justify-space-evenly`
+  `text-overflow-ellipsis` and `focus-ring` (optional `$color` and
+  `$offset`) mixins; the `control-base` and `control-secondary` mixins
+  that Button and IconButton share; `flex--justify-space-evenly`
   and `flex--column--justify-center` (also as `.flex…` classes).
 - `TextArea` accepts an optional `id` and links its label to the textarea.
 - Storybook: a light/dark/system theme toolbar, the a11y addon and a
   Foundations/Tokens page. `yarn test:visual` screenshots every story in
   both themes and checks each for console errors and axe violations.
+- `IconButton`: a 44px icon-only button. `aria-label` is required by its
+  type; `variant` `secondary` (outlined) or `ghost`; other `<button>`
+  attributes pass through; `type` defaults to `"button"`.
+- `Tag`: the spec's pill tag (`text`, `variant` `primary`/`success`/
+  `danger`/`warning`/`neutral`, `size` `md`/`lg`, `className`).
+- `Card`: title, media, body, tags and footer slots. With `href`, the whole
+  card is a link through its title (inner links stay clickable, the focus
+  ring outlines the card), and it lifts on hover with `--rq-shadow-lg` (no
+  movement under reduced motion). `--rq-card-media-height` (default 168px)
+  sets the media height. The card is its own stacking context, so its link
+  cover can't paint over a sticky top bar.
+- `Heading`: the spec's type scale as the variants `hero` (72px light,
+  44px on narrow screens), `section` (32px/26px regular) and `title` (20px
+  semibold); `as` picks the element (`h1`–`h6`); `children` can replace
+  `text`. `Heading` is now exported from the package entry (it was only
+  used by `Modal`).
+- `Button`: `variant="secondary"` (the outlined button); `width="auto"`
+  to fit the text; `href` (with optional `target`/`rel`) renders a real
+  link styled as a button. Each size sets `--rq-button-width` and
+  `--rq-button-padding-x`. The redesign's 48px calls to action are
+  `size="xlg"` with `width="auto"`.
+- `yarn story:create` and `yarn svg:create` refuse a name the package
+  already exports, and remind you to add a test.
 
 ### Changed
 
@@ -88,6 +117,13 @@ restyle of every component. Visual changes are intended.
 - `_common.scss` is renamed `_flex-utilities.scss` (internal).
 - `$work-sans-family` is now the first family of the token font stack
   (still `"Work Sans"`).
+- **Visual:** `Badge` renders a `Tag`: a pill that fits its text instead
+  of a set width per size (`lg`/`xlg` give the 14px tag, the others the
+  13px one). The element is a `<span>` (was a `<div>`) and keeps the class
+  `badge`; the `.badge--*` styles are gone. A new `className` prop adds
+  classes after `badge`.
+- `Button` wraps its content in `<span>`s instead of `<div>`s (a `<div>`
+  isn't allowed inside a `<button>`). It looks the same.
 
 ### Deprecated
 
@@ -98,6 +134,11 @@ restyle of every component. Visual changes are intended.
 - The `text-overflow-elipsis` mixin (misspelled). Use
   `text-overflow-ellipsis`; the old name warns and will be removed in a
   future major release.
+- `Badge`: use `Tag`. `Badge` is an alias that renders a `Tag` (no runtime
+  warning) and will be removed in a future major release.
+- `Button`'s `variant="neutral"`: use `"secondary"` (the same style).
+- `Button`'s default `width="fixed"`: the default becomes `"auto"` in the
+  next major release. Pass `width="fixed"` to keep the set widths.
 
 ## 0.6.0-next.0 - 2026-10-01
 

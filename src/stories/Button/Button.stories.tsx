@@ -28,6 +28,29 @@ export const Danger: Story = {
   args: { text: "Danger", variant: "danger" },
 };
 
-export const Neutral: Story = {
-  args: { text: "Neutral", variant: "neutral" },
+export const Secondary: Story = {
+  args: { text: "Secondary", variant: "secondary" },
+};
+
+// With `href`: a real link, styled as a button.
+export const Link: Story = {
+  args: { href: "#", text: "View résumé" },
+};
+
+// The spec's 48px calls to action: size="xlg" with width="auto". The render
+// ignores `args`; `text` is only set because the story type requires it.
+export const CallsToAction: Story = {
+  args: { text: "View résumé" },
+  render: () => (
+    <div style={{ display: "flex", gap: "16px" }}>
+      <Button href="#" size="xlg" width="auto" text="View résumé" />
+      <Button
+        href="#"
+        size="xlg"
+        width="auto"
+        variant="secondary"
+        text="Personal projects"
+      />
+    </div>
+  ),
 };

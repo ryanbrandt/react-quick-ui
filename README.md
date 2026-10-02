@@ -56,7 +56,7 @@ Components are styled with design tokens: CSS custom properties prefixed `--rq-`
 | Colour (per theme) | `--rq-color-` `bg`, `surface`, `text`, `muted`, `border`, `control-border`, `tint`, `accent-text`, `accent-fill`, `on-accent`, `brand`, `success-text`/`-tint`/`-fill`, `danger-text`/`-tint`/`-fill`, `warning-text`/`-tint`, `scrim`, `overlay` |
 | Space              | `--rq-space-N` (N × 4px: 1–6, 8, 10, 12, 16), `gutter`, `gutter-mobile`, `section`, `section-mobile`, `grid-gap`                                                                                                                                  |
 | Radius             | `--rq-radius-control` (12px), `-card` (16px), `-pill`                                                                                                                                                                                             |
-| Font               | `--rq-font-family`, `--rq-font-size-` `2xs` (13px) … `6xl` (72px), `--rq-font-weight-` `light`…`bold`, `--rq-line-height-tight`/`-body`, `--rq-letter-spacing-tight`                                                                              |
+| Font               | `--rq-font-family`, `--rq-font-size-` `2xs` (13px) … `6xl` (72px) plus the fluid `hero` (44–72px) and `section` (26–32px), `--rq-font-weight-` `light`…`bold`, `--rq-line-height-` `tight`/`snug`/`title`/`body`, `--rq-letter-spacing-tight`     |
 | Focus ring         | `--rq-focus-ring-color` (per theme: the accent text colour), `--rq-focus-ring-width` (2px), `--rq-focus-ring-offset` (2px)                                                                                                                        |
 | Shadow (per theme) | `--rq-shadow-sm`, `--rq-shadow-lg`                                                                                                                                                                                                                |
 | Motion             | `--rq-duration-fast`/`-base`/`-slow` (0ms under `prefers-reduced-motion: reduce`), `--rq-easing-standard`/`-emphasized`                                                                                                                           |
@@ -121,7 +121,7 @@ It provides:
 - **deprecated** legacy colours: `$primary-blue`, `$light-blue`, `$extra-light-blue`, `$black`, `$dark-gray`, `$gray`, `$light-gray`, `$white`, `$green`, `$dark-green`, `$red` and `$yellow`. They are plain colour values, so Sass colour functions keep working, but they don't follow the theme, and they will be removed in a future major release. Use the tokens instead: `$primary-blue` → `--rq-color-brand` (decoration) or `--rq-color-accent-text`/`-fill`; `$white` → `--rq-color-surface`; `$dark-gray`/`$gray` → `--rq-color-muted`/`-border`; `$light-gray` → `--rq-color-bg`; `$green`, `$red`, `$yellow` → the `success-`, `danger-` and `warning-` tokens.
 - variables: `$work-sans-family` (the first family of `$font-family`) and `$accordion-transition-time`
 - flex mixins: `flex`, `flex--align-center`, `flex--column`, `flex--column--align-center--justify-center` and the rest of the `flex[--column][--align-…][--justify-…]` set, listed in `$flex-names` (the same names as the `.flex…` classes and the `%flex…` placeholders, which can still be extended)
-- other mixins: `hr-divider`, `text-overflow-ellipsis`, `user-control-disabled`, `focus-ring` (from the `--rq-focus-ring-*` tokens), `input-container`, `input-base`, `input-label`, `input-error` and `scroll-bar`. These style with the `--rq-*` tokens, so the page needs `tokens.css` or `index.css`. `text-overflow-elipsis` (misspelled) still works but is deprecated.
+- other mixins: `hr-divider`, `text-overflow-ellipsis`, `user-control-disabled`, `focus-ring` (from the `--rq-focus-ring-*` tokens; optional `$color` and `$offset`), `control-base` and `control-secondary` (the shared button styles: border, radius, cursor, transition, focus ring and disabled state; the outlined secondary look), `input-container`, `input-base`, `input-label`, `input-error` and `scroll-bar`. These style with the `--rq-*` tokens, so the page needs `tokens.css` or `index.css`. `text-overflow-elipsis` (misspelled) still works but is deprecated.
 
 That path goes through the package's `exports` map, which Vite and Sass's `pkg:` importer (`@use "pkg:@ryanbrandt/react-quick-ui/stylesheets/sass"`) both follow. With a plain `node_modules` load path, use `@ryanbrandt/react-quick-ui/dist/stylesheets/sass` instead.
 
@@ -132,6 +132,61 @@ That path goes through the package's `exports` map, which Vite and Sass's `pkg:`
 @import "@ryanbrandt/react-quick-ui/dist/stylesheets/index.scss";
 @import "@ryanbrandt/react-quick-ui/dist/stylesheets/colors.scss";
 ```
+
+### Content components
+
+**Button.** `variant` is `primary` (filled with `accent-fill`), `secondary` (outlined on the surface colour), `success` or `danger`; `neutral` is the deprecated name of `secondary` on `Button` (on `Tag`, `neutral` is a current variant). `size` sets the height: `sm` 20px, `md` 30px (default), `lg` 40px, `xlg` 48px. By default each size also has a set width that truncates long text; `width="auto"` fits the text instead (and stretches to fill a column flex layout). Each size sets `--rq-button-width` and `--rq-button-padding-x` (the `width="auto"` side padding), so a stylesheet can override them. Pass `href` (and optionally `target`, `rel`) to render a real link that looks like a button, with no button role; without `href` it is a `<button>` and accepts `disabled`.
+
+The redesign's 48px calls to action are `size="xlg" width="auto"`:
+
+```tsx
+<Button href="/resume" size="xlg" width="auto" text="View résumé" />
+<Button href="/work" size="xlg" width="auto" variant="secondary" text="Personal projects" />
+```
+
+**IconButton.** A 44px square, icon-only button. `aria-label` is required (TypeScript enforces it) and names the button; the `icon` is hidden from assistive technology. `variant` is `secondary` (outlined, default) or `ghost` (no background until hovered). Other `<button>` attributes (`onClick`, `aria-expanded`, …) pass through, and `type` defaults to `"button"`.
+
+```tsx
+<IconButton aria-label="Open menu" icon={<MenuSvg />} variant="ghost" />
+```
+
+**Tag.** A pill label: `text`, `variant` (`primary` tint by default, `success`, `danger`, `warning`, or outlined `neutral`; unlike on `Button`, `neutral` is not deprecated here), `size` (`md`, 13px, for tags on cards; `lg`, 14px, for an eyebrow) and `className`. **`Badge` is deprecated:** it now renders a `Tag`, mapping its sizes to `lg` (`lg`, `xlg`) or `md` (the rest), so it fits its text instead of a set width. It keeps the `badge` class for existing stylesheets; `className` adds more.
+
+**Card.** The project card: `title`, optional `href`, `media`, body (`children`), `tags` (strings, shown as a list of `Tag`s), `footer`, `headingLevel` (default `h3`) and `className`. With `href`, the title is a link whose hit area covers the whole card. Links and buttons inside the card (e.g. in the footer) stay separately clickable, the keyboard focus ring outlines the card, and the card lifts on hover (shadow only under reduced motion). The media renders after the text in the markup, so screen readers reach the title first, but it is shown at the top. Mark decorative media `aria-hidden` (or give an image `alt=""`). Keep the media non-interactive: a link in it would be tabbed to after the footer. The media area is 168px tall; set `--rq-card-media-height` to change it, e.g. on mobile:
+
+```css
+@media (max-width: 640px) {
+  .card {
+    --rq-card-media-height: 132px;
+  }
+}
+```
+
+Each card is its own stacking context (`isolation: isolate`), so the link cover and the controls lifted above it stay beneath a sticky top bar or other page content with `z-index` 1 or more. Interactive elements inside a linked card get `position: relative; z-index: 2` from a zero-specificity rule, so any `position` you set on them wins.
+
+```tsx
+<Card
+  title="Open FEC GraphQL Server"
+  href="/work/open-fec"
+  media={<span aria-hidden="true">FEC</span>}
+  tags={["GraphQL", "Node.js"]}
+  footer={<a href="https://github.com/…">View on GitHub →</a>}
+>
+  A GraphQL wrapper around the Open FEC API.
+</Card>
+```
+
+**Heading.** Pass `text`, or `children` for rich content. `as` sets the element (`h1`–`h6`), so the style and the document outline can differ. The spec's type scale adds three variants, in the text colour. Inside them, `<strong>` is semibold in the accent colour (the hero's name).
+
+| `variant`      | Element    | Style                                                                  |
+| -------------- | ---------- | ---------------------------------------------------------------------- |
+| `hero`         | `h1`       | 72px light (44px on narrow screens, scaling in between), tight leading |
+| `section`      | `h2`       | 32px regular (26px on narrow screens)                                  |
+| `title`        | `h3`       | 20px semibold (card titles)                                            |
+| `h1` (default) | `h1`       | unchanged: 16px bold, centred, accent colour                           |
+| `h2`, `h3`     | `h2`, `h3` | unchanged: 14px semibold / light, centred, accent colour               |
+
+The original `h1`/`h2`/`h3` variants keep their look. For new page headings use `hero` for the page title, `section` for section headings and `title` for card or list-item titles.
 
 ## Development
 

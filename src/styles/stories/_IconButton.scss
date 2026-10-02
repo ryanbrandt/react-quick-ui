@@ -1,0 +1,30 @@
+@use "../sass/flex";
+@use "../sass/mixins";
+
+.icon-button {
+  @include flex.flex--align-center--justify-center;
+  // The minimum touch target.
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background-color: transparent;
+  color: var(--rq-color-text);
+  @include mixins.control-base;
+
+  &--secondary {
+    @include mixins.control-secondary;
+  }
+
+  &--ghost:hover {
+    background-color: var(--rq-color-tint);
+  }
+
+  &__icon {
+    @include flex.flex--align-center--justify-center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

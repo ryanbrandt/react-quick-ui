@@ -17,3 +17,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Hero: Story = {
+  args: { variant: "hero" },
+};
+
+// `<strong>` in the spec's variants is semibold in the accent colour.
+export const HeroWithName: Story = {
+  render: () => (
+    <Heading variant="hero">
+      Hello, World! I'm <strong>Ryan Brandt</strong>.
+    </Heading>
+  ),
+};
+
+export const Section: Story = {
+  args: { variant: "section" },
+};
+
+export const Title: Story = {
+  args: { variant: "title" },
+};

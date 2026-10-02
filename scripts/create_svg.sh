@@ -5,22 +5,15 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-RESET='\033[0m'
+source scripts/_common.sh
 
-fail() {
-  printf "\n${RED}%s${RESET}\n" "$1" >&2
-  exit 1
-}
-
-[ "$#" -eq 1 ] || fail "An svg component name is required"
-name="$1"
-[[ "$name" =~ ^[A-Z][A-Za-z0-9]*$ ]] || fail "Use a PascalCase name, e.g. ArrowSvg"
+read_name "An svg component" ArrowSvg "$@"
 
 dir="src/assets/svgs/$name"
 # Check the target before writing anything, so a failure can't half-write.
+# The cheap file check comes first.
 [ ! -e "$dir" ] || fail "A $name svg already exists!"
+refuse_exported_name "$name"
 
 mkdir "$dir"
 
@@ -57,3 +50,4 @@ printf 'export { default as %s } from "@svgs/%s/%s";\n' "$name" "$name" "$name" 
 yarn prettier --log-level warn --write "$dir" src/assets/svgs/index.ts
 
 printf "\n${GREEN}%s SVG created!${RESET}\n" "$name"
+printf 'Next: add %s to %s (the 100%% coverage gate fails without a test).\n' "$name" "__tests__/assets/svgs.test.tsx"

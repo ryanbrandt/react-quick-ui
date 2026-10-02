@@ -155,12 +155,19 @@ describe("index.css", () => {
     }))
   );
 
+  // Components may set their own custom properties (e.g. each Button size
+  // sets --rq-button-width). The only var() not defined anywhere is the
+  // documented optional --rq-card-media-height (read with a fallback).
   it("only uses --rq-* tokens that tokens.css defines", () => {
-    const defined = new Set(
-      compileRules("tokens.scss").flatMap((rule) => [
+    const defined = new Set([
+      ...compileRules("tokens.scss").flatMap((rule) => [
         ...rule.declarations.keys(),
-      ])
-    );
+      ]),
+      ...declarations
+        .map(({ property }) => property)
+        .filter((property) => property.startsWith("--")),
+      "--rq-card-media-height",
+    ]);
     const used = declarations.flatMap(({ value }) =>
       [...value.matchAll(/var\((--[\w-]+)/g)].map(([, name = ""]) => name)
     );
