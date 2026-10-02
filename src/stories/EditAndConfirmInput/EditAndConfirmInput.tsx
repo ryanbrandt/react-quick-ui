@@ -77,6 +77,13 @@ export interface Props {
    * @default lg
    */
   size?: InputSize;
+
+  /**
+   * An optional id for the input element, which the label is linked to
+   *
+   * @default a unique id from React's useId
+   */
+  id?: string;
 }
 
 const BaseEditAndConfirmInput: FunctionComponent<Props> = (
@@ -94,6 +101,7 @@ const BaseEditAndConfirmInput: FunctionComponent<Props> = (
     className = "",
     editDisabled = false,
     confirmDisabled = false,
+    id,
   } = props;
 
   const confirmIconClassNames = createCompositeClassname({
@@ -126,6 +134,7 @@ const BaseEditAndConfirmInput: FunctionComponent<Props> = (
 
   return (
     <Input
+      id={id}
       className={className}
       value={value}
       onChange={onChange}

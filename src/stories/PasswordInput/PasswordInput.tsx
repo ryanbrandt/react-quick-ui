@@ -49,6 +49,13 @@ interface Props {
    * An optional CSS classname to apply to the input for custom styling
    */
   className?: string;
+
+  /**
+   * An optional id for the input element, which the label is linked to
+   *
+   * @default a unique id from React's useId
+   */
+  id?: string;
 }
 
 const PasswordInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
@@ -61,10 +68,12 @@ const PasswordInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
     disabled,
     placeholder,
     className,
+    id,
   } = props;
 
   return (
     <Input
+      id={id}
       value={value}
       onChange={onChange}
       inputType="password"

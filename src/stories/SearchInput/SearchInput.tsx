@@ -37,6 +37,13 @@ interface Props {
    * An optional CSS classname to apply to the search input
    */
   className?: string;
+
+  /**
+   * An optional id for the input element (e.g. for an external `<label>`)
+   *
+   * @default a unique id from React's useId
+   */
+  id?: string;
 }
 
 const SearchInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
@@ -47,6 +54,7 @@ const SearchInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
     disabled,
     size = "xlg",
     className = "",
+    id,
   } = props;
 
   const classNames = createCompositeClassName({
@@ -60,6 +68,7 @@ const SearchInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
         <SearchSvg />
       </span>
       <Input
+        id={id}
         value={value}
         onChange={onChange}
         inputType="search"

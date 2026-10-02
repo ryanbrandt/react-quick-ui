@@ -14,10 +14,12 @@
 }
 
 .edit-and-confirm-input {
-  // A filled square with a white check: the accent fill keeps it AA.
+  // A filled square with a white check: the accent fill keeps it AA. Both
+  // icons are 20px, the space Input leaves for an icon (it overlaps the
+  // input's padded edge by 20px), so neither spills past the input.
   &__confirm-icon {
-    width: 33px;
-    height: 33px;
+    width: 20px;
+    height: 20px;
     @include edit-and-confirm-input-icon(var(--rq-color-accent-fill));
   }
 

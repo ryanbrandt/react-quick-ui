@@ -54,4 +54,10 @@ describe("PasswordInput", () => {
       className: MOCK_CLASS_NAME,
     });
   });
+
+  it("passes an id through to the input", () => {
+    render(<PasswordInput id="field-id" />);
+
+    mockBaseInput.assertCalledWith({ id: "field-id" });
+  });
 });

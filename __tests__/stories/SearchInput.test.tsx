@@ -106,4 +106,10 @@ describe("Search", () => {
       });
     });
   });
+
+  it("passes an id through to the input", () => {
+    render(<SearchInput id="field-id" />);
+
+    mockBaseInput.assertCalledWith({ id: "field-id" });
+  });
 });

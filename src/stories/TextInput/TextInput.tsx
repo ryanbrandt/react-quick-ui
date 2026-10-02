@@ -54,6 +54,13 @@ interface Props {
    * @default ""
    */
   className?: string;
+
+  /**
+   * An optional id for the input element, which the label is linked to
+   *
+   * @default a unique id from React's useId
+   */
+  id?: string;
 }
 
 const TextInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
@@ -66,6 +73,7 @@ const TextInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
     size = "lg",
     error,
     className = "",
+    id,
   } = props;
 
   const textInputClassNames = createCompositeClassName({
@@ -75,6 +83,7 @@ const TextInput: FunctionComponent<Props> = (props: Props): JSX.Element => {
 
   return (
     <Input
+      id={id}
       value={value}
       onChange={onChange}
       inputType="text"
