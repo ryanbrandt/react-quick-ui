@@ -6,26 +6,31 @@
 .card {
   @include flex.flex--column;
   position: relative;
+  // Its own stacking context: the link cover (z-index 1) and the lifted
+  // controls (2) stack inside the card, so they can't paint over page
+  // content such as a sticky top bar.
+  isolation: isolate;
   box-sizing: border-box;
   row-gap: var(--rq-space-3);
   padding: var(--rq-space-6);
-  overflow: hidden;
   border: 1px solid var(--rq-color-border);
   border-radius: var(--rq-radius-card);
   background-color: var(--rq-color-surface);
   color: var(--rq-color-text);
-  transition:
-    box-shadow var(--rq-duration-base) var(--rq-easing-standard),
-    transform var(--rq-duration-base) var(--rq-easing-standard);
 
   &__media {
     @include flex.flex--align-center--justify-center;
     order: -1;
-    height: 168px;
+    // Set --rq-card-media-height to change it (e.g. 132px on mobile).
+    height: var(--rq-card-media-height, 168px);
     // Full bleed: undo the card's padding. Below it, the bottom margin and
     // the row gap add up to the padding.
     margin: calc(-1 * var(--rq-space-6)) calc(-1 * var(--rq-space-6))
       calc(var(--rq-space-6) - var(--rq-space-3));
+    // The card's inner top corners (inside its 1px border). The card itself
+    // doesn't clip, so the hover shadow can show outside it.
+    border-radius: calc(var(--rq-radius-card) - 1px)
+      calc(var(--rq-radius-card) - 1px) 0 0;
     overflow: hidden;
     background-color: var(--rq-color-tint);
     color: var(--rq-color-accent-text);
@@ -94,25 +99,39 @@
       outline: none;
 
       &::after {
-        @include mixins.focus-ring;
-        // Inside the card's edge: the card clips anything outside it.
-        outline-offset: calc(-1 * var(--rq-focus-ring-width));
+        // Inside the card's edge, like the original clipped ring.
+        @include mixins.focus-ring(
+          $offset: calc(-1 * var(--rq-focus-ring-width))
+        );
         border-radius: var(--rq-radius-card);
       }
     }
   }
 
-  // Other links and controls sit above the cover, so they keep working.
-  &--link :is(a, button, input, select, textarea, summary):not(.card__link) {
-    position: relative;
-    z-index: 2;
-  }
+  &--link {
+    transition: transform var(--rq-duration-base) var(--rq-easing-standard);
 
-  &--link:hover {
-    box-shadow: var(--rq-shadow-lg);
+    // The hover shadow, faded in with opacity (cheaper than animating
+    // box-shadow). It sits on the card's border box.
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      box-shadow: var(--rq-shadow-lg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--rq-duration-base) var(--rq-easing-standard);
+    }
 
-    .card__link {
-      text-decoration: underline;
+    &:hover {
+      &::before {
+        opacity: 1;
+      }
+
+      .card__link {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -121,4 +140,27 @@
       transform: translateY(-2px);
     }
   }
+}
+
+// Other interactive elements sit above the cover, so they keep working. The
+// selector has no specificity, so a consumer's own position (e.g. absolute)
+// wins.
+:where(.card--link)
+  :where(
+    a[href],
+    button,
+    input,
+    select,
+    textarea,
+    summary,
+    label,
+    [tabindex]:not([tabindex="-1"]),
+    [role="button"],
+    [contenteditable],
+    iframe,
+    audio[controls],
+    video[controls]
+  ):where(:not(.card__link)) {
+  position: relative;
+  z-index: 2;
 }

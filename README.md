@@ -152,7 +152,17 @@ The redesign's 48px calls to action are `size="xlg" width="auto"`:
 
 **Tag.** A pill label: `text`, `variant` (`primary` tint by default, `success`, `danger`, `warning`, or outlined `neutral`; unlike on `Button`, `neutral` is not deprecated here), `size` (`md`, 13px, for tags on cards; `lg`, 14px, for an eyebrow) and `className`. **`Badge` is deprecated:** it now renders a `Tag`, mapping its sizes to `lg` (`lg`, `xlg`) or `md` (the rest), so it fits its text instead of a set width. It no longer adds a `badge` class: pass `className` (e.g. `className="badge"`) if your stylesheet targets it.
 
-**Card.** The project card: `title`, optional `href`, `media`, body (`children`), `tags` (strings, shown as a list of `Tag`s), `footer`, `headingLevel` (default `h3`) and `className`. With `href`, the title is a link whose hit area covers the whole card. Links and buttons inside the card (e.g. in the footer) stay separately clickable, the keyboard focus ring outlines the card, and the card lifts on hover (shadow only under reduced motion). The media renders after the text in the markup, so screen readers reach the title first, but it is shown at the top. Mark decorative media `aria-hidden` (or give an image `alt=""`).
+**Card.** The project card: `title`, optional `href`, `media`, body (`children`), `tags` (strings, shown as a list of `Tag`s), `footer`, `headingLevel` (default `h3`) and `className`. With `href`, the title is a link whose hit area covers the whole card. Links and buttons inside the card (e.g. in the footer) stay separately clickable, the keyboard focus ring outlines the card, and the card lifts on hover (shadow only under reduced motion). The media renders after the text in the markup, so screen readers reach the title first, but it is shown at the top. Mark decorative media `aria-hidden` (or give an image `alt=""`). The media area is 168px tall; set `--rq-card-media-height` to change it, e.g. on mobile:
+
+```css
+@media (max-width: 640px) {
+  .card {
+    --rq-card-media-height: 132px;
+  }
+}
+```
+
+Each card is its own stacking context (`isolation: isolate`), so the link cover and the controls lifted above it stay beneath a sticky top bar or other page content with `z-index` 1 or more. Interactive elements inside a linked card get `position: relative; z-index: 2` from a zero-specificity rule, so any `position` you set on them wins.
 
 ```tsx
 <Card

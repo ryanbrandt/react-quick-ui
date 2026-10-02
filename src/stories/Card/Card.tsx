@@ -63,13 +63,13 @@ const Card: FunctionComponent<CardProps> = (props: CardProps): JSX.Element => {
     children,
     tags,
     footer,
-    className,
+    className = "",
   } = props;
 
   const classNames = createCompositeClassName({
     card: true,
     "card--link": !!href,
-    [className ?? ""]: true,
+    [className]: true,
   });
 
   return (

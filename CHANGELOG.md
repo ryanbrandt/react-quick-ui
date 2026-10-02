@@ -55,7 +55,9 @@ restyle of every component. Visual changes are intended.
 - `Card`: title, media, body, tags and footer slots. With `href`, the whole
   card is a link through its title (inner links stay clickable, the focus
   ring outlines the card), and it lifts on hover with `--rq-shadow-lg` (no
-  movement under reduced motion).
+  movement under reduced motion). `--rq-card-media-height` (default 168px)
+  sets the media height. The card is its own stacking context, so its link
+  cover can't paint over a sticky top bar.
 - `Heading`: the spec's type scale as the variants `hero` (72px light,
   44px on narrow screens), `section` (32px/26px regular) and `title` (20px
   semibold); `as` picks the element (`h1`–`h6`); `children` can replace
