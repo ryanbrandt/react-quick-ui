@@ -1,0 +1,62 @@
+@use "../sass/mixins";
+
+// The spec's pill tag: a tint background with matching text.
+
+@mixin tag-variant($background, $color) {
+  background-color: $background;
+  color: $color;
+}
+
+.tag {
+  @include mixins.text-overflow-ellipsis;
+  display: inline-block;
+  box-sizing: border-box;
+  max-width: 100%;
+  // Transparent, so the background shows through; only neutral colours it.
+  border: 1px solid transparent;
+  border-radius: var(--rq-radius-pill);
+  font-weight: var(--rq-font-weight-medium);
+  line-height: normal;
+
+  // Padding plus the 1px border gives the spec's 4px 10px (card tags) and
+  // 6px 14px (the eyebrow).
+  &--md {
+    font-size: var(--rq-font-size-2xs);
+    padding: 3px 9px;
+  }
+
+  &--lg {
+    font-size: var(--rq-font-size-xs);
+    padding: 5px 13px;
+  }
+
+  &--primary {
+    @include tag-variant(var(--rq-color-tint), var(--rq-color-accent-text));
+  }
+
+  &--success {
+    @include tag-variant(
+      var(--rq-color-success-tint),
+      var(--rq-color-success-text)
+    );
+  }
+
+  &--danger {
+    @include tag-variant(
+      var(--rq-color-danger-tint),
+      var(--rq-color-danger-text)
+    );
+  }
+
+  &--warning {
+    @include tag-variant(
+      var(--rq-color-warning-tint),
+      var(--rq-color-warning-text)
+    );
+  }
+
+  &--neutral {
+    @include tag-variant(var(--rq-color-surface), var(--rq-color-muted));
+    border-color: var(--rq-color-border);
+  }
+}

@@ -2,8 +2,9 @@
 @use "../sass/mixins";
 
 @mixin button-filled($background) {
+  --rq-button-color: var(--rq-color-on-accent);
   background-color: $background;
-  color: var(--rq-color-on-accent);
+  color: var(--rq-button-color);
 
   &:hover {
     // Darkening keeps the white label at or above its resting contrast.
@@ -11,50 +12,66 @@
   }
 }
 
-@mixin button-size($fontSize, $width, $height) {
+// Each size sets its width and the padding that `width="auto"` uses.
+@mixin button-size($fontSize, $width, $height, $padding) {
+  --rq-button-width: #{$width};
+  --rq-button-padding-x: #{$padding};
   font-size: $fontSize;
-  width: $width;
   height: $height;
-
-  svg {
-    width: $fontSize;
-    height: $fontSize;
-  }
 }
 
 .button {
-  box-sizing: border-box;
-  border: 1px solid transparent;
+  width: var(--rq-button-width);
   font-weight: var(--rq-font-weight-medium);
-  border-radius: var(--rq-radius-control);
   fill: currentColor;
-  cursor: pointer;
-  transition:
-    filter var(--rq-duration-base) var(--rq-easing-standard),
-    background-color var(--rq-duration-base) var(--rq-easing-standard);
+  @include mixins.control-base;
 
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
-
-  &:disabled {
-    @include mixins.user-control-disabled();
+  // Icons follow the size's font size.
+  svg {
+    width: 1em;
+    height: 1em;
   }
 
   &--xlg {
-    @include button-size(var(--rq-font-size-md), 230px, 48px);
+    @include button-size(
+      var(--rq-font-size-md),
+      230px,
+      48px,
+      var(--rq-space-6)
+    );
   }
 
   &--lg {
-    @include button-size(var(--rq-font-size-xs), 180px, 40px);
+    @include button-size(
+      var(--rq-font-size-xs),
+      180px,
+      40px,
+      var(--rq-space-5)
+    );
   }
 
   &--md {
-    @include button-size(var(--rq-font-size-2xs), 130px, 30px);
+    @include button-size(
+      var(--rq-font-size-2xs),
+      130px,
+      30px,
+      var(--rq-space-4)
+    );
   }
 
   &--sm {
-    @include button-size(var(--rq-font-size-2xs), 80px, 20px);
+    @include button-size(
+      var(--rq-font-size-2xs),
+      80px,
+      20px,
+      var(--rq-space-3)
+    );
+  }
+
+  // width="auto": fit the text instead of the size's set width.
+  &--width-auto {
+    width: auto;
+    padding-inline: var(--rq-button-padding-x);
   }
 
   &--primary {
@@ -69,14 +86,31 @@
     @include button-filled(var(--rq-color-danger-fill));
   }
 
-  // The spec's secondary button.
+  // The spec's secondary button (`neutral` is its deprecated name).
+  &--secondary,
   &--neutral {
-    background-color: var(--rq-color-surface);
-    border-color: var(--rq-color-control-border);
-    color: var(--rq-color-text);
+    @include mixins.control-secondary;
+    --rq-button-color: var(--rq-color-text);
+  }
 
-    &:hover {
-      background-color: var(--rq-color-tint);
+  // With `href`: a link laid out like a button.
+  &--link {
+    display: inline-flex;
+    align-items: center;
+    // A <button> centres its text by default; a link doesn't.
+    text-align: center;
+
+    // The link states beat a page's `a:visited { color }` or
+    // `a:hover { text-decoration: underline }` (0,1,1) with (0,2,0).
+    &,
+    &:is(:link, :visited, :hover, :active) {
+      color: var(--rq-button-color);
+      text-decoration: none;
+    }
+
+    .button__content {
+      flex: 1;
+      min-width: 0;
     }
   }
 

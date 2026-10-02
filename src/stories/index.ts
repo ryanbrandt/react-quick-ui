@@ -10,6 +10,10 @@ export { default as LoadingOverlay } from "@stories/LoadingOverlay/LoadingOverla
 export { default as SearchInput } from "@stories/SearchInput/SearchInput";
 export { default as PasswordInput } from "@stories/PasswordInput/PasswordInput";
 export { default as EditAndConfirmInput } from "@stories/EditAndConfirmInput/EditAndConfirmInput";
+export { default as Tag } from "@stories/Tag/Tag";
+export { default as IconButton } from "@stories/IconButton/IconButton";
+export { default as Card } from "@stories/Card/Card";
+export { default as Heading } from "@stories/Heading/Heading";
 export { default as Dialog } from "@stories/Dialog/Dialog";
 export { default as ThemeToggle } from "@stories/ThemeToggle/ThemeToggle";
 export type { ThemePreference } from "@stories/ThemeToggle/ThemeToggle";

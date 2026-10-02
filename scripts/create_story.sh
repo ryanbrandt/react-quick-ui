@@ -5,24 +5,17 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-RESET='\033[0m'
+source scripts/_common.sh
 
-fail() {
-  printf "\n${RED}%s${RESET}\n" "$1" >&2
-  exit 1
-}
-
-[ "$#" -eq 1 ] || fail "A component name is required"
-name="$1"
-[[ "$name" =~ ^[A-Z][A-Za-z0-9]*$ ]] || fail "Use a PascalCase name, e.g. MyComponent"
+read_name "A component" MyComponent "$@"
 
 dir="src/stories/$name"
 scss="src/styles/stories/_$name.scss"
 # Check every target before writing anything, so a failure can't half-write.
+# The cheap file checks come first.
 [ ! -e "$dir" ] || fail "A $name story already exists!"
 [ ! -e "$scss" ] || fail "$scss already exists!"
+refuse_exported_name "$name"
 
 # Lowercase without bash 4's ${1,,} (macOS ships bash 3.2).
 class_name="$(printf %s "$name" | tr '[:upper:]' '[:lower:]')"
@@ -62,3 +55,4 @@ printf '@use "stories/%s";\n' "$name" >>src/styles/index.scss
 yarn prettier --log-level warn --write "$dir" "$scss" src/stories/index.ts src/styles/index.scss
 
 printf "\n${GREEN}%s story created!${RESET}\n" "$name"
+printf 'Next: add a test in %s (the 100%% coverage gate fails without one).\n' "__tests__/stories/$name.test.tsx"
