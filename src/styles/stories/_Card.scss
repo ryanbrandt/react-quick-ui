@@ -1,0 +1,124 @@
+@use "../sass/flex";
+@use "../sass/mixins";
+
+// The spec's project card. The media comes last in the markup (so screen
+// readers reach the title first) and is moved to the top with `order`.
+.card {
+  @include flex.flex--column;
+  position: relative;
+  box-sizing: border-box;
+  row-gap: var(--rq-space-3);
+  padding: var(--rq-space-6);
+  overflow: hidden;
+  border: 1px solid var(--rq-color-border);
+  border-radius: var(--rq-radius-card);
+  background-color: var(--rq-color-surface);
+  color: var(--rq-color-text);
+  transition:
+    box-shadow var(--rq-duration-base) var(--rq-easing-standard),
+    transform var(--rq-duration-base) var(--rq-easing-standard);
+
+  &__media {
+    @include flex.flex--align-center--justify-center;
+    order: -1;
+    height: 168px;
+    // Full bleed: undo the card's padding. Below it, the bottom margin and
+    // the row gap add up to the padding.
+    margin: calc(-1 * var(--rq-space-6)) calc(-1 * var(--rq-space-6))
+      calc(var(--rq-space-6) - var(--rq-space-3));
+    overflow: hidden;
+    background-color: var(--rq-color-tint);
+    color: var(--rq-color-accent-text);
+    font-size: var(--rq-font-size-5xl);
+    font-weight: var(--rq-font-weight-semibold);
+    letter-spacing: var(--rq-letter-spacing-tight);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__body {
+    color: var(--rq-color-muted);
+    font-size: var(--rq-font-size-sm);
+    line-height: var(--rq-line-height-body);
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__tags {
+    @include flex.flex;
+    flex-wrap: wrap;
+    gap: var(--rq-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__footer {
+    font-size: var(--rq-font-size-sm);
+    font-weight: var(--rq-font-weight-medium);
+    color: var(--rq-color-accent-text);
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  // A whole-card link: the title link's ::after covers the card.
+  &__link {
+    color: inherit;
+    text-decoration: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    &:focus-visible {
+      outline: none;
+
+      &::after {
+        @include mixins.focus-ring;
+        // Inside the card's edge: the card clips anything outside it.
+        outline-offset: calc(-1 * var(--rq-focus-ring-width));
+        border-radius: var(--rq-radius-card);
+      }
+    }
+  }
+
+  // Other links and controls sit above the cover, so they keep working.
+  &--link :is(a, button, input, select, textarea, summary):not(.card__link) {
+    position: relative;
+    z-index: 2;
+  }
+
+  &--link:hover {
+    box-shadow: var(--rq-shadow-lg);
+
+    .card__link {
+      text-decoration: underline;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &--link:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
