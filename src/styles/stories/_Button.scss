@@ -2,8 +2,9 @@
 @use "../sass/mixins";
 
 @mixin button-filled($background) {
+  --rq-button-color: var(--rq-color-on-accent);
   background-color: $background;
-  color: var(--rq-color-on-accent);
+  color: var(--rq-button-color);
 
   &:hover {
     // Darkening keeps the white label at or above its resting contrast.
@@ -89,6 +90,7 @@
   &--secondary,
   &--neutral {
     @include mixins.control-secondary;
+    --rq-button-color: var(--rq-color-text);
   }
 
   // With `href`: a link laid out like a button.
@@ -98,9 +100,11 @@
     // A <button> centres its text by default; a link doesn't.
     text-align: center;
 
-    // :hover too, to beat a page's `a:hover { text-decoration: underline }`.
+    // The link states beat a page's `a:visited { color }` or
+    // `a:hover { text-decoration: underline }` (0,1,1) with (0,2,0).
     &,
-    &:hover {
+    &:is(:link, :visited, :hover, :active) {
+      color: var(--rq-button-color);
       text-decoration: none;
     }
 

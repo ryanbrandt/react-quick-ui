@@ -129,7 +129,8 @@ $font-sizes: (
   6xl: 72px,
   // Fluid role sizes: the hero (5xl on mobile, 6xl on desktop) and section
   // headings (3xl to 4xl). The rem part follows the reader's font size; the
-  // vw part scales them between about 400px and 960px of viewport.
+  // vw part scales them up to 960px of viewport (from about 400px for the
+  // hero, 480px for section headings).
   hero: clamp(44px, calc(1.5rem + 5vw), 72px),
   section: clamp(26px, calc(1.25rem + 1.25vw), 32px),
 );
