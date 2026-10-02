@@ -16,7 +16,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-// Picking an option checks it (through syncArgs); the arrow keys move on.
+// Picking an option checks it (through syncArgs). Arrow keys: see
+// e2e/interactions.spec.ts.
 export const PickDark: Story = {
   args: { value: "light" },
   play: async ({ canvas, userEvent }) => {
@@ -24,11 +25,6 @@ export const PickDark: Story = {
     // The arg update takes a round trip through Storybook.
     await waitFor(() =>
       expect(canvas.getByRole("radio", { name: "Dark" })).toBeChecked()
-    );
-
-    await userEvent.keyboard("{ArrowRight}");
-    await waitFor(() =>
-      expect(canvas.getByRole("radio", { name: "System" })).toBeChecked()
     );
   },
 };

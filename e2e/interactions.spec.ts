@@ -148,3 +148,21 @@ test("theme system follows an OS dark preference", async ({ page }) => {
     bgToken: "#12141b",
   });
 });
+
+test("ThemeToggle moves between options with the arrow keys", async ({
+  page,
+}) => {
+  await gotoStory(page, "core-inputs-themetoggle--default", "light");
+  const radio = (name: string) => page.getByRole("radio", { name });
+
+  // Tab lands on the checked option, as in any radio group.
+  await page.keyboard.press("Tab");
+  await expect(radio("System")).toBeFocused();
+
+  await page.keyboard.press("ArrowLeft");
+  await expect(radio("Dark")).toBeChecked();
+  await expect(radio("Dark")).toBeFocused();
+  await page.keyboard.press("ArrowLeft");
+  await expect(radio("Light")).toBeChecked();
+  await expect(radio("System")).not.toBeChecked();
+});
