@@ -1,0 +1,61 @@
+@use "../sass/flex";
+@use "../sass/mixins";
+
+// A segmented control: each option is a native radio drawn as a 36px
+// square, with its icon on top. The checked option is filled with the
+// accent (3:1 or more against the surface), so the state doesn't rely on a
+// subtle tint.
+$option-size: 36px;
+
+.theme-toggle {
+  @include flex.flex--align-center;
+  box-sizing: border-box;
+  width: fit-content;
+  // 36px options + 3px padding + 1px border = the spec's 44px controls.
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--rq-color-control-border);
+  border-radius: var(--rq-radius-control);
+  background-color: var(--rq-color-surface);
+
+  &__option {
+    @include flex.flex--align-center--justify-center;
+    position: relative;
+    width: $option-size;
+    height: $option-size;
+  }
+
+  &__input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    appearance: none;
+    border-radius: calc(var(--rq-radius-control) - 4px);
+    cursor: pointer;
+    transition: background-color var(--rq-duration-fast)
+      var(--rq-easing-standard);
+
+    &:hover {
+      background-color: var(--rq-color-tint);
+    }
+
+    &:checked {
+      background-color: var(--rq-color-accent-fill);
+    }
+
+    &:focus-visible {
+      @include mixins.focus-ring;
+    }
+  }
+
+  &__icon {
+    // Above the input, and click-through to it.
+    position: relative;
+    pointer-events: none;
+    color: var(--rq-color-muted);
+  }
+
+  &__input:checked + &__icon {
+    color: var(--rq-color-on-accent);
+  }
+}

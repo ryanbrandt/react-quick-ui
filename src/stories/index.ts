@@ -11,3 +11,5 @@ export { default as SearchInput } from "@stories/SearchInput/SearchInput";
 export { default as PasswordInput } from "@stories/PasswordInput/PasswordInput";
 export { default as EditAndConfirmInput } from "@stories/EditAndConfirmInput/EditAndConfirmInput";
 export { default as Dialog } from "@stories/Dialog/Dialog";
+export { default as ThemeToggle } from "@stories/ThemeToggle/ThemeToggle";
+export type { ThemePreference } from "@stories/ThemeToggle/ThemeToggle";
