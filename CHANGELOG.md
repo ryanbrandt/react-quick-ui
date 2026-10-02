@@ -41,6 +41,26 @@ restyle of every component. Visual changes are intended.
 - Storybook: a light/dark/system theme toolbar, the a11y addon and a
   Foundations/Tokens page. `yarn test:visual` screenshots every story in
   both themes and checks each for console errors and axe violations.
+- `IconButton`: a 44px icon-only button. `aria-label` is required by its
+  type; `variant` `secondary` (outlined) or `ghost`; other `<button>`
+  attributes pass through; `type` defaults to `"button"`.
+- `Tag`: the spec's pill tag (`text`, `variant` `primary`/`success`/
+  `danger`/`warning`/`neutral`, `size` `md`/`lg`, `className`).
+- `Card`: title, media, body, tags and footer slots. With `href`, the whole
+  card is a link through its title (inner links stay clickable, the focus
+  ring outlines the card), and it lifts on hover with `--rq-shadow-lg` (no
+  movement under reduced motion).
+- `Heading`: the spec's type scale as the variants `hero` (72px light,
+  44px on narrow screens), `section` (32px/26px regular) and `title` (20px
+  semibold); `as` picks the element (`h1`–`h6`); `children` can replace
+  `text`. `Heading` is now exported from the package entry (it was only
+  used by `Modal`).
+- `Button`: `variant="secondary"` (the outlined button); `width="auto"`
+  to fit the text; `as="a"` with `href`/`target`/`rel` to render a real
+  link styled as a button. The redesign's 48px calls to action are
+  `size="xlg"` with `width="auto"`.
+- `yarn story:create` and `yarn svg:create` refuse a name the package
+  already exports, and remind you to add a test.
 
 ### Changed
 
@@ -88,6 +108,12 @@ restyle of every component. Visual changes are intended.
 - `_common.scss` is renamed `_flex-utilities.scss` (internal).
 - `$work-sans-family` is now the first family of the token font stack
   (still `"Work Sans"`).
+- **Visual:** `Badge` renders a `Tag`: a pill that fits its text instead
+  of a set width per size (`lg`/`xlg` give the 14px tag, the others the
+  13px one). The element is a `<span>` (was a `<div>`) and keeps the class
+  `badge`; the `.badge--*` styles are gone.
+- `Button` wraps its content in `<span>`s instead of `<div>`s (a `<div>`
+  isn't allowed inside a `<button>`). It looks the same.
 
 ### Deprecated
 
@@ -98,6 +124,9 @@ restyle of every component. Visual changes are intended.
 - The `text-overflow-elipsis` mixin (misspelled). Use
   `text-overflow-ellipsis`; the old name warns and will be removed in a
   future major release.
+- `Badge`: use `Tag`. `Badge` is an alias that renders a `Tag` (no runtime
+  warning) and will be removed in a future major release.
+- `Button`'s `variant="neutral"`: use `"secondary"` (the same style).
 
 ## 0.6.0-next.0 - 2026-10-01
 

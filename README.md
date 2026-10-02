@@ -133,6 +133,51 @@ That path goes through the package's `exports` map, which Vite and Sass's `pkg:`
 @import "@ryanbrandt/react-quick-ui/dist/stylesheets/colors.scss";
 ```
 
+### Content components
+
+**Button.** `variant` is `primary` (filled with `accent-fill`), `secondary` (outlined on the surface colour), `success` or `danger`; `neutral` is the deprecated name of `secondary`. `size` sets the height: `sm` 20px, `md` 30px (default), `lg` 40px, `xlg` 48px. By default each size also has a set width that truncates long text; `width="auto"` fits the text instead (and stretches to fill a column flex layout). Pass `as="a"` with `href` (and optionally `target`, `rel`) to render a real link that looks like a button, with no button role.
+
+The redesign's 48px calls to action are `size="xlg" width="auto"`:
+
+```tsx
+<Button as="a" href="/resume" size="xlg" width="auto" text="View résumé" />
+<Button as="a" href="/work" size="xlg" width="auto" variant="secondary" text="Personal projects" />
+```
+
+**IconButton.** A 44px square, icon-only button. `aria-label` is required (TypeScript enforces it) and names the button; the `icon` is hidden from assistive technology. `variant` is `secondary` (outlined, default) or `ghost` (no background until hovered). Other `<button>` attributes (`onClick`, `aria-expanded`, …) pass through, and `type` defaults to `"button"`.
+
+```tsx
+<IconButton aria-label="Open menu" icon={<MenuSvg />} variant="ghost" />
+```
+
+**Tag.** A pill label: `text`, `variant` (`primary` tint by default, `success`, `danger`, `warning`, or outlined `neutral`) and `size` (`md`, 13px, for tags on cards; `lg`, 14px, for an eyebrow). **`Badge` is deprecated:** it now renders a `Tag` (with the extra class `badge`, so existing `.badge` rules still match). Its sizes map to `lg` (`lg`, `xlg`) or `md` (the rest), and it fits its text instead of a set width.
+
+**Card.** The project card: `title`, optional `href`, `media`, body (`children`), `tags` (strings, shown as a list of `Tag`s), `footer`, `headingLevel` (default `h3`) and `className`. With `href`, the title is a link whose hit area covers the whole card. Links and buttons inside the card (e.g. in the footer) stay separately clickable, the keyboard focus ring outlines the card, and the card lifts on hover (shadow only under reduced motion). The media renders after the text in the markup, so screen readers reach the title first, but it is shown at the top. Mark decorative media `aria-hidden` (or give an image `alt=""`).
+
+```tsx
+<Card
+  title="Open FEC GraphQL Server"
+  href="/work/open-fec"
+  media={<span aria-hidden="true">FEC</span>}
+  tags={["GraphQL", "Node.js"]}
+  footer={<a href="https://github.com/…">View on GitHub →</a>}
+>
+  A GraphQL wrapper around the Open FEC API.
+</Card>
+```
+
+**Heading.** Pass `text`, or `children` for rich content. `as` sets the element (`h1`–`h6`), so the style and the document outline can differ. The spec's type scale adds three variants, in the text colour. Inside them, `<strong>` is semibold in the accent colour (the hero's name).
+
+| `variant`      | Element    | Style                                                                  |
+| -------------- | ---------- | ---------------------------------------------------------------------- |
+| `hero`         | `h1`       | 72px light (44px on narrow screens, scaling in between), tight leading |
+| `section`      | `h2`       | 32px regular (26px on narrow screens)                                  |
+| `title`        | `h3`       | 20px semibold (card titles)                                            |
+| `h1` (default) | `h1`       | unchanged: 16px bold, centred, accent colour                           |
+| `h2`, `h3`     | `h2`, `h3` | unchanged: 14px semibold / light, centred, accent colour               |
+
+The original `h1`/`h2`/`h3` variants keep their look. For new page headings use `hero` for the page title, `section` for section headings and `title` for card or list-item titles.
+
 ## Development
 
 - `yarn storybook`: the component explorer, with a light/dark **Theme** toolbar button and the a11y panel.
