@@ -5,29 +5,17 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-RESET='\033[0m'
+source scripts/_common.sh
 
-fail() {
-  printf "\n${RED}%s${RESET}\n" "$1" >&2
-  exit 1
-}
-
-[ "$#" -eq 1 ] || fail "A component name is required"
-name="$1"
-[[ "$name" =~ ^[A-Z][A-Za-z0-9]*$ ]] || fail "Use a PascalCase name, e.g. MyComponent"
+read_name "A component" MyComponent "$@"
 
 dir="src/stories/$name"
 scss="src/styles/stories/_$name.scss"
-# A name the package already exports would be exported twice (TS2300).
-if yarn node scripts/exported-names.mjs | grep -qx "$name"; then
-  fail "$name is already exported from the package (src/index.ts)"
-fi
-
 # Check every target before writing anything, so a failure can't half-write.
+# The cheap file checks come first.
 [ ! -e "$dir" ] || fail "A $name story already exists!"
 [ ! -e "$scss" ] || fail "$scss already exists!"
+refuse_exported_name "$name"
 
 # Lowercase without bash 4's ${1,,} (macOS ships bash 3.2).
 class_name="$(printf %s "$name" | tr '[:upper:]' '[:lower:]')"
