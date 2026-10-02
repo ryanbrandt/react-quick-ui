@@ -1,0 +1,169 @@
+@use "../sass/flex";
+@use "../sass/mixins";
+
+// The D0 header. The bar adapts to its own width (a container query), not
+// the viewport's: below $navbar-narrow the links move into a menu.
+$navbar-narrow: 768px;
+$navbar-height: 72px;
+$navbar-height-narrow: 64px;
+$navbar-control-size: 44px;
+
+@mixin navbar-narrow {
+  @container navbar (width < #{$navbar-narrow}) {
+    @content;
+  }
+}
+
+@mixin navbar-control {
+  @include flex.flex--align-center--justify-center;
+  width: $navbar-control-size;
+  height: $navbar-control-size;
+  padding: 0;
+  border: none;
+  border-radius: var(--rq-radius-control);
+  background: transparent;
+  color: var(--rq-color-text);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--rq-color-tint);
+  }
+
+  &:focus-visible {
+    @include mixins.focus-ring;
+  }
+}
+
+.navbar {
+  container: navbar / inline-size;
+  z-index: 10;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--rq-color-border);
+  // Translucent, blurring the page that scrolls under it. Safari still
+  // needs the prefix; keep it before the standard property.
+  background-color: color-mix(
+    in srgb,
+    var(--rq-color-surface) 85%,
+    transparent
+  );
+  -webkit-backdrop-filter: blur(12px) saturate(1.8);
+  backdrop-filter: blur(12px) saturate(1.8);
+  color: var(--rq-color-text);
+
+  // Without a backdrop blur, a see-through bar would be hard to read.
+  @supports not (
+    (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))
+  ) {
+    background-color: var(--rq-color-surface);
+  }
+
+  &--sticky {
+    position: sticky;
+    top: 0;
+  }
+
+  &__bar {
+    @include flex.flex--align-center--justify-space-between;
+    box-sizing: border-box;
+    height: $navbar-height;
+    gap: var(--rq-space-6);
+    // The spec's 120px gutter at 1440px wide, shrinking with the bar.
+    padding-inline: clamp(
+      var(--rq-space-gutter-mobile),
+      8.333cqi,
+      var(--rq-space-gutter)
+    );
+
+    @include navbar-narrow {
+      height: $navbar-height-narrow;
+      padding-inline: var(--rq-space-gutter-mobile) var(--rq-space-4);
+    }
+  }
+
+  &__brand {
+    @include flex.flex--align-center;
+    flex-shrink: 0;
+  }
+
+  &__nav {
+    @include flex.flex--align-center;
+    align-self: stretch;
+    gap: var(--rq-space-10);
+    font-size: var(--rq-font-size-md);
+
+    a {
+      @include flex.flex--align-center;
+      align-self: stretch;
+      box-sizing: border-box;
+      // The 2px underline sits on the bar's bottom border.
+      border-block: 2px solid transparent;
+      color: var(--rq-color-muted);
+      text-decoration: none;
+      transition: color var(--rq-duration-fast) var(--rq-easing-standard);
+
+      &:hover {
+        color: var(--rq-color-text);
+      }
+
+      &:focus-visible {
+        @include mixins.focus-ring;
+      }
+
+      &[aria-current="page"] {
+        border-bottom-color: var(--rq-color-brand);
+        color: var(--rq-color-accent-text);
+        font-weight: var(--rq-font-weight-medium);
+      }
+    }
+
+    // Narrow: a panel under the bar, shown while the menu is open.
+    @include navbar-narrow {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding-block: var(--rq-space-2);
+      border-bottom: 1px solid var(--rq-color-border);
+      background-color: var(--rq-color-surface);
+      box-shadow: var(--rq-shadow-sm);
+
+      &--open {
+        display: flex;
+      }
+
+      a {
+        min-height: $navbar-control-size;
+        padding-inline: var(--rq-space-gutter-mobile);
+        border-block: none;
+        border-inline-start: 2px solid transparent;
+
+        &:focus-visible {
+          outline-offset: calc(-1 * var(--rq-focus-ring-width));
+        }
+
+        &[aria-current="page"] {
+          border-inline-start-color: var(--rq-color-brand);
+        }
+      }
+    }
+  }
+
+  &__actions {
+    @include flex.flex--align-center;
+    flex-shrink: 0;
+    gap: var(--rq-space-1);
+  }
+
+  &__menu-button {
+    @include navbar-control;
+    display: none;
+
+    @include navbar-narrow {
+      display: flex;
+    }
+  }
+}

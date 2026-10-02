@@ -13,3 +13,4 @@ export { default as EditAndConfirmInput } from "@stories/EditAndConfirmInput/Edi
 export { default as Dialog } from "@stories/Dialog/Dialog";
 export { default as ThemeToggle } from "@stories/ThemeToggle/ThemeToggle";
 export type { ThemePreference } from "@stories/ThemeToggle/ThemeToggle";
+export { default as NavBar } from "@stories/NavBar/NavBar";

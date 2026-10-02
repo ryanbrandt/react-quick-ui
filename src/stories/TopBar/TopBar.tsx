@@ -18,6 +18,11 @@ interface BaseProps {
 
 type Props = PropsWithChildren<BaseProps>;
 
+/**
+ * @deprecated Use `NavBar`: the D0 header with brand, links and actions
+ * slots, a translucent sticky bar and a mobile menu. `TopBar` is an empty
+ * bar you lay out yourself; it will be removed in a future major release.
+ */
 const TopBar: FunctionComponent<Props> = (props: Props): JSX.Element => {
   const { sticky = false, className = "", children } = props;
 
