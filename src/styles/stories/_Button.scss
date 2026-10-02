@@ -11,7 +11,7 @@
   }
 }
 
-@mixin button-size($fontSize, $width, $height) {
+@mixin button-size($fontSize, $width, $height, $padding) {
   font-size: $fontSize;
   width: $width;
   height: $height;
@@ -19,6 +19,12 @@
   svg {
     width: $fontSize;
     height: $fontSize;
+  }
+
+  // width="auto": fit the text instead of the size's set width.
+  &.button--width-auto {
+    width: auto;
+    padding: 0 $padding;
   }
 }
 
@@ -42,19 +48,39 @@
   }
 
   &--xlg {
-    @include button-size(var(--rq-font-size-md), 230px, 48px);
+    @include button-size(
+      var(--rq-font-size-md),
+      230px,
+      48px,
+      var(--rq-space-6)
+    );
   }
 
   &--lg {
-    @include button-size(var(--rq-font-size-xs), 180px, 40px);
+    @include button-size(
+      var(--rq-font-size-xs),
+      180px,
+      40px,
+      var(--rq-space-5)
+    );
   }
 
   &--md {
-    @include button-size(var(--rq-font-size-2xs), 130px, 30px);
+    @include button-size(
+      var(--rq-font-size-2xs),
+      130px,
+      30px,
+      var(--rq-space-4)
+    );
   }
 
   &--sm {
-    @include button-size(var(--rq-font-size-2xs), 80px, 20px);
+    @include button-size(
+      var(--rq-font-size-2xs),
+      80px,
+      20px,
+      var(--rq-space-3)
+    );
   }
 
   &--primary {
@@ -69,7 +95,8 @@
     @include button-filled(var(--rq-color-danger-fill));
   }
 
-  // The spec's secondary button.
+  // The spec's secondary button (`neutral` is its deprecated name).
+  &--secondary,
   &--neutral {
     background-color: var(--rq-color-surface);
     border-color: var(--rq-color-control-border);
@@ -77,6 +104,26 @@
 
     &:hover {
       background-color: var(--rq-color-tint);
+    }
+  }
+
+  // as="a": a link laid out like a button.
+  &--link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    // A <button> centres its text by default; a link doesn't.
+    text-align: center;
+
+    // :hover too, to beat a page's `a:hover { text-decoration: underline }`.
+    &,
+    &:hover {
+      text-decoration: none;
+    }
+
+    .button__content {
+      flex: 1;
+      min-width: 0;
     }
   }
 

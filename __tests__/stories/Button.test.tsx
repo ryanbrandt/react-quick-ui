@@ -43,6 +43,8 @@ describe("Button", () => {
         button: true,
         [`button--${MOCK_SIZE}`]: true,
         [`button--${MOCK_VARIANT}`]: true,
+        "button--width-auto": false,
+        "button--link": false,
       });
     });
   });
@@ -57,6 +59,8 @@ describe("Button", () => {
         button: true,
         "button--md": true,
         "button--primary": true,
+        "button--width-auto": false,
+        "button--link": false,
       });
     });
   });
@@ -101,6 +105,54 @@ describe("Button", () => {
       expect(iconWrapper?.previousElementSibling).toBe(
         screen.getByText(MOCK_TEXT)
       );
+    });
+  });
+
+  describe('when width is "auto"', () => {
+    it("adds the width-auto modifier", () => {
+      render(<Button text={MOCK_TEXT} width="auto" />);
+
+      expect(mockedcreateCompositeClassName).toHaveBeenCalledWith(
+        expect.objectContaining({ "button--width-auto": true })
+      );
+    });
+  });
+
+  describe('when as is "a"', () => {
+    const MOCK_HREF = "/resume";
+
+    it("renders a link with no button semantics", () => {
+      render(
+        <Button
+          as="a"
+          href={MOCK_HREF}
+          target="_blank"
+          rel="noopener noreferrer"
+          text={MOCK_TEXT}
+        />
+      );
+
+      const link = screen.getByRole("link", { name: MOCK_TEXT });
+
+      expect(link.tagName).toBe("A");
+      expect(link).toHaveAttribute("href", MOCK_HREF);
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link).toHaveAttribute("rel", "noopener noreferrer");
+      expect(link).not.toHaveAttribute("role");
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+      expect(mockedcreateCompositeClassName).toHaveBeenCalledWith(
+        expect.objectContaining({ "button--link": true })
+      );
+    });
+
+    it("invokes the provided onClick handler", () => {
+      const mockOnClickHandler = jest.fn();
+      render(
+        <Button as="a" href="#" text={MOCK_TEXT} onClick={mockOnClickHandler} />
+      );
+
+      fireEvent.click(screen.getByRole("link"));
+      expect(mockOnClickHandler).toHaveBeenCalledTimes(1);
     });
   });
 });
