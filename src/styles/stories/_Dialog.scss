@@ -10,9 +10,12 @@ $dialog-duration: var(--rq-duration-base);
 $dialog-easing: var(--rq-easing-emphasized);
 $dialog-hidden-transform: translateY(var(--rq-space-4)) scale(0.98);
 
-// Page scroll stays locked while any dialog is open.
-:root:has(.dialog[open]) {
+// The page (the document's scroller; not other scroll containers) stays
+// locked while any modal dialog is open. The gutter keeps the space the
+// scrollbar took, so the page doesn't shift sideways when it goes.
+:root:has(dialog:modal) {
   overflow: hidden;
+  scrollbar-gutter: stable;
 }
 
 .dialog {
@@ -45,18 +48,19 @@ $dialog-hidden-transform: translateY(var(--rq-space-4)) scale(0.98);
   }
 
   &::backdrop {
-    background-color: transparent;
+    background-color: var(--rq-color-scrim);
+    opacity: 0;
     transition:
-      background-color $dialog-duration $dialog-easing,
+      opacity $dialog-duration $dialog-easing,
       overlay $dialog-duration allow-discrete,
       display $dialog-duration allow-discrete;
   }
 
   &[open]::backdrop {
-    background-color: var(--rq-color-scrim);
+    opacity: 1;
 
     @starting-style {
-      background-color: transparent;
+      opacity: 0;
     }
   }
 

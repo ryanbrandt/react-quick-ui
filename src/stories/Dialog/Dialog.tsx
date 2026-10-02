@@ -2,6 +2,7 @@ import {
   type FunctionComponent,
   type JSX,
   type MouseEvent,
+  type PointerEvent,
   type ReactNode,
   type SyntheticEvent,
   useEffect,
@@ -10,6 +11,7 @@ import {
 } from "react";
 
 import createCompositeClassName from "@utilities/createCompositeClassName";
+import CloseSvg from "@svgs/CloseSvg/CloseSvg";
 
 export interface DialogProps {
   /**
@@ -20,7 +22,10 @@ export interface DialogProps {
 
   /**
    * Called when the user asks to close the dialog: Esc, the close button,
-   * or a click on the backdrop (see {@link closeOnBackdropClick}).
+   * or a click on the backdrop (see {@link closeOnBackdropClick}). It must
+   * set {@link open} to `false`: these only ask, and the dialog stays open
+   * until `open` changes. (A dialog the browser closed itself, e.g. by a
+   * `<form method="dialog">`, opens again only once `open` has been `false`.)
    */
   onClose: () => void;
 
@@ -65,26 +70,14 @@ export interface DialogProps {
   children?: ReactNode;
 }
 
-const CloseIcon = () => (
-  <svg
-    aria-hidden="true"
-    width={20}
-    height={20}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.8}
-    strokeLinecap="round"
-  >
-    <path d="M6 6l12 12M18 6L6 18" />
-  </svg>
-);
-
 /**
  * A modal dialog on the native `<dialog>` element. While it is open, the
  * browser makes the rest of the page inert (focus can't leave the dialog)
  * and the stylesheet locks page scrolling. Opening moves focus into the
  * dialog; closing returns it to the element that had it before.
+ *
+ * It is controlled: {@link DialogProps.onClose} must set
+ * {@link DialogProps.open} to `false`.
  */
 const Dialog: FunctionComponent<DialogProps> = (
   props: DialogProps
@@ -93,29 +86,26 @@ const Dialog: FunctionComponent<DialogProps> = (
     open,
     onClose,
     title,
-    "aria-labelledby": labelledBy,
-    "aria-describedby": describedBy,
     closeOnBackdropClick = true,
     closeLabel = "Close",
     className = "",
     children,
+    // aria-labelledby and aria-describedby
+    ...aria
   } = props;
 
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const pointerDownTarget = useRef<EventTarget | null>(null);
   const titleId = useId();
 
   useEffect(() => {
     if (!open) return undefined;
 
     const dialog = dialogRef.current!;
-    // The element to return focus to: usually the button that opened it.
-    const trigger = document.activeElement as HTMLElement | null;
     dialog.showModal();
 
-    return () => {
-      dialog.close();
-      trigger?.focus();
-    };
+    // Closing returns focus to the element that had it before showModal().
+    return () => dialog.close();
   }, [open]);
 
   // Esc: keep the dialog open until the owner sets `open` to false.
@@ -131,9 +121,19 @@ const Dialog: FunctionComponent<DialogProps> = (
   };
 
   // The panel fills the <dialog>, so a click that targets the <dialog>
-  // itself landed on its ::backdrop.
+  // itself landed on its ::backdrop. It must have started there too: a
+  // text selection dragged out of the panel ends with a click on the
+  // backdrop.
+  const handlePointerDown = (event: PointerEvent<HTMLDialogElement>) => {
+    pointerDownTarget.current = event.target;
+  };
   const handleClick = (event: MouseEvent<HTMLDialogElement>) => {
-    if (closeOnBackdropClick && event.target === event.currentTarget) {
+    const { target, currentTarget } = event;
+    if (
+      closeOnBackdropClick &&
+      target === currentTarget &&
+      pointerDownTarget.current === currentTarget
+    ) {
       onClose();
     }
   };
@@ -150,10 +150,11 @@ const Dialog: FunctionComponent<DialogProps> = (
     <dialog
       ref={dialogRef}
       className={classNames}
-      aria-labelledby={labelledBy ?? (title ? titleId : undefined)}
-      aria-describedby={describedBy}
+      aria-labelledby={title ? titleId : undefined}
+      {...aria}
       onCancel={handleCancel}
       onClose={handleClose}
+      onPointerDown={handlePointerDown}
       onClick={handleClick}
     >
       <div className="dialog__panel">
@@ -169,7 +170,7 @@ const Dialog: FunctionComponent<DialogProps> = (
           aria-label={closeLabel}
           onClick={onClose}
         >
-          <CloseIcon />
+          <CloseSvg aria-hidden="true" />
         </button>
       </div>
     </dialog>

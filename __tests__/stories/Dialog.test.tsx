@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import Dialog from "@stories/Dialog/Dialog";
+import Dialog, { type DialogProps } from "@stories/Dialog/Dialog";
 
 // jsdom has HTMLDialogElement but no showModal()/close(). These stand-ins
 // only toggle `open` and fire `close` like the browser does; the real
@@ -34,7 +34,7 @@ describe("Dialog", () => {
     jest.clearAllMocks();
   });
 
-  const renderDialog = (props: Partial<Parameters<typeof Dialog>[0]> = {}) =>
+  const renderDialog = (props: Partial<DialogProps> = {}) =>
     render(
       <Dialog open onClose={onClose} title="Title" {...props}>
         <p>Content</p>
@@ -86,13 +86,10 @@ describe("Dialog", () => {
   });
 
   describe("closing", () => {
-    it("closes and returns focus to the trigger when open becomes false", () => {
-      render(<button type="button">Trigger</button>);
-      const trigger = screen.getByRole("button", { name: "Trigger" });
-      trigger.focus();
-
+    // The browser returns focus to the trigger on close(); the Playwright
+    // suite checks that.
+    it("closes when open becomes false", () => {
       const { rerender } = renderDialog();
-      screen.getByRole("button", { name: "Close" }).focus();
       rerender(
         <Dialog open={false} onClose={onClose}>
           <p>Content</p>
@@ -103,7 +100,6 @@ describe("Dialog", () => {
       expect(screen.getByRole("dialog", { hidden: true })).not.toHaveAttribute(
         "open"
       );
-      expect(trigger).toHaveFocus();
       // Closing because the owner asked isn't reported back.
       expect(onClose).not.toHaveBeenCalled();
     });
@@ -113,14 +109,6 @@ describe("Dialog", () => {
       unmount();
 
       expect(close).toHaveBeenCalled();
-    });
-
-    it("tolerates no focused element to return to", () => {
-      jest.spyOn(document, "activeElement", "get").mockReturnValue(null);
-      const { unmount } = renderDialog();
-
-      expect(() => unmount()).not.toThrow();
-      jest.restoreAllMocks();
     });
 
     it("asks to close on the close button", async () => {
@@ -164,6 +152,16 @@ describe("Dialog", () => {
       renderDialog();
 
       await userEvent.click(screen.getByText("Content"));
+
+      expect(onClose).not.toHaveBeenCalled();
+    });
+
+    it("ignores a click on the backdrop that started in the panel", () => {
+      renderDialog();
+
+      // e.g. selecting text and releasing the mouse past the panel's edge
+      fireEvent.pointerDown(screen.getByText("Content"));
+      fireEvent.click(screen.getByRole("dialog"));
 
       expect(onClose).not.toHaveBeenCalled();
     });
