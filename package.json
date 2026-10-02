@@ -45,7 +45,8 @@
     "test:visual": "yarn build-storybook --quiet && playwright test",
     "test:visual:run": "playwright test",
     "test:visual:update": "yarn build-storybook --quiet && playwright test --update-snapshots",
-    "test:visual:install": "playwright install chromium"
+    "test:visual:install": "playwright install chromium",
+    "test:stories": "yarn build-storybook --quiet && playwright test e2e/stories.spec.ts"
   },
   "browserslist": {
     "production": [
