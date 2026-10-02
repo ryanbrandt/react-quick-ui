@@ -11,3 +11,4 @@ export { default as SearchInput } from "@stories/SearchInput/SearchInput";
 export { default as PasswordInput } from "@stories/PasswordInput/PasswordInput";
 export { default as EditAndConfirmInput } from "@stories/EditAndConfirmInput/EditAndConfirmInput";
 export { default as Tag } from "@stories/Tag/Tag";
+export { default as IconButton } from "@stories/IconButton/IconButton";
