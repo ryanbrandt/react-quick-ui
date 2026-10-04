@@ -3,6 +3,20 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Unreleased
+
+### Fixed
+
+- `ThemeToggle`: the checked option showed a white icon on white on iOS
+  Safari. The option's state is now drawn on a new
+  `.theme-toggle__indicator` span after the radio, never on the `<input>`'s
+  own background or `appearance` (the radio is now invisible, still
+  covering the option for clicks and focus). The white icon colour is set
+  in the same rule as the accent fill behind it, so it can't appear
+  without it. The hover tint only applies on devices that can hover
+  (`@media (hover: hover)`), so a tap no longer leaves it stuck on the
+  option. The `.theme-toggle__icon` class is gone; style the indicator.
+
 ## 1.0.0-next.0 - 2026-10-02
 
 A prerelease (npm tag `next`) of 1.0.0, for the personal-page redesign.

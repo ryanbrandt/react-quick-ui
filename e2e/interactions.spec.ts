@@ -164,3 +164,39 @@ test("ThemeToggle moves between options with the arrow keys", async ({
   await expect(radio("Light")).toBeChecked();
   await expect(radio("System")).not.toBeChecked();
 });
+
+// The checked indicator on a touch screen (iOS Safari showed a white icon on
+// white): no hover there, so a tap can't leave the tint over the fill.
+test.describe("ThemeToggle on a touch screen", () => {
+  test.use({ hasTouch: true, isMobile: true });
+
+  test("fills the tapped option with the accent", async ({ page }) => {
+    await gotoStory(page, "core-inputs-themetoggle--default", "light");
+    expect(await page.evaluate(() => matchMedia("(hover: none)").matches)).toBe(
+      true
+    );
+
+    await page.getByRole("radio", { name: "Light" }).tap();
+    await expect(page.getByRole("radio", { name: "Light" })).toBeChecked();
+
+    // The tokens, resolved to rgb() the way computed styles report them.
+    const tokens = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = "var(--rq-color-accent-fill)";
+      probe.style.color = "var(--rq-color-on-accent)";
+      document.body.append(probe);
+      const { backgroundColor, color } = getComputedStyle(probe);
+      probe.remove();
+      return { backgroundColor, color };
+    });
+    // toHaveCSS retries, so the fill's transition can finish.
+    const indicator = page.locator(
+      ".theme-toggle__input:checked + .theme-toggle__indicator"
+    );
+    await expect(indicator).toHaveCSS(
+      "background-color",
+      tokens.backgroundColor
+    );
+    await expect(indicator).toHaveCSS("color", tokens.color);
+  });
+});

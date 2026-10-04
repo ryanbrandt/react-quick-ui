@@ -71,12 +71,9 @@ const ThemeToggle: FunctionComponent<ThemeToggleProps> = (
             checked={value === option.value}
             onChange={() => onChange(option.value)}
           />
-          <option.Icon
-            aria-hidden="true"
-            className="theme-toggle__icon"
-            width={18}
-            height={18}
-          />
+          <span aria-hidden="true" className="theme-toggle__indicator">
+            <option.Icon width={18} height={18} />
+          </span>
         </span>
       ))}
     </div>
