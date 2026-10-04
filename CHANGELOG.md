@@ -12,6 +12,12 @@ All notable changes to this project are documented here. The format follows
   to drop "System". If `value` isn't one of the options, none is checked,
   so pass the theme the page resolves to.
 
+### Changed
+
+- `ThemeToggle`: the `.theme-toggle__icon` class is removed. Each icon now
+  sits inside a `.theme-toggle__indicator` span, which draws the option's
+  state; style that instead.
+
 ### Fixed
 
 - `ThemeToggle`: the checked option showed a white icon on white on iOS
@@ -22,7 +28,7 @@ All notable changes to this project are documented here. The format follows
   in the same rule as the accent fill behind it, so it can't appear
   without it. The hover tint only applies on devices that can hover
   (`@media (hover: hover)`), so a tap no longer leaves it stuck on the
-  option. The `.theme-toggle__icon` class is gone; style the indicator.
+  option.
 
 ## 1.0.0-next.0 - 2026-10-02
 

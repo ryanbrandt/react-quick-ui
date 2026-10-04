@@ -29,8 +29,8 @@ export interface ThemeToggleProps {
   onChange: (value: ThemePreference) => void;
 
   /**
-   * The options to offer, in this order. Leave out `"system"` for a
-   * light/dark switch.
+   * The options to offer, in this order, each at most once. Leave out
+   * `"system"` for a light/dark switch.
    *
    * @default ["light", "dark", "system"]
    */
