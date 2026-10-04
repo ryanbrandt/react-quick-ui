@@ -5,6 +5,13 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+### Added
+
+- `ThemeToggle` takes an optional `options` prop: the options to show, in
+  order (default `["light", "dark", "system"]`). Pass `["light", "dark"]`
+  to drop "System". If `value` isn't one of the options, none is checked,
+  so pass the theme the page resolves to.
+
 ### Fixed
 
 - `ThemeToggle`: the checked option showed a white icon on white on iOS

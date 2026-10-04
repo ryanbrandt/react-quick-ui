@@ -53,4 +53,51 @@ describe("ThemeToggle", () => {
       screen.getByRole("radiogroup", { name: "Colour theme" })
     ).toHaveClass("theme-toggle", "custom");
   });
+
+  describe("options", () => {
+    it("renders only the given options, in order", () => {
+      render(
+        <ThemeToggle
+          value="dark"
+          onChange={onChange}
+          options={["dark", "light"]}
+        />
+      );
+
+      expect(
+        screen
+          .getAllByRole("radio")
+          .map((radio) => radio.getAttribute("aria-label"))
+      ).toEqual(["Dark", "Light"]);
+      expect(screen.getByRole("radio", { name: "Dark" })).toBeChecked();
+    });
+
+    it("checks nothing when the value isn't one of them", () => {
+      render(
+        <ThemeToggle
+          value="system"
+          onChange={onChange}
+          options={["light", "dark"]}
+        />
+      );
+
+      for (const radio of screen.getAllByRole("radio")) {
+        expect(radio).not.toBeChecked();
+      }
+    });
+
+    it("reports the picked option", async () => {
+      render(
+        <ThemeToggle
+          value="light"
+          onChange={onChange}
+          options={["light", "dark"]}
+        />
+      );
+
+      await userEvent.click(screen.getByRole("radio", { name: "Dark" }));
+
+      expect(onChange).toHaveBeenCalledWith("dark");
+    });
+  });
 });
