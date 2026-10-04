@@ -16,6 +16,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+// A light/dark switch: no "system" option. The app passes the theme the
+// page resolves to.
+export const LightAndDark: Story = {
+  args: { value: "light", options: ["light", "dark"] },
+};
+
 // Picking an option checks it (through syncArgs). Arrow keys: see
 // e2e/interactions.spec.ts.
 export const PickDark: Story = {

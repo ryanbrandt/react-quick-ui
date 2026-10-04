@@ -3,6 +3,33 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 1.0.0-next.1 - 2026-10-03
+
+### Added
+
+- `ThemeToggle` takes an optional `options` prop: the options to show, in
+  order (default `["light", "dark", "system"]`). Pass `["light", "dark"]`
+  to drop "System". If `value` isn't one of the options, none is checked,
+  so pass the theme the page resolves to.
+
+### Changed
+
+- `ThemeToggle`: the `.theme-toggle__icon` class is removed. Each icon now
+  sits inside a `.theme-toggle__indicator` span, which draws the option's
+  state; style that instead.
+
+### Fixed
+
+- `ThemeToggle`: the checked option showed a white icon on white on iOS
+  Safari. The option's state is now drawn on a new
+  `.theme-toggle__indicator` span after the radio, never on the `<input>`'s
+  own background or `appearance` (the radio is now invisible, still
+  covering the option for clicks and focus). The white icon colour is set
+  in the same rule as the accent fill behind it, so it can't appear
+  without it. The hover tint only applies on devices that can hover
+  (`@media (hover: hover)`), so a tap no longer leaves it stuck on the
+  option.
+
 ## 1.0.0-next.0 - 2026-10-02
 
 A prerelease (npm tag `next`) of 1.0.0, for the personal-page redesign.

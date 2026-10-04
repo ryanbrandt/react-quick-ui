@@ -120,7 +120,7 @@ const [open, setOpen] = useState(false);
 </NavBar>
 ```
 
-**`ThemeToggle`** picks `"light"`, `"dark"` or `"system"` (the `ThemePreference` type, the same values `data-theme` takes). It is a group of three radio buttons drawn as a segmented control, so screen readers announce the choice and the arrow keys move between options. It only reports the choice; your app sets `data-theme`:
+**`ThemeToggle`** picks `"light"`, `"dark"` or `"system"` (the `ThemePreference` type, the same values `data-theme` takes). It is a group of radio buttons drawn as a segmented control, so screen readers announce the choice and the arrow keys move between options. It only reports the choice; your app sets `data-theme`:
 
 ```tsx
 const [theme, setTheme] = useState<ThemePreference>("system");
@@ -129,6 +129,8 @@ useEffect(() => {
 }, [theme]);
 return <ThemeToggle value={theme} onChange={setTheme} />;
 ```
+
+To leave out "System", pass `options={["light", "dark"]}` (`options` sets which options show, in that order). Then pass the theme the page actually shows as `value`, e.g. the OS's preference while nothing is stored: if `value` isn't one of the `options`, no option is checked.
 
 Storing the choice (e.g. in `localStorage`) is up to the app too. To avoid a flash of the wrong theme on load, set `data-theme` from the stored value in a small inline script before the page renders.
 

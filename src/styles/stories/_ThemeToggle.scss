@@ -1,10 +1,13 @@
 @use "../sass/flex";
 @use "../sass/mixins";
 
-// A segmented control: each option is a native radio drawn as a 36px
-// square, with its icon on top. The checked option is filled with the
-// accent (3:1 or more against the surface), so the state doesn't rely on a
-// subtle tint.
+// A segmented control: each option is a 36px square holding a native radio
+// and, after it, an indicator with the icon. The radio is invisible but
+// covers the option, so it takes the clicks and the focus; the indicator
+// draws its state. (iOS Safari doesn't reliably paint a radio's own
+// background, even with `appearance: none`.) The checked option is filled
+// with the accent (3:1 or more against the surface), so the state doesn't
+// rely on a subtle tint.
 $option-size: 36px;
 
 .theme-toggle {
@@ -28,48 +31,54 @@ $option-size: 36px;
   &__input {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     margin: 0;
     appearance: none;
-    border-radius: calc(var(--rq-radius-control) - 4px);
+    opacity: 0;
     cursor: pointer;
+  }
+
+  &__indicator {
+    @include flex.flex--align-center--justify-center;
+    width: 100%;
+    height: 100%;
+    border-radius: calc(var(--rq-radius-control) - 4px);
+    color: var(--rq-color-muted);
     transition: background-color var(--rq-duration-fast)
       var(--rq-easing-standard);
+  }
 
-    &:hover {
+  // Only where hovering is real: on touch screens, a tap would leave the
+  // tint stuck on the option.
+  @media (hover: hover) {
+    &__input:hover + &__indicator {
       background-color: var(--rq-color-tint);
     }
-
-    &:checked {
-      background-color: var(--rq-color-accent-fill);
-    }
-
-    &:focus-visible {
-      @include mixins.focus-ring;
-    }
   }
 
-  &__icon {
-    // Above the input, and click-through to it.
-    position: relative;
-    pointer-events: none;
-    color: var(--rq-color-muted);
-  }
-
-  &__input:checked + &__icon {
+  &__input:checked + &__indicator {
+    background-color: var(--rq-color-accent-fill);
     color: var(--rq-color-on-accent);
   }
 
+  &__input:focus-visible + &__indicator {
+    @include mixins.focus-ring;
+  }
+
   // Forced colours drop the accent fill, so mark the checked option with
-  // the system highlight.
+  // the system highlight, and draw the focus ring in the text colour (the
+  // token's colour survives on the checked option, which opts out of
+  // forced colours).
   @media (forced-colors: active) {
-    &__input:checked {
+    &__input:checked + &__indicator {
       forced-color-adjust: none;
       background-color: Highlight;
+      color: HighlightText;
     }
 
-    &__input:checked + &__icon {
-      forced-color-adjust: none;
-      color: HighlightText;
+    &__input:focus-visible + &__indicator {
+      @include mixins.focus-ring($color: CanvasText);
     }
   }
 }
